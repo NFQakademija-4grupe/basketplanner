@@ -9,7 +9,7 @@ class HomeController extends Controller
     public function homeAction()
     {
         return $this->render('NFQHomeBundle:Home:home.html.twig', array(
-                // ...
-            ));    }
 
+            ));
+    }
 }
