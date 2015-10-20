@@ -1,0 +1,3 @@
+basket_planer_main_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BasketPlanerMainBundle:Default:index }

@@ -17,6 +17,9 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new NFQ\HomeBundle\NFQHomeBundle(),
+            new BasketPlaner\Bundle\MatchBundle\BasketPlanerMatchBundle(),
+            new BasketPlaner\Bundle\TeamBundle\BasketPlanerTeamBundle(),
+            new BasketPlaner\Bundle\MainBundle\BasketPlanerMainBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
