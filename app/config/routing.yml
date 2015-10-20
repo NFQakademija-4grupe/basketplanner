@@ -4,12 +4,9 @@ basket_planer_main:
 
 basket_planer_team:
     resource: "@BasketPlanerTeamBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /team
 
 basket_planer_match:
     resource: "@BasketPlanerMatchBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /match
 
-nfq_home:
-    resource: "@NFQHomeBundle/Resources/config/routing.yml"
-    prefix:   /
