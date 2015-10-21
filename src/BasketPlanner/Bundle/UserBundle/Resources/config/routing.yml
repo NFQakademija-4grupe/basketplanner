@@ -1,3 +1,11 @@
 basket_planner_user_homepage:
     path:     /
     defaults: { _controller: BasketPlannerUserBundle:User:index }
+
+edit:
+    path:     /edit
+    defaults: { _controller: BasketPlannerUserBundle:Profile:edit }
+
+show:
+    path:     /show
+    defaults: { _controller: BasketPlannerUserBundle:Profile:show }
