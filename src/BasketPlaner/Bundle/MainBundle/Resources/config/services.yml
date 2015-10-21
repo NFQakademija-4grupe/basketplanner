@@ -1,4 +1,0 @@
-services:
-#    basket_planer_main.example:
-#        class: BasketPlaner\Bundle\MainBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]

@@ -16,10 +16,11 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new BasketPlaner\Bundle\MatchBundle\BasketPlanerMatchBundle(),
-            new BasketPlaner\Bundle\TeamBundle\BasketPlanerTeamBundle(),
-            new BasketPlaner\Bundle\MainBundle\BasketPlanerMainBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new BasketPlanner\Bundle\UserBundle\BasketPlannerUserBundle(),
+            new BasketPlanner\Bundle\MainBundle\BasketPlannerMainBundle(),
+            new BasketPlanner\Bundle\TeamBundle\BasketPlannerTeamBundle(),
+            new BasketPlanner\Bundle\MatchBundle\BasketPlannerMatchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

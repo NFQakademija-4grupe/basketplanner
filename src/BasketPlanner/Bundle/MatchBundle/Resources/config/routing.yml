@@ -1,0 +1,3 @@
+basket_planner_match_homepage:
+    path:     /
+    defaults: { _controller: BasketPlannerMatchBundle:Default:index }

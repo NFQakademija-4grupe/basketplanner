@@ -1,14 +1,18 @@
-basket_planer_main:
-    resource: "@BasketPlanerMainBundle/Resources/config/routing.yml"
-    prefix:   /
+basket_planner_match:
+    resource: "@BasketPlannerMatchBundle/Resources/config/routing.yml"
+    prefix:   /match
 
-basket_planer_team:
-    resource: "@BasketPlanerTeamBundle/Resources/config/routing.yml"
+basket_planner_team:
+    resource: "@BasketPlannerTeamBundle/Resources/config/routing.yml"
     prefix:   /team
 
-basket_planer_match:
-    resource: "@BasketPlanerMatchBundle/Resources/config/routing.yml"
-    prefix:   /match
+basket_planner_main:
+    resource: "@BasketPlannerMainBundle/Resources/config/routing.yml"
+    prefix:   /
+
+basket_planner_user:
+    resource: "@BasketPlannerUserBundle/Resources/config/routing.yml"
+    prefix:   /user
 
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"

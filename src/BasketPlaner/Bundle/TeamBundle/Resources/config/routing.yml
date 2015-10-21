@@ -1,3 +1,0 @@
-basket_planer_team_homepage:
-    path:     /
-    defaults: { _controller: BasketPlanerTeamBundle:Default:index }

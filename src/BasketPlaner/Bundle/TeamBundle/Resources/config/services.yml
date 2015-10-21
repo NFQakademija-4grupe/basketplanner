@@ -1,4 +1,0 @@
-services:
-#    basket_planer_team.example:
-#        class: BasketPlaner\Bundle\TeamBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
