@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new BasketPlaner\Bundle\MatchBundle\BasketPlanerMatchBundle(),
             new BasketPlaner\Bundle\TeamBundle\BasketPlanerTeamBundle(),
             new BasketPlaner\Bundle\MainBundle\BasketPlanerMainBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -78,3 +78,19 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_name: secured_area
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           "12454878754521325"
+            client_secret:       "456597897846546465"
+            scope:               ""
+        google:
+            type:                google
+            client_id:           "1234546787987895645"
+            client_secret:       "1214546578798765454"
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+    # here you will add one (or more) configurations for resource owners
