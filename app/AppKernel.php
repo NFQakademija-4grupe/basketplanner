@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new BasketPlanner\Bundle\UserBundle\BasketPlannerUserBundle(),
             new BasketPlanner\Bundle\MainBundle\BasketPlannerMainBundle(),
             new BasketPlanner\Bundle\TeamBundle\BasketPlannerTeamBundle(),

@@ -79,18 +79,39 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: secured_area
+    user_class: BasketPlanner\Bundle\UserBundle\Entity\User
+
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
     firewall_name: secured_area
+    connect:
+        confirmation: true
+        #account_connector: hwi_oauth.user.provider.fosub_bridge
+        #registration_form_handler: hwi_oauth.registration.form.handler.fosub_bridge
+        #registration_form: fos_user.registration.form
+
+    http_client:
+            verify_peer: false
     resource_owners:
         facebook:
             type:                facebook
-            client_id:           "12454878754521325"
-            client_secret:       "456597897846546465"
-            scope:               ""
+            client_id:           "1510825085876742"
+            client_secret:       "ac9702af370b465a379ff57abf928a91"
+            scope:               "email, public_profile"
         google:
             type:                google
             client_id:           "1234546787987895645"
             client_secret:       "1214546578798765454"
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
     # here you will add one (or more) configurations for resource owners
+    fosub:
+        # try 30 times to check if a username is available (foo, foo1, foo2 etc)
+        username_iterations: 30
+
+        # mapping between resource owners (see below) and properties
+        properties:
+            facebook: facebookID
+            google:   googleID
