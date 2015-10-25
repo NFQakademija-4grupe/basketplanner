@@ -10,4 +10,10 @@ class UserController extends Controller
     {
         return $this->render('BasketPlannerUserBundle:User:index.html.twig');
     }
+
+    public function registerAction()
+    {
+        die(var_dump("user controller"));
+        return $this->render('BasketPlannerUserBundle:User:index.html.twig');
+    }
 }

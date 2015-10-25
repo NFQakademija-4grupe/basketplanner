@@ -5,4 +5,9 @@ services:
     basketplanner_user_provider:
         class: "%basketplanner_user_provider.class%"
         #this is the place where the properties are passed to the UserProvider - see config.yml
-        arguments: [@fos_user.user_manager,{facebook: facebookID, google: googleID}]
+        arguments: [@fos_user.user_manager,{facebook: facebookId, google: googleId}]
+
+    basketplanner.form.registration:
+        class: BasketPlanner\Bundle\UserBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }

@@ -21,6 +21,34 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="first_name", type="string", length=50, nullable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=50, nullable=true)
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=10, nullable=true)
+     */
+    protected $gender;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="birthday", type="string", length=12, nullable=true)
+     */
+    protected $birthday;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="facebook_id", type="string", nullable=true)
      */
     private $facebookId;
@@ -63,6 +91,98 @@ class User extends BaseUser
     }
 
     /**
+     * Get first name
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set first name
+     *
+     * @param string $firstName
+     *
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    /**
+     * Get last name
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set last name
+     *
+     * @param string $lastName
+     *
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    /**
+     * Get birthday
+     *
+     * @return string
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * Set birthday
+     *
+     * @param string $birthday
+     *
+     * @return User
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = $birthday;
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+        return $this;
+    }
+
+    /**
      * Get facebook Id
      *
      * @return string
@@ -79,7 +199,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setFacebookID($facebookId)
+    public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
         return $this;
