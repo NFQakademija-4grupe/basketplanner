@@ -1,1 +1,40 @@
-Hello !
+{% extends '::base.html.twig' %}
+
+{% block content %}
+<section class="col-md-9 main-section">
+    <div class="row match-row">
+
+        <div class="col-md-12">
+            <h2>Visų mačų sąrašas</h2>
+        </div>
+
+        <div class="col-md-12">
+            <p><span class="fa fa-filter"></span> Rūšiuoti mačus pagal:
+                <a href="#"><span class="label label-primary no-border-radius">naujausius</span></a>
+                <a href="#"><span class="label label-primary no-border-radius">laiką iki mačo</span></a>
+                <a href="#"><span class="label label-primary no-border-radius">žaidėjų skaičių</span></a>
+                <a href="#"><span class="label label-primary no-border-radius">rajoną</span></a>
+            </p>
+        </div>
+
+        {% include 'Home/partials/list-matches.html.twig' %}
+
+    </div>
+
+    <div class="row pagination-row">
+        <div class="col-md-12 center">
+
+            <ul class="pagination custom-pagination">
+                <li class="disabled"><a href="#">«</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
