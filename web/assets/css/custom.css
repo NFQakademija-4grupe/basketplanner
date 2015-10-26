@@ -1,6 +1,9 @@
 body {
-    /*background-color: #F5F5F5;*/
-    background-image: url('http://langmode.pl/wp-content/uploads/2013/08/blurred-background-10-2000x12501.jpg');
+    background: url('http://langmode.pl/wp-content/uploads/2013/08/blurred-background-10-2000x12501.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .main-section {
@@ -41,7 +44,7 @@ body {
 
     .tile-google-map {
         width: 120px;
-        min-height: 120px;
+        min-height: 130px;
     }
 
     .tile-title {
@@ -110,6 +113,13 @@ a:hover {
     color: inherit;
 }
 
-section {
+/* CUSTOM jQuery UI */
+.ui-widget-header {
+    background: #4582EC !important;
+    color: #f6f4ff;
+    border-radius: 0;
+}
 
+.ui-corner-all {
+    border-radius: 0;
 }

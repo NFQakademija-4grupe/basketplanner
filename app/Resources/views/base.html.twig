@@ -1,41 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    {% block stylesheets %}
+    <!-- Bootstrap -->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
+    <!-- Custom styles -->
+    <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet" />
+    {% endblock %}
+</head>
+<body>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <div class="container no-padding">
+        {% block header %}
+            {% include 'partials/header.html.twig' %}
+        {% endblock %}
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        {% block sideNavigation %}
+            {% include 'partials/side-navigation.html.twig' %}
+        {% endblock %}
 
-        <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet" />
-    </head>
-    <body>
+        {% block content %}{% endblock %}
 
-        <div class="container">
-            {% block header %}
-                {% include 'partials/header.html.twig' %}
-            {% endblock %}
+        {% block footer %}
+            {% include 'partials/footer.html.twig' %}
+        {% endblock %}
+    </div> <!-- /container -->
 
-            {% block sideNavigation %}
-                {% include 'partials/side-navigation.html.twig' %}
-            {% endblock %}
 
-            {% block content %}{% endblock %}
+    {% block javascripts %}
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script>
+            $(function() {
+                $( "#datepicker" ).datepicker();
+            });
+        </script>
+    {% endblock %}
 
-            {% block footer %}
-                {% include 'partials/footer.html.twig' %}
-            {% endblock %}
-        </div> <!-- /container -->
-
-        {% block javascripts %}{% endblock %}
-
-    </body>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
+</body>
 </html>
