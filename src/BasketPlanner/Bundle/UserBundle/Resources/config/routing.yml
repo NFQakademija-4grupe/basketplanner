@@ -2,10 +2,10 @@ basket_planner_user_homepage:
     path:     /
     defaults: { _controller: BasketPlannerUserBundle:User:index }
 
-edit:
+basket_planner_user_edit:
     path:     /edit
     defaults: { _controller: BasketPlannerUserBundle:Profile:edit }
 
-show:
+basket_planner_user_show:
     path:     /show
     defaults: { _controller: BasketPlannerUserBundle:Profile:show }
