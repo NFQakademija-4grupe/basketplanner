@@ -18,10 +18,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new BasketPlanner\Bundle\UserBundle\BasketPlannerUserBundle(),
-            new BasketPlanner\Bundle\MainBundle\BasketPlannerMainBundle(),
-            new BasketPlanner\Bundle\TeamBundle\BasketPlannerTeamBundle(),
-            new BasketPlanner\Bundle\MatchBundle\BasketPlannerMatchBundle(),
+            new BasketPlanner\UserBundle\BasketPlannerUserBundle(),
+            new BasketPlanner\MainBundle\BasketPlannerMainBundle(),
+            new BasketPlanner\TeamBundle\BasketPlannerTeamBundle(),
+            new BasketPlanner\MatchBundle\BasketPlannerMatchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
