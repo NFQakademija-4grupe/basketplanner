@@ -10,4 +10,8 @@ services:
     basketplanner.form.registration:
         class: BasketPlanner\UserBundle\Form\RegistrationType
         tags:
-            - { name: form.type, alias: app_user_registration }
+            - { name: form.type, alias: basketplanner_user_registration }
+
+    basketplanner_registration_form_handler:
+        class: BasketPlanner\UserBundle\Form\FOSUBRegistrationFormHandler
+        arguments: [@fos_user.user_manager,@fos_user.mailer, @fos_user.util.token_generator]

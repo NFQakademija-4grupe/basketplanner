@@ -4,6 +4,7 @@ namespace BasketPlanner\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -22,6 +23,15 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=50, nullable=true)
+     *
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=3,
+     *     max=50,
+     *     minMessage="Vardas per trumpas.",
+     *     maxMessage="Vardas per ilgas.",
+     *     groups={"Registration", "Profile"}
+     * )
      */
     protected $firstName;
 
@@ -29,6 +39,15 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=50, nullable=true)
+     *
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=3,
+     *     max=50,
+     *     minMessage="Pavarde per trumpa.",
+     *     maxMessage="Pavarde per ilga.",
+     *     groups={"Registration", "Profile"}
+     * )
      */
     protected $lastName;
 

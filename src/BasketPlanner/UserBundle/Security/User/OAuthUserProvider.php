@@ -14,7 +14,6 @@ class OAuthUserProvider extends BaseClass
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        die(var_dump($response->getResponse()));
         $property = $this->getProperty($response);
         $username = $response->getUsername();
         //on connect - get the access token and the user ID
@@ -44,23 +43,8 @@ class OAuthUserProvider extends BaseClass
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $serviceUserId));
         //when the user is registrating
         if (null === $user) {
-            $service = $response->getResourceOwner()->getName();
-            $setter = 'set'.ucfirst($service);
-            $setter_id = $setter.'Id';
-            $setter_token = $setter.'AccessToken';
-            // create new user here
-            $user = $this->userManager->createUser();
-            $user->$setter_id($serviceUserId);
-            $user->$setter_token($response->getAccessToken());
-            //I have set all requested data with the user's username
-            //modify here with relevant data
-            $user->setUsername($serviceUserId);
-            $user->setEmail($email);
-            $user->setPassword($serviceUserId);
-            $user->setEnabled(true);
-            $this->userManager->updateUser($user);
-            return $user;
-            //die(var_dump("work"));
+            //die(var_dump("oauth provider"));
+            throw new AccountNotLinkedException();
         }
         //if user exists - go with the HWIOAuth way
         $user = parent::loadUserByOAuthUserResponse($response);

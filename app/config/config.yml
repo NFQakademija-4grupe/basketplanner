@@ -85,13 +85,14 @@ fos_user:
     user_class: BasketPlanner\UserBundle\Entity\User
     registration:
         form:
-            type: basketplanner.form.registration
+            type: basketplanner_user_registration
 
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
     firewall_name: main
     connect:
         account_connector: basketplanner_user_provider
+        registration_form_handler: basketplanner_registration_form_handler
     fosub:
         # try 30 times to check if a username is available (foo, foo1, foo2 etc)
         username_iterations: 30
