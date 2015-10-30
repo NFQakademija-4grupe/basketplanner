@@ -14,6 +14,7 @@ class OAuthUserProvider extends BaseClass
     {
         $serviceUserId = $response->getUsername();
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $serviceUserId));
+
         //registration
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();
@@ -30,17 +31,29 @@ class OAuthUserProvider extends BaseClass
             $user->setEmail($response->getEmail());
             //custom fields witch can be empty if user doesn't allow to provide them
             if($response->getRealName() != null){
-                $user->setUsername($response->getRealName());
+                $user->setUsername($serviceUserId);
             }else{
                 $user->setUsername($response->getEmail());
             }
+            switch($service){
+                case "facebook":
+                    if (array_key_exists('first_name', $responseCustomFields)){
+                        $user->setFirstName($responseCustomFields['first_name']);
+                    }
 
-            if (array_key_exists('first_name', $responseCustomFields)){
-                $user->setFirstName($responseCustomFields['first_name']);
-            }
+                    if (array_key_exists('last_name', $responseCustomFields)){
+                        $user->setLastName($responseCustomFields['last_name']);
+                    }
+                    break;
+                case "google":
+                    if (array_key_exists('given_name', $responseCustomFields)){
+                        $user->setFirstName($responseCustomFields['given_name']);
+                    }
 
-            if (array_key_exists('last_name', $responseCustomFields)){
-                $user->setLastName($responseCustomFields['last_name']);
+                    if (array_key_exists('family_name', $responseCustomFields)){
+                        $user->setLastName($responseCustomFields['family_name']);
+                    }
+                    break;
             }
 
             if (array_key_exists('gender', $responseCustomFields)){

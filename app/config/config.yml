@@ -119,6 +119,6 @@ hwi_oauth:
                 profilepicture:  picture.data.url
         google:
             type:                google
-            client_id:           "1234546787987895645"
-            client_secret:       "1214546578798765454"
+            client_id:           "134368907402-4970hjvcpvgcph882m349glugp2qjka8.apps.googleusercontent.com"
+            client_secret:       "dpzaJJ2cIj4TuQtr29RswObb"
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"

@@ -34,7 +34,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         <span class="fa fa-user"></span>
-                            {{ app.user.username }}
+                            {{ app.security.getToken().getUser().getFullName() }}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
