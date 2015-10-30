@@ -108,9 +108,10 @@ hwi_oauth:
             client_id:           "1510825085876742"
             client_secret:       "ac9702af370b465a379ff57abf928a91"
             scope:               "email, public_profile"
-            infos_url:           "https://graph.facebook.com/me?fields=id,first_name,last_name,email,gender,birthday,picture.type(square)"
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,gender,birthday,picture.type(square)"
             paths:
                 email:           email
+                name:            name
                 firstname:       first_name
                 lastname:        last_name
                 gender:          gender

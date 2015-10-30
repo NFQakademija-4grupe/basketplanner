@@ -59,11 +59,10 @@ class User extends BaseUser
     protected $gender;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="birthday", type="string", length=12, nullable=true)
+     * @ORM\Column(name="profile_updated", type="boolean", nullable=true)
      */
-    protected $birthday;
+    protected $profileUpdated = false;
+
 
     /**
      * @var string
@@ -152,29 +151,6 @@ class User extends BaseUser
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-        return $this;
-    }
-
-    /**
-     * Get birthday
-     *
-     * @return string
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * Set birthday
-     *
-     * @param string $birthday
-     *
-     * @return User
-     */
-    public function setBirthday($birthday)
-    {
-        $this->birthday = $birthday;
         return $this;
     }
 
