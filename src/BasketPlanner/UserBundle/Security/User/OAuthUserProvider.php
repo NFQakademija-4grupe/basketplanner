@@ -17,6 +17,12 @@ class OAuthUserProvider extends BaseClass
 
         //registration
         if (null === $user) {
+            //check if user with service email exist in database
+            if($existent_user = $this->userManager->findUserByEmail($response->getEmail())){
+                $message = 'There is already an account with this email address';
+                throw new \Symfony\Component\Security\Core\Exception\AuthenticationException($message);
+            }
+
             $service = $response->getResourceOwner()->getName();
             $setter = 'set'.ucfirst($service);
             $setter_id = $setter.'Id';

@@ -18,23 +18,27 @@
 <body>
 
     <div class="container no-padding">
-        {% if app.user %}
-            {% block header %}
-                {% include 'partials/header.html.twig' %}
-            {% endblock %}
+        {% block main_body %}
+            {% if app.user %}
+                {% block header %}
+                    {% include 'partials/header.html.twig' %}
+                {% endblock %}
 
-            {% block sideNavigation %}
-                {% include 'partials/side-navigation.html.twig' %}
-            {% endblock %}
+                {% block side_navigation %}
+                    {% include 'partials/side-navigation.html.twig' %}
+                {% endblock %}
 
-            {% block content %}{% endblock %}
+                {% block content %}{% endblock %}
 
-            {% block footer %}
-                {% include 'partials/footer.html.twig' %}
-            {% endblock %}
-        {% else  %}
-            {% include 'partials/login.html.twig' %}
-        {%  endif %}
+                {% block footer %}
+                    {% include 'partials/footer.html.twig' %}
+                {% endblock %}
+            {% else  %}
+                {% block login %}
+                    {% include 'partials/login.html.twig' %}
+                {% endblock %}
+            {%  endif %}
+        {% endblock %}
     </div> <!-- /container -->
 
 

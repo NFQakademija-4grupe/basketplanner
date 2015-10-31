@@ -11,8 +11,10 @@ class RegistrationType extends AbstractType
     {
         $builder->add('firstName');
         $builder->add('lastName');
-        $builder->add('gender');
-        $builder->add('birthday');
+        $builder->add('gender', 'choice', array(
+            'choices'  => array('male' => 'Vyras', 'female' => 'Moteris'),
+            'required' => true,
+        ));
     }
 
     public function getParent()
