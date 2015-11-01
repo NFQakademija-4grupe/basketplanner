@@ -86,6 +86,16 @@ class User extends BaseUser
     private $googleId;
 
     /**
+     * @ORM\OneToOne(targetEntity="\BasketPlanner\MatchBundle\Entity\Match", mappedBy="user")
+     **/
+    protected $match;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\Comment", mappedBy="user")
+     **/
+    protected $comments;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="google_access_token", type="string", length=255, nullable=true)
@@ -280,4 +290,86 @@ class User extends BaseUser
         return $this;
     }
 
+
+    /**
+     * Set profileUpdated
+     *
+     * @param boolean $profileUpdated
+     *
+     * @return User
+     */
+    public function setProfileUpdated($profileUpdated)
+    {
+        $this->profileUpdated = $profileUpdated;
+
+        return $this;
+    }
+
+    /**
+     * Get profileUpdated
+     *
+     * @return boolean
+     */
+    public function getProfileUpdated()
+    {
+        return $this->profileUpdated;
+    }
+
+    /**
+     * Set match
+     *
+     * @param \BasketPlanner\MatchBundle\Entity\Match $match
+     *
+     * @return User
+     */
+    public function setMatch(\BasketPlanner\MatchBundle\Entity\Match $match = null)
+    {
+        $this->match = $match;
+
+        return $this;
+    }
+
+    /**
+     * Get match
+     *
+     * @return \BasketPlanner\MatchBundle\Entity\Match
+     */
+    public function getMatch()
+    {
+        return $this->match;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \BasketPlanner\MatchBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\BasketPlanner\MatchBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \BasketPlanner\MatchBundle\Entity\Comment $comment
+     */
+    public function removeComment(\BasketPlanner\MatchBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }

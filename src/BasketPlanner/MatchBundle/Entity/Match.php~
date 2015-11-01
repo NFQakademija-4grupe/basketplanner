@@ -1,0 +1,56 @@
+<?php
+
+namespace BasketPlanner\MatchBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="matches")
+ */
+class Match
+{
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="\BasketPlanner\UserBundle\Entity\User", inversedBy="match")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    protected $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="match")
+     **/
+    protected $comments;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $description;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $date;
+
+    /**
+     * @ORM\Column(type="time")
+     */
+    protected $time;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    protected $location;
+}
