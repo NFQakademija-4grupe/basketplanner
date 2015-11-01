@@ -24,13 +24,18 @@ class User extends BaseUser
      *
      * @ORM\Column(name="first_name", type="string", length=50, nullable=true)
      *
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(message="Įveskite savo vardą.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=50,
      *     minMessage="Vardas per trumpas.",
      *     maxMessage="Vardas per ilgas.",
      *     groups={"Registration", "Profile"}
+     * )
+     * @Assert\Regex(
+     *        pattern="/[a-zA-Z]/",
+     *        message="Vardas gali būti sudarytas tik iš raidžių symbolių.",
+     *        groups={"Registration", "Profile"}
      * )
      */
     protected $firstName;
@@ -40,13 +45,18 @@ class User extends BaseUser
      *
      * @ORM\Column(name="last_name", type="string", length=50, nullable=true)
      *
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\NotBlank(message="Įveskite savo pavardę.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=50,
      *     minMessage="Pavarde per trumpa.",
      *     maxMessage="Pavarde per ilga.",
      *     groups={"Registration", "Profile"}
+     * )
+     * @Assert\Regex(
+     *        pattern="/[a-zA-Z]/",
+     *        message="Pavardė gali būti sudaryta tik iš raidžių symbolių.",
+     *        groups={"Registration", "Profile"}
      * )
      */
     protected $lastName;

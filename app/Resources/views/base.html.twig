@@ -28,8 +28,9 @@
                     {% include 'partials/side-navigation.html.twig' %}
                 {% endblock %}
 
-                {% block content %}{% endblock %}
-
+                <section class="col-md-9 main-section">
+                    {% block content %}{% endblock %}
+                </section>
                 {% block footer %}
                     {% include 'partials/footer.html.twig' %}
                 {% endblock %}

@@ -24,6 +24,9 @@ profile:
     show:
         username: Naudotojo vardas
         email: El. paštas
+        first_name: Vardas
+        last_name: Pavardė
+        gender: Lytis
     edit:
         submit: Atnaujinti
     flash:
