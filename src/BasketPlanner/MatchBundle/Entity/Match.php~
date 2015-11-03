@@ -2,7 +2,6 @@
 
 namespace BasketPlanner\MatchBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,11 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Match
 {
-    public function __construct()
-    {
-        $this->comments = new ArrayCollection();
-    }
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -30,27 +24,135 @@ class Match
     protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="match")
-     **/
-    protected $comments;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     protected $description;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
-    protected $date;
+    protected $dateTime;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="string", length=25)
      */
-    protected $time;
+    protected $district;
 
     /**
      * @ORM\Column(type="json_array")
      */
     protected $location;
+
+    /**
+     * @ORM\Column(type="string", columnDefinition="ENUM('1x1', '2x2', '3x3', '4x4', '5x5', 'Nesvarbu')")
+     */
+    protected $type;
+
+
+    /**
+     * @return mixed
+     */
+    public function getDistrict()
+    {
+        return $this->district;
+    }
+
+    /**
+     * @param mixed $district
+     */
+    public function setDistrict($district)
+    {
+        $this->district = $district;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
+    }
+
+    /**
+     * @param mixed $dateTime
+     */
+    public function setDateTime($dateTime)
+    {
+        $this->dateTime = $dateTime;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Match
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set location
+     *
+     * @param array $location
+     *
+     * @return Match
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return array
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
 }

@@ -101,11 +101,6 @@ class User extends BaseUser
     protected $match;
 
     /**
-     * @ORM\OneToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\Comment", mappedBy="user")
-     **/
-    protected $comments;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="google_access_token", type="string", length=255, nullable=true)
