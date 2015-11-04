@@ -36,7 +36,7 @@
                 {% endblock %}
             {% else  %}
                 {% block login %}
-                    {% include 'partials/login.html.twig' %}
+                    {% render url('fos_user_security_login') %}
                 {% endblock %}
             {%  endif %}
         {% endblock %}

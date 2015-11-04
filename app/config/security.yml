@@ -30,8 +30,8 @@ security:
                 resource_owners:
                     facebook:      "/login/check-facebook"
                     google:        "/login/check-google"
-                login_path:        /login
-                failure_path:      /login
+                login_path:        /
+                failure_path:      /
 
                 oauth_user_provider:
                     service: basketplanner_user_provider

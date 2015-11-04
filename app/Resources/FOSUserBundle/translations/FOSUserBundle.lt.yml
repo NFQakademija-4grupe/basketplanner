@@ -27,7 +27,9 @@ profile:
         first_name: Vardas
         last_name: Pavardė
         gender: Lytis
+        age: Amžius
     edit:
+        edit: Redaguoti
         submit: Atnaujinti
     flash:
         updated: Profilis atnaujintas
@@ -98,3 +100,6 @@ form:
     first_name: Vardas
     last_name: Pavardė
     gender: Lytis
+    female: Moteris
+    male: Vyras
+    age: Amžius

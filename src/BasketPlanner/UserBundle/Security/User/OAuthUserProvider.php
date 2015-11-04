@@ -19,7 +19,7 @@ class OAuthUserProvider extends BaseClass
         if (null === $user) {
             //check if user with service email exist in database
             if($existent_user = $this->userManager->findUserByEmail($response->getEmail())){
-                $message = 'There is already an account with this email address';
+                $message = 'Vartotojas su nurodytu el.pašto adresu jau egzistuoja.';
                 throw new \Symfony\Component\Security\Core\Exception\AuthenticationException($message);
             }
 
@@ -66,7 +66,7 @@ class OAuthUserProvider extends BaseClass
                 $user->setGender($responseCustomFields['gender']);
             }
 
-            $user->setPassword($serviceUserId);
+            $user->setPlainPassword($serviceUserId);
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
             return $user;

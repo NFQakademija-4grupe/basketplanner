@@ -69,6 +69,13 @@ class User extends BaseUser
     protected $gender;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="age", type="integer", length=2, nullable=true)
+     */
+    protected $age;
+
+    /**
      * @ORM\Column(name="profile_updated", type="boolean", nullable=true)
      */
     protected $profileUpdated = false;
@@ -200,6 +207,29 @@ class User extends BaseUser
     public function setGender($gender)
     {
         $this->gender = $gender;
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return int
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * Set age
+     *
+     * @param int $age
+     *
+     * @return User
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
         return $this;
     }
 

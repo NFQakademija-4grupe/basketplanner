@@ -1,5 +1,7 @@
 {% extends "::base.html.twig" %}
 
-{% block content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
-{% endblock content %}
+{% block main_body %}
+    <div class="center-block">
+        {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+    </div>
+{% endblock main_body %}
