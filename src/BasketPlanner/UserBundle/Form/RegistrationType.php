@@ -12,8 +12,10 @@ class RegistrationType extends AbstractType
         $builder->add('firstName');
         $builder->add('lastName');
         $builder->add('gender', 'choice', array(
-            'choices'  => array('male' => 'Vyras', 'female' => 'Moteris'),
+            'choices'  => array('male' => 'form.male', 'female' => 'form.female'),
             'required' => true,
+            'label' => 'form.gender',
+            'translation_domain' => 'FOSUserBundle'
         ));
     }
 

@@ -89,6 +89,9 @@ fos_user:
     registration:
         form:
             type: basketplanner_user_registration
+    profile:
+        form:
+            type: basketplanner_user_profile
 
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
