@@ -76,6 +76,13 @@ class User extends BaseUser
     protected $age;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="picture_url", type="string", length=500, nullable=true)
+     */
+    protected $profilePicture;
+
+    /**
      * @ORM\Column(name="profile_updated", type="boolean", nullable=true)
      */
     protected $profileUpdated = false;
@@ -93,7 +100,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
      */
-    protected $facebook_access_token;
+    protected $facebookAccessToken;
 
     /**
      * @var string
@@ -112,7 +119,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="google_access_token", type="string", length=255, nullable=true)
      */
-    protected $google_access_token;
+    protected $googleAccessToken;
 
     public function __construct()
     {
@@ -234,6 +241,29 @@ class User extends BaseUser
     }
 
     /**
+     * Get profile picture url
+     *
+     * @return string
+     */
+    public function getProfilePicture()
+    {
+        return $this->profilePicture;
+    }
+
+    /**
+     * Set profile picture url
+     *
+     * @param string $profilePicture
+     *
+     * @return User
+     */
+    public function setProfilePicture($profilePicture)
+    {
+        $this->profilePicture = $profilePicture;
+        return $this;
+    }
+
+    /**
      * Get facebook Id
      *
      * @return string
@@ -286,7 +316,7 @@ class User extends BaseUser
      */
     public function getFacebookAccessToken()
     {
-        return $this->facebook_access_token;
+        return $this->facebookAccessToken;
     }
 
     /**
@@ -298,7 +328,7 @@ class User extends BaseUser
      */
     public function setFacebookAccessToken($facebookAccessToken)
     {
-        $this->facebook_access_token = $facebookAccessToken;
+        $this->facebookAccessToken = $facebookAccessToken;
         return $this;
     }
 
@@ -309,7 +339,7 @@ class User extends BaseUser
      */
     public function getGoogleAccessToken()
     {
-        return $this->google_access_token;
+        return $this->googleAccessToken;
     }
 
     /**
@@ -321,7 +351,7 @@ class User extends BaseUser
      */
     public function setGoogleAccessToken($googleAccessToken)
     {
-        $this->google_access_token = $googleAccessToken;
+        $this->googleAccessToken = $googleAccessToken;
         return $this;
     }
 

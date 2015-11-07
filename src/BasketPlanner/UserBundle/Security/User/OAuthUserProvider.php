@@ -4,9 +4,19 @@ namespace BasketPlanner\UserBundle\Security\User;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class OAuthUserProvider extends BaseClass
 {
+    protected $dispatcher;
+
+    /*
+    public function __construct(UserManagerInterface $userManager, array $properties, EventDispatcherInterface $dispatcher){
+        parent::__construct($userManager, $properties);
+        $this->dispatcher = $dispatcher;
+    }
+    */
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +28,7 @@ class OAuthUserProvider extends BaseClass
         //registration
         if (null === $user) {
             //check if user with service email exist in database
-            if($existent_user = $this->userManager->findUserByEmail($response->getEmail())){
+            if($user_exists = $this->userManager->findUserByEmail($response->getEmail())){
                 $message = 'Vartotojas su nurodytu el.pašto adresu jau egzistuoja.';
                 throw new \Symfony\Component\Security\Core\Exception\AuthenticationException($message);
             }
@@ -35,12 +45,14 @@ class OAuthUserProvider extends BaseClass
             $responseCustomFields = $response->getResponse();
             //fill user info
             $user->setEmail($response->getEmail());
+            $user->setProfilePicture($response->getProfilePicture());
             //custom fields witch can be empty if user doesn't allow to provide them
             if($response->getRealName() != null){
                 $user->setUsername($serviceUserId);
             }else{
                 $user->setUsername($response->getEmail());
             }
+
             switch($service){
                 case "facebook":
                     if (array_key_exists('first_name', $responseCustomFields)){
@@ -66,9 +78,16 @@ class OAuthUserProvider extends BaseClass
                 $user->setGender($responseCustomFields['gender']);
             }
 
-            $user->setPlainPassword($serviceUserId);
+            //generate random password
+            $passwordGenerator = new SecureRandom();
+            $random = $passwordGenerator->nextBytes(16);
+            $passwordString= bin2hex($random);
+            $password = substr($passwordString,0,10);
+
+            $user->setPlainPassword($password);
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
+
             return $user;
         }
         //if user exists - go with the HWIOAuth way
@@ -78,5 +97,10 @@ class OAuthUserProvider extends BaseClass
         $user->$setter($response->getAccessToken());
 
         return $user;
+    }
+
+    public function setEventDispatcher(TraceableEventDispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
 }

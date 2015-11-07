@@ -1,6 +1,7 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <div class="fos_user_user_show">
+    <p><img src="{{ user.profilePicture }}"/></p>
     <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
     <p>{{ 'profile.show.first_name'|trans }}: {{ user.firstName }}</p>
     <p>{{ 'profile.show.last_name'|trans }}: {{ user.lastName }}</p>
