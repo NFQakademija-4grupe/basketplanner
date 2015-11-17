@@ -78,8 +78,10 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
+    transport: smtp
+    encryption: ssl
+    auth_mode: login
+    host:      smtp.gmail.com
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
@@ -130,3 +132,7 @@ hwi_oauth:
             client_id:           "134368907402-4970hjvcpvgcph882m349glugp2qjka8.apps.googleusercontent.com"
             client_secret:       "dpzaJJ2cIj4TuQtr29RswObb"
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+
+ivory_google_map:
+    extensions:
+        my_extension: basket_planner_match.map_extension

@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new BasketPlanner\MainBundle\BasketPlannerMainBundle(),
             new BasketPlanner\TeamBundle\BasketPlannerTeamBundle(),
             new BasketPlanner\MatchBundle\BasketPlannerMatchBundle(),
+            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
