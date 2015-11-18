@@ -8,3 +8,7 @@ services:
         class: BasketPlanner\UserBundle\Form\RegistrationType
         tags:
             - { name: form.type, alias: app_user_registration }
+
+    basket_planner_match.map_extension:
+        class: BasketPlanner\MatchBundle\Extension\MyGoogleMapExtension
+        public: false

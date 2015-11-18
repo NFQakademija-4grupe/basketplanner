@@ -21,3 +21,11 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: basketplanner_user_profile }
+
+    basketplanner.user.event_listener:
+        class: BasketPlanner\UserBundle\Listeners\UserEventsListener
+        arguments:
+            templating: "@twig"
+            mailer: "@mailer"
+        tags:
+        - { name: kernel.event_listener, event: registration.event, method: onRegistrationEvent }

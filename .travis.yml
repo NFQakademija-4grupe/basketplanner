@@ -1,0 +1,17 @@
+sudo: false
+language: php
+php:
+  - 5.6
+services:
+  - mysql
+matrix:
+  allow_failures:
+    - php: hhvm
+before_script:
+#  - composer config -g github-oauth.github.com
+  - mysql -e "create database IF NOT EXISTS symfony;" -uroot
+  - composer install --no-interaction
+
+script:
+  - vendor/bin/phpunit --coverage-clover=coveralls.clover
+  - vendor/bin/phpcs -p --standard=vendor/ongr/ongr-strict-standard/Ongr --ignore=vendor/,Tests/app/ ./
