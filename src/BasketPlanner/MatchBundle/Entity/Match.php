@@ -3,11 +3,12 @@
 namespace BasketPlanner\MatchBundle\Entity;
 
 use BasketPlanner\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="matches")
  */
 class Match
@@ -20,13 +21,21 @@ class Match
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="\BasketPlanner\UserBundle\Entity\User", inversedBy="match")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *
-     * @Assert\Type(type="\BasketPlanner\UserBundle\Entity\User")
-     * @Assert\Valid()
+     * @ORM\ManyToOne(targetEntity="\BasketPlanner\UserBundle\Entity\User", inversedBy="createdMatches")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      **/
-    protected $user;
+    protected $owner;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\BasketPlanner\UserBundle\Entity\User", inversedBy="joinedMatches")
+     * @ORM\JoinTable(name="matches_users")
+     */
+    protected $players;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="match")
+     */
+    protected $comments;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -35,85 +44,75 @@ class Match
      *     message = "Aprašymas negali būti tuščias"
      * )
      * @Assert\Length(
-     *     min = 25,
+     *     min = 10,
      *     max = 255,
-     *     minMessage = "Aprašymas negali būti trumpesnis nei {{ limit }} simboliai",
+     *     minMessage = "Aprašymas negali būti trumpesnis nei {{ limit }} simbolių",
      *     maxMessage = "Aprašymas negali būti ilgesnis kaip {{ limit }} simboliai"
      * )
      */
     protected $description;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity="Court")
+     * @ORM\JoinColumn(name="court_id", referencedColumnName="id")
+     *
+     * @Assert\NotBlank(
+     *     message = "Prašome pasirinkti aikštelę"
+     * )
+     * @Assert\Valid()
+     */
+    protected $court;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
      *
      * @Assert\DateTime(
-     *     message = "Blogai nurodytas mačo laikas"
+     *     message = "Neteisingas mačo laikas"
      * )
      * @Assert\Range(
      *     min = "now",
-     *     minMessage = "Blogai nurodytas mačo laikas"
+     *     max = "+7 days",
+     *     minMessage = "Blogai nurodytas mačo laikas",
+     *     maxMessage = "Mačą galima kurti ne daugiau kaip 7 dienom į priekį"
      * )
      */
     protected $beginsAt;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @var int
      *
-     * @Assert\NotBlank(
-     *     message = "Rajonas negali būti tuščias"
-     * )
-     * @Assert\Length(
-     *     min = 5,
-     *     max = 25,
-     *     minMessage = "Rajono pavadinimas negali būti trumpesnis nei {{ limit }} simboliai",
-     *     maxMessage = "Rajono pavadinimas negali būti ilgesnis kaip {{ limit }} simboliai"
-     * )
+     * @ORM\Column(type="integer", nullable=false)
      */
-    protected $district;
+    protected $playersCount;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      *
      * @Assert\NotBlank(
-     *     message = "Nenurodyta platuma"
+     *     message = "Prašome pasirinkti mačo tipą"
      * )
-     * @Assert\Type(
-     *     type="double",
-     *     message = "Blogai nurodyta koordinate(platuma)"
-     * )
-     */
-    protected $latitude;
-
-    /**
-     * @ORM\Column(type="float")
-     *
-     * @Assert\NotBlank(
-     *     message = "Nenurodyta ilguma"
-     * )
-     * @Assert\Type(
-     *     type="double",
-     *     message = "Blogai nurodyta koordinate(ilguma)"
-     * )
-     */
-    protected $longitude;
-
-    /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('1x1', '2x2', '3x3', '4x4', '5x5', 'Nesvarbu')")
-     *
-     * @Assert\Choice(
-     *     choices = {"1x1", "2x2", "3x3", "4x4", "5x5", "Nesvarbu"},
-     *     message = "Neteisingas mačo tipas"
-     * )
+     * @Assert\Valid()
      */
     protected $type;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=false)
      *
      * @Assert\DateTime()
      */
     protected $createdAt;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    protected $active;
+
+    public function __construct()
+    {
+        $this->players = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -174,85 +173,13 @@ class Match
     }
 
     /**
-     * Set district
-     *
-     * @param string $district
-     *
-     * @return Match
-     */
-    public function setDistrict($district)
-    {
-        $this->district = $district;
-
-        return $this;
-    }
-
-    /**
-     * Get district
-     *
-     * @return string
-     */
-    public function getDistrict()
-    {
-        return $this->district;
-    }
-
-    /**
-     * Set latitude
-     *
-     * @param \double $latitude
-     *
-     * @return Match
-     */
-    public function setLatitude($latitude)
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
-
-    /**
-     * Get latitude
-     *
-     * @return \double
-     */
-    public function getLatitude()
-    {
-        return $this->latitude;
-    }
-
-    /**
-     * Set longitude
-     *
-     * @param \double $longitude
-     *
-     * @return Match
-     */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    /**
-     * Get longitude
-     *
-     * @return \double
-     */
-    public function getLongitude()
-    {
-        return $this->longitude;
-    }
-
-    /**
      * Set type
      *
-     * @param string $type
+     * @param Type $type
      *
      * @return Match
      */
-    public function setType($type)
+    public function setType(Type $type)
     {
         $this->type = $type;
 
@@ -262,7 +189,7 @@ class Match
     /**
      * Get type
      *
-     * @return string
+     * @return Type
      */
     public function getType()
     {
@@ -294,26 +221,176 @@ class Match
     }
 
     /**
-     * Set user
+     * Set court
      *
-     * @param User $user
+     * @param Court $court
      *
      * @return Match
      */
-    public function setUser(User $user = null)
+    public function setCourt(Court $court = null)
     {
-        $this->user = $user;
+        $this->court = $court;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get court
+     *
+     * @return Court
+     */
+    public function getCourt()
+    {
+        return $this->court;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param User $owner
+     *
+     * @return Match
+     */
+    public function setOwner(User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
      *
      * @return User
      */
-    public function getUser()
+    public function getOwner()
     {
-        return $this->user;
+        return $this->owner;
+    }
+
+    public function increasePlayersCount()
+    {
+        $this->playersCount++;
+    }
+
+    public function decreasePlayersCount()
+    {
+        $this->playersCount--;
+    }
+
+    /**
+     * Set players
+     *
+     * @param integer $playersCount
+     *
+     * @return Match
+     */
+    public function setPlayersCount($playersCount)
+    {
+        $this->playersCount = $playersCount;
+
+        return $this;
+    }
+
+    /**
+     * Get players
+     *
+     * @return integer
+     */
+    public function getPlayersCount()
+    {
+        return $this->playersCount;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Match
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Add player
+     *
+     * @param User $player
+     *
+     * @return Match
+     */
+    public function addPlayer(User $player)
+    {
+        $this->players[] = $player;
+
+        return $this;
+    }
+
+    /**
+     * Remove player
+     *
+     * @param User $player
+     */
+    public function removePlayer(User $player)
+    {
+        $this->players->removeElement($player);
+    }
+
+    /**
+     * Get players
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param Comment $comment
+     *
+     * @return Match
+     */
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param Comment $comment
+     */
+    public function removeComment(Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

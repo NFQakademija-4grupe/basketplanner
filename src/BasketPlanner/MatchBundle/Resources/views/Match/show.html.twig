@@ -1,1 +1,49 @@
-show
+{% extends '::base.html.twig' %}
+{# INDIVIDUALAUS MAČO INFO #}
+
+{% block content %}
+
+{% for flash_message in app.session.flashbag.get('success') %}
+    <div style="color: #3fad46; font-size: 20px;">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+
+{% for flash_message in app.session.flashbag.get('error') %}
+    <div style="color: #ed0600; font-size: 20px;">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+
+{{ dump(match) }}
+Cia rodomas macas rastas pagal nurodyta ID. Jei maco neras, gausim 404 Not Found. <br>
+Visa maco informacija pasiekiama per `match` kintamaji.<br><br>
+
+{% if app.user == match.owner %}
+    Linkas matomas tik maco kurejui <br>
+    <a href="{{ path('basket_planner_match_edit', {'id' : match.id}) }}">Redaguoti maco aprasyma</a>
+{% endif %}
+
+<br><br>
+Visi maco zaidejai: <br>
+{% for player in match.players %}
+    <li>{{ player.fullName }}</li>
+{% endfor %}
+<br><br>
+
+Visos maco zinutes: <br>
+{% if match.comments is not empty %}
+    {% for comment in match.comments %}
+        <li><strong>Zinute:</strong> {{ comment.message }}, <strong>Autorius:</strong> {{ comment.user.fullName }}</li>
+    {% endfor %}
+{% else %}
+    Niekas nieko neparase... :(
+{% endif %}
+
+<br><br>
+
+<div id="komentaru-forma">
+    {{ render(controller('BasketPlannerMatchBundle:Comment:create', { 'id': match.id } )) }}
+</div>
+
+{% endblock %}

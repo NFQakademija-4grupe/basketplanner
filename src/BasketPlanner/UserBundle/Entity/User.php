@@ -2,6 +2,8 @@
 
 namespace BasketPlanner\UserBundle\Entity;
 
+use BasketPlanner\MatchBundle\Entity\Match;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -110,9 +112,14 @@ class User extends BaseUser
     private $googleId;
 
     /**
-     * @ORM\OneToOne(targetEntity="\BasketPlanner\MatchBundle\Entity\Match", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\Match", mappedBy="owner")
      **/
-    protected $match;
+    protected $createdMatches;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\Match", mappedBy="players")
+     */
+    protected $joinedMatches;
 
     /**
      * @var string
@@ -124,7 +131,8 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+        $this->createdMatches = new ArrayCollection();
+        $this->joinedMatches = new ArrayCollection();
     }
 
     /**
@@ -380,61 +388,72 @@ class User extends BaseUser
         return $this->profileUpdated;
     }
 
+
     /**
-     * Set match
+     * Add createdMatch
      *
-     * @param \BasketPlanner\MatchBundle\Entity\Match $match
+     * @param Match $createdMatch
      *
      * @return User
      */
-    public function setMatch(\BasketPlanner\MatchBundle\Entity\Match $match = null)
+    public function addCreatedMatch(Match $createdMatch)
     {
-        $this->match = $match;
+        $this->createdMatches[] = $createdMatch;
 
         return $this;
     }
 
     /**
-     * Get match
+     * Remove createdMatch
      *
-     * @return \BasketPlanner\MatchBundle\Entity\Match
+     * @param Match $createdMatch
      */
-    public function getMatch()
+    public function removeCreatedMatch(Match $createdMatch)
     {
-        return $this->match;
+        $this->createdMatches->removeElement($createdMatch);
     }
 
     /**
-     * Add comment
-     *
-     * @param \BasketPlanner\MatchBundle\Entity\Comment $comment
-     *
-     * @return User
-     */
-    public function addComment(\BasketPlanner\MatchBundle\Entity\Comment $comment)
-    {
-        $this->comments[] = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Remove comment
-     *
-     * @param \BasketPlanner\MatchBundle\Entity\Comment $comment
-     */
-    public function removeComment(\BasketPlanner\MatchBundle\Entity\Comment $comment)
-    {
-        $this->comments->removeElement($comment);
-    }
-
-    /**
-     * Get comments
+     * Get createdMatches
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getComments()
+    public function getCreatedMatches()
     {
-        return $this->comments;
+        return $this->createdMatches;
+    }
+
+    /**
+     * Add joinedMatch
+     *
+     * @param Match $joinedMatch
+     *
+     * @return User
+     */
+    public function addJoinedMatch(Match $joinedMatch)
+    {
+        $this->joinedMatches[] = $joinedMatch;
+
+        return $this;
+    }
+
+    /**
+     * Remove joinedMatch
+     *
+     * @param Match $joinedMatch
+     */
+    public function removeJoinedMatch(Match $joinedMatch)
+    {
+        $this->joinedMatches->removeElement($joinedMatch);
+    }
+
+    /**
+     * Get joinedMatches
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJoinedMatches()
+    {
+        return $this->joinedMatches;
     }
 }

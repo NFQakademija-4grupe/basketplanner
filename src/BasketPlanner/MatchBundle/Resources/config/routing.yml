@@ -1,6 +1,39 @@
 basket_planner_match_create:
     path:     /create
     defaults: { _controller: BasketPlannerMatchBundle:Match:create }
+    methods: [GET, POST]
+
+basket_planner_match_edit:
+    path:     /edit/{id}
+    defaults: { _controller: BasketPlannerMatchBundle:Match:edit }
+    methods: [GET, POST]
+    requirements:
+        id: \d+
+
+basket_planner_match_list:
+    path: /{page}
+    defaults: { _controller: BasketPlannerMatchBundle:Match:list, page: 1 }
+    methods: [GET]
+    requirements:
+        page: \d+
+
 basket_planner_match_show:
-    path:     /show
+    path:     /show/{id}
     defaults: { _controller: BasketPlannerMatchBundle:Match:show }
+    methods: [GET]
+    requirements:
+        id: \d+
+
+basket_planner_match_join:
+    path: /join/{id}
+    defaults: { _controller: BasketPlannerMatchBundle:Match:join }
+    methods: [GET]
+    requirements:
+        id: \d+
+
+basket_planner_comment_create:
+    path: /{id}/comment/create
+    defaults: { _controller: BasketPlannerMatchBundle:Comment:create }
+    methods: [POST]
+    requirements:
+        id: \d+

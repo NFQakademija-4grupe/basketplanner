@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+{{ form_start(form) }}
+    <div>
+        {{ form_label(form.description, 'Aprašymas') }}<br>
+        {{ form_errors(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'ASDASDASDSA'}}) }}
+    </div>
+    <br>
+    {% if form.court is defined  %}
+    <div>
+        {{ form_label(form.court, 'Aikštelė') }}
+        {{ form_errors(form.court) }}
+        {{ form_widget(form.court) }}
+    </div>
+    {% endif %}
+    <br>
+    {% if form.beginsAt is defined  %}
+    <div>
+        {{ form_label(form.beginsAt, 'Mačo pradžia') }}
+        {{ form_errors(form.beginsAt) }}
+        {{ form_widget(form.beginsAt) }}
+    </div>
+    {% endif %}
+    <br>
+    {% if form.type is defined  %}
+    <div>
+        {{ form_label(form.type, 'Mačo tipas') }}
+        {{ form_errors(form.type) }}
+        {{ form_widget(form.type) }}
+    </div>
+    {% endif %}
+    <br>
+
+    {{ form_widget(form.save) }}
+{{ form_end(form) }}
+
+<h2>Visų aikštelių sąrašas su koordinatem</h2>
+{% for court in courts %}
+    ID: {{ court.id }} <br>
+    Adresas : {{ court.address }} <br>
+    Latitude: {{ court.latitude }} <br>
+    Longitude: {{ court.longitude }} <br>
+    <hr>
+{% endfor %}
+
+{% endblock %}
