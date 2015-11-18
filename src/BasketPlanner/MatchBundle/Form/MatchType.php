@@ -33,10 +33,14 @@ class MatchType extends AbstractType
                 ])
                 ->add('type', 'entity', [
                     'class' => 'BasketPlanner\MatchBundle\Entity\Type',
-                    'data_class' => 'BasketPlanner\MatchBundle\Entity\Type',
                     'choice_label' => 'name',
+                    'required' => true,
                     'expanded' => true,
-                    'multiple' => false
+                    'multiple' => false,
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er
+                            ->createQueryBuilder('c');
+                    }
                 ])
             ;
         }

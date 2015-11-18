@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use BasketPlanner\UserBundle\Entity\User;
 
 /**
- * UserTeam
+ * TeamUsers
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class UserTeam
+class TeamUsers
 {
     /**
      * @var integer
@@ -60,7 +60,7 @@ class UserTeam
      *
      * @param integer $userId
      *
-     * @return UserTeam
+     * @return TeamUsers
      */
     public function setUserId($userId)
     {
@@ -84,7 +84,7 @@ class UserTeam
      *
      * @param integer $teamId
      *
-     * @return UserTeam
+     * @return TeamUsers
      */
     public function setTeamId($teamId)
     {
@@ -108,7 +108,7 @@ class UserTeam
      *
      * @param string $role
      *
-     * @return UserTeam
+     * @return TeamUsers
      */
     public function setRole($role)
     {
@@ -132,7 +132,7 @@ class UserTeam
      *
      * @param \BasketPlanner\UserBundle\Entity\User $user
      *
-     * @return UserTeam
+     * @return TeamUsers
      */
     public function setUser(\BasketPlanner\UserBundle\Entity\User $user = null)
     {
@@ -156,7 +156,7 @@ class UserTeam
      *
      * @param \BasketPlanner\TeamBundle\Entity\Team $team
      *
-     * @return UserTeam
+     * @return TeamUsers
      */
     public function setTeam(\BasketPlanner\TeamBundle\Entity\Team $team = null)
     {

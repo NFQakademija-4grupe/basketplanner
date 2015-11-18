@@ -1,1 +1,8 @@
+parameters:
 services:
+    basketplanner_match.map_extension:
+        class: BasketPlanner\MatchBundle\Extension\MyGoogleMapExtension
+
+    basketplanner_match.map_loader_service:
+        class: BasketPlanner\MatchBundle\Services\GoogleMapLoaderService
+        arguments: ['@service_container']

@@ -9,9 +9,26 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Ivory\GoogleMap\Overlays\Marker;
+use Ivory\GoogleMap\Overlays\InfoWindow;
+use Ivory\GoogleMap\Helper\MapHelper;
 
 class MatchController extends Controller
 {
+    /**
+     * @var Ivory\GoogleMapBundle\Model\Map
+     */
+    public function indexAction()
+    {
+        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $map = $loadMap->loadMarkers(false);
+        $mapVariable = $map->getJavascriptVariable();
+        return $this->render('BasketPlannerMatchBundle:Match:index.html.twig', array(
+            'map' => $map,
+            'mapVariable' => $mapVariable
+        ));
+    }
+
     /**
      * Show all matches
      *
@@ -58,6 +75,10 @@ class MatchController extends Controller
      */
     public function createAction(Request $request)
     {
+        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $map = $loadMap->loadMarkers(false);
+        $mapVariable = $map->getJavascriptVariable();
+
         $match = new Match();
 
         $form = $this->createForm(new MatchType(), $match);
@@ -82,9 +103,11 @@ class MatchController extends Controller
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
 
-        $courts = $em->getRepository('BasketPlannerMatchBundle:Court')->findByApproved(1);
-
-        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', ['form' => $form->createView(), 'courts' => $courts]);
+        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [
+            'form' => $form->createView(),
+            'map' => $map,
+            'mapVariable' => $mapVariable,
+        ]);
     }
 
     /**

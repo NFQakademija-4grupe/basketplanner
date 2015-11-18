@@ -18,7 +18,7 @@ class Team
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\UserTeam", mappedBy="team", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\TeamUsers", mappedBy="team", cascade={"all"})
      */
     private $id;
 

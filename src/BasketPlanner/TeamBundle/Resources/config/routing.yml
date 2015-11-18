@@ -1,15 +1,3 @@
 basket_planner_team_homepage:
     path:     /
     defaults: { _controller: BasketPlannerTeamBundle:Team:index }
-
-basket_planner_team_create:
-    path:     /create
-    defaults: { _controller: BasketPlannerTeamBundle:Team:create }
-
-basket_planner_team_edit:
-    path:     /edit
-    defaults: { _controller: BasketPlannerTeamBundle:Team:edit }
-
-basket_planner_team_remove:
-    path:     /remove
-    defaults: { _controller: BasketPlannerTeamBundle:Team:remove }

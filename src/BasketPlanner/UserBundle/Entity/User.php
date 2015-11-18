@@ -19,7 +19,7 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\UserTeam", mappedBy="user", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\TeamUsers", mappedBy="user", cascade={"all"})
      */
     protected $id;
 

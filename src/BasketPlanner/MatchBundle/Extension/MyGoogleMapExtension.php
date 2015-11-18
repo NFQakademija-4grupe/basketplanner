@@ -34,6 +34,54 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
     public function renderAfter(Map $map)
     {
         // Here, we can render js code just after the generated one.
-        return;
+        return '
+                    var mapVariable = '.$map->getJavascriptVariable().';
+                    var geocoder;
+                    var marker;
+                    function initialize() {
+                        geocoder = new google.maps.Geocoder();
+                        google.maps.event.addListener(mapVariable, "click", function(event) {
+                            placeMarker(event.latLng);
+                        });
+                    }
+                    function placeMarker(location) {
+                        if (marker == null){
+                            marker = new google.maps.Marker({
+                                position: location,
+                                map: mapVariable,
+                                markerID: "new"
+                            });
+                            google.maps.event.addListener(marker, "click", markerClickEventListener);
+                            marker.info = new google.maps.InfoWindow({
+                                content: "<br>"
+                            });
+                            geocodePosition(marker.getPosition());
+                            google.maps.event.addListener(marker, "click", function() {
+                                marker.info.open(mapVariable, marker);
+                            });
+                        }else{
+                            marker.setPosition(location);
+                            geocodePosition(marker.getPosition());
+                        }
+                    }
+                    function geocodePosition(pos) {
+                        geocoder.geocode({
+                            latLng: pos
+                        }, function(responses) {
+                            if (responses && responses.length > 0) {
+                                var address = responses[0].address_components[1].long_name + " " +
+                                              responses[0].address_components[0].long_name + ", " +
+                                              responses[0].address_components[2].long_name;
+                                updateMarkerAddress(address);
+                            } else {
+                                updateMarkerAddress("Cannot determine address at this location.");
+                            }
+                        });
+                    }
+                    function updateMarkerAddress(str) {
+                        var contentText = str + "<br>";
+                        marker.info.setContent(contentText);
+                    }
+                    initialize();'.PHP_EOL;
     }
 }
