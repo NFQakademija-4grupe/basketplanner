@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Type
  *
- * @ORM\Table(name="types")
+ * @ORM\Table(name="match_types")
  * @ORM\Entity
  */
 class Type
