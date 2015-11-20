@@ -13,4 +13,4 @@ before_script:
   - composer install --no-interaction
 
 script:
-  - vendor/phpunit --coverage-clover=coveralls.clover
+  - phpunit --configuration app/phpunit.xml --coverage-text
