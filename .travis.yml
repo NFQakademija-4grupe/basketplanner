@@ -14,4 +14,3 @@ before_script:
 
 script:
   - vendor/bin/phpunit --coverage-clover=coveralls.clover
-  - vendor/bin/phpcs -p --standard=vendor/ongr/ongr-strict-standard/Ongr --ignore=vendor/,Tests/app/ ./

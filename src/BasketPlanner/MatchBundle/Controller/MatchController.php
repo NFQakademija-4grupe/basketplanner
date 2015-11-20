@@ -15,19 +15,6 @@ use Ivory\GoogleMap\Helper\MapHelper;
 
 class MatchController extends Controller
 {
-    /**
-     * @var Ivory\GoogleMapBundle\Model\Map
-     */
-    public function indexAction()
-    {
-        $loadMap = $this->get('basket_planner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
-        $mapVariable = $map->getJavascriptVariable();
-        return $this->render('BasketPlannerMatchBundle:Match:index.html.twig', array(
-            'map' => $map,
-            'mapVariable' => $mapVariable
-        ));
-    }
 
     /**
      * Show all matches
