@@ -24,8 +24,12 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
     {
         // Here, we can render js code just before the generated one.
         return 'function markerClickEventListener(event) {
-           console.log(this.markerID);
-        }'.PHP_EOL;
+                    $("#basket_planner_create_match_court_id").val(this.markerID);
+                    $("#basket_planner_create_match_court_address").val(this.markerAddress);
+                    $("#basket_planner_create_match_court_latitude").val(this.position.lat());
+                    $("#basket_planner_create_match_court_longitude").val(this.position.lng());
+                    console.log(event);
+                }'.PHP_EOL;
     }
 
     /**
@@ -49,7 +53,7 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                             marker = new google.maps.Marker({
                                 position: location,
                                 map: mapVariable,
-                                markerID: "new"
+                                markerID: 0
                             });
                             google.maps.event.addListener(marker, "click", markerClickEventListener);
                             marker.info = new google.maps.InfoWindow({
@@ -80,6 +84,7 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                     }
                     function updateMarkerAddress(str) {
                         var contentText = str + "<br>";
+                        marker.markerAddress = str;
                         marker.info.setContent(contentText);
                     }
                     initialize();'.PHP_EOL;

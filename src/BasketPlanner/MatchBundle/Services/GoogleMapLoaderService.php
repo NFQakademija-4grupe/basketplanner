@@ -35,6 +35,7 @@ class GoogleMapLoaderService{
             $marker->setPosition($court->getLatitude(), $court->getLongitude(), true);
             $marker->setOption('clickable', true);
             $marker->setOption('markerID', $court->getId());
+            $marker->setOption('markerAddress', $court->getAddress());
 
             $infoWindow = new InfoWindow();
             $infoWindow->setContent($court->getAddress());

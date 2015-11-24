@@ -4,6 +4,7 @@
 namespace BasketPlanner\MatchBundle\Controller;
 
 use BasketPlanner\MatchBundle\Entity\Match;
+use BasketPlanner\MatchBundle\Entity\Court;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -76,11 +77,26 @@ class MatchController extends Controller
 
         if ($form->isValid())
         {
+            $court = new Court();
+            $court = $form["court"]->getData();
+
+            $entity = $em->getRepository('BasketPlanner\MatchBundle\Entity\Court')->findOneBy(array('id' => $court->getId()));
+
+            if ($entity == null){
+                $court->setId(null);
+                $court->setApproved(false);
+                $em->persist($court);
+                $em->flush();
+            }else{
+                $court = $entity;
+            }
+
             $user = $this->getUser();
 
             $match->setOwner($user);
             $match->addPlayer($user);
             $match->setPlayersCount(1);
+            $match->setCourt($court);
             $match->setActive(true);
             $match->setCreatedAt(new \DateTime('now'));
 

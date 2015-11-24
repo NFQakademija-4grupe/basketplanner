@@ -2,6 +2,7 @@
 
 namespace BasketPlanner\MatchBundle\Form;
 
+use BasketPlanner\MatchBundle\Entity\Court;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,16 +22,7 @@ class MatchType extends AbstractType
         if (!$options['for_editing'])
         {
             $builder->add('beginsAt', 'datetime')
-                ->add('court', 'entity', [
-                    'class' => 'BasketPlanner\MatchBundle\Entity\Court',
-                    'choice_label' => 'address',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er
-                            ->createQueryBuilder('c')
-                            ->where('c.approved = :approved')
-                            ->setParameter('approved', 1);
-                    }
-                ])
+                ->add('court', new CourtType())
                 ->add('type', 'entity', [
                     'class' => 'BasketPlanner\MatchBundle\Entity\Type',
                     'choice_label' => 'name',
