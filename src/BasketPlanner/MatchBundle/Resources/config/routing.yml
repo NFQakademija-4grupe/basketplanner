@@ -17,6 +17,18 @@ basket_planner_match_list:
     requirements:
         page: \d+
 
+basket_planner_match_filter:
+    path: /filter
+    defaults: { _controller: BasketPlannerMatchBundle:Match:filter }
+    methods: [GET]
+
+basket_planner_match_leave:
+   path: /leave/{id}
+   defaults: { _controller: BasketPlannerMatchBundle:Match:leave }
+   methods: [GET]
+   requirements:
+       id: \d+
+
 basket_planner_match_show:
     path:     /show/{id}
     defaults: { _controller: BasketPlannerMatchBundle:Match:show }

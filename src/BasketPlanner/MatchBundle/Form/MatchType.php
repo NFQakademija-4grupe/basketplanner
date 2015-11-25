@@ -20,10 +20,11 @@ class MatchType extends AbstractType
 
         if (!$options['for_editing'])
         {
-            $builder->add('beginsAt', 'datetime')
+            $builder->add('beginsAt', 'datetime', ['data' => new \DateTime()])
                 ->add('court', new CourtType())
                 ->add('type', 'entity', [
                     'class' => 'BasketPlanner\MatchBundle\Entity\Type',
+                    'data_class' => 'BasketPlanner\MatchBundle\Entity\Type',
                     'choice_label' => 'name',
                     'required' => true,
                     'expanded' => true,

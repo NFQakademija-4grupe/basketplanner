@@ -70,7 +70,7 @@ class Court
     private $longitude;
 
     /**
-     * @ORM\Column(name="approved", type="boolean")
+     * @ORM\Column(name="approved", type="boolean", options={"default"=false})
      */
     private $approved;
 

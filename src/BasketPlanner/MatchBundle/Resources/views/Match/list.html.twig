@@ -104,28 +104,35 @@
 
         {#
         {% for match in pagination %}
-            <li><strong>Mačo ID:</strong> {{ match.id }}</li>
-            <li><strong>Kūrėjo email:</strong> {{ match.owner.email }}</li>
-            <li><strong>Kūrėjo vardas:</strong> {{ match.owner.firstName }} {{ match.owner.lastName }}</li>
-            <li><strong>Aikštelės adresas:</strong> {{ match.court.address }}</li>
-            <li><strong>Aikštelės koordinatė(latitude):</strong> {{ match.court.latitude }}</li>
-            <li><strong>Aikštelės koordinate(longitude):</strong> {{ match.court.longitude }}</li>
-            <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
-            <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
-            <li>
-                <strong>Nuoroda prisijungimui:</strong>
-                <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
-                    Prisijungti į mačą
-                </a>
-            </li>
-            <li>
-                <strong>Nuoroda perziurai:</strong>
-                <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
-                    Perziureti maca
-                </a>
-            </li>
-            <hr>
-        {% endfor %}#}
+    <li><strong>Mačo ID:</strong> {{ match.id }}</li>
+    <li><strong>Kūrėjo email:</strong> {{ match.owner.email }}</li>
+    <li><strong>Kūrėjo vardas:</strong> {{ match.owner.firstName }} {{ match.owner.lastName }}</li>
+    <li><strong>Aikštelės adresas:</strong> {{ match.court.address }}</li>
+    <li><strong>Aikštelės koordinatė(latitude):</strong> {{ match.court.latitude }}</li>
+    <li><strong>Aikštelės koordinate(longitude):</strong> {{ match.court.longitude }}</li>
+    <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
+    <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
+    <li>
+        {% if app.user in match.players %}
+            <strong>Nuoroda išėjimui:</strong>
+            <a href="{{ path('basket_planner_match_leave', {'id': match.id}) }}">
+                Išeiti iš mačo
+            </a>
+        {% else %}
+            <strong>Nuoroda prisijungimui:</strong>
+            <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
+                Prisijungti į mačą
+            </a>
+        {% endif %}
+    </li>
+    <li>
+        <strong>Nuoroda perziurai:</strong>
+        <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+            Perziureti maca
+        </a>
+    </li>
+    <hr>
+{% endfor %}#}
 
         <div class="row">
             <div class="col-lg-4">

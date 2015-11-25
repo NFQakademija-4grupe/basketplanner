@@ -47,3 +47,29 @@
 {% block scripts %}{% endblock %}
 </body>
 </html>
+{#
+
+<div class="container no-padding">
+    {% block main_body %}
+        {% if app.user %}
+            {% block header %}
+                {% include 'partials/header.html.twig' %}
+            {% endblock %}
+
+            {% block side_navigation %}
+                {{ render(controller('BasketPlannerMatchBundle:Match:showFilterForm')) }}
+            {% endblock %}
+
+            <section class="col-md-9 main-section">
+                {% block content %}{% endblock %}
+            </section>
+            {% block footer %}
+                {% include 'partials/footer.html.twig' %}
+            {% endblock %}
+        {% else  %}
+            {% block login %}
+                {% render url('fos_user_security_login') %}
+            {% endblock %}
+        {%  endif %}
+    {% endblock %}
+</div> <!-- /container -->#}
