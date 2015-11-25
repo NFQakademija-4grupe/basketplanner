@@ -9,83 +9,116 @@
             <div class="col-lg-4">
                 <div class="panel widget">
                     <div class="panel-heading">Filtravimas</div>
-                    <form method="get" class="form-inline">
-                        <div class="panel-body">
+                    <div class="panel-body">
 
-                            <div class="row">
+                        {{ form_start(form,  {'action': path('basket_planner_match_list'), 'method': 'GET'}) }}
+
+                        <fieldset>
+                            <div class="form-group">
+                                {{ form_label(form.search_text, 'Paieška') }}
+                                {{ form_errors(form.search_text) }}
+                                {{ form_widget(form.search_text, {'attr': {'class': 'form-control no-border-radius', 'placeholder': 'paieška'}}) }}
                             </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <div class="col-sm-6 col-lg-6">
-                                        <div id="datetimepicker1"
-                                             class="input-group date mb-lg">
-                                            <input type="text" class="form-control" placeholder="Nuo"/>
-                                 <span class="input-group-addon">
-                                    <span class="fa-calendar fa"></span>
-                                 </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-6">
-                                        <div id="datetimepicker2"
-                                             class="input-group date mb-lg">
-                                            <input type="text" class="form-control" placeholder="Iki"/>
-                                 <span class="input-group-addon">
-                                    <span class="fa-calendar fa"></span>
-                                 </span>
-                                        </div>
-                                    </div>
-                                </div>
+
+                            <div class="form-group">
+                                {{ form_label(form.type, 'Žaidimo tipas', {'label_attr': {'class': 'control-label'}}) }}
+                                {{ form_errors(form.type) }}
+                                {{ form_widget(form.type) }}
                             </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#1x1">
-                                            <span class="fa fa-check"></span>1x1</label>
-                                    </div>
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#2x2">
-                                            <span class="fa fa-check"></span>2x2</label>
-                                    </div>
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#3x3">
-                                            <span class="fa fa-check"></span>3x3</label>
-                                    </div>
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#4x4">
-                                            <span class="fa fa-check"></span>4x4</label>
-                                    </div>
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#5x5">
-                                            <span class="fa fa-check"></span>5x5</label>
-                                    </div>
-                                    <div class="checkbox-inline c-checkbox ">
-                                        <label>
-                                            <input type="checkbox" id="#Kita">
-                                            <span class="fa fa-check"></span>Kita</label>
-                                    </div>
-                                </div>
+
+                            <div class="form-group">
+                                {{ form_label(form.min_date, 'Pradžia') }}
+                                {{ form_errors(form.min_date) }}
+                                {{ form_widget(form.min_date) }}
                             </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <div class="col-sm-6 col-lg-6">
-                                        <input type="email" placeholder="Adresas" class="form-control">
-                                    </div>
-                                </div>
+
+                            <div class="form-group">
+                                {{ form_label(form.max_date, 'Pabaiga') }}
+                                {{ form_errors(form.max_date) }}
+                                {{ form_widget(form.max_date) }}
                             </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row text-center">
-                                <div class="col-xs-6">
-                                    <button type="submit" class="btn btn-default btn-block">Filtruoti</button>
-                                </div>
+
+                            <div class="form-group center">
+                                {{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}
                             </div>
-                        </div>
-                    </form>
+
+                        </fieldset>
+
+                        {{ form_end(form) }}
+
+                        {#<div class="row">#}
+                        {#</div>#}
+                        {#<div class="row">#}
+                            {#<div class="form-group">#}
+                                {#<div class="col-sm-6 col-lg-6">#}
+                                    {#<div id="datetimepicker1"#}
+                                         {#class="input-group date mb-lg">#}
+                                        {#<input type="text" class="form-control" placeholder="Nuo"/>#}
+                             {#<span class="input-group-addon">#}
+                                {#<span class="fa-calendar fa"></span>#}
+                             {#</span>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="col-sm-6 col-lg-6">#}
+                                    {#<div id="datetimepicker2"#}
+                                         {#class="input-group date mb-lg">#}
+                                        {#<input type="text" class="form-control" placeholder="Iki"/>#}
+                             {#<span class="input-group-addon">#}
+                                {#<span class="fa-calendar fa"></span>#}
+                             {#</span>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<div class="row">#}
+                            {#<div class="form-group">#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#1x1">#}
+                                        {#<span class="fa fa-check"></span>1x1</label>#}
+                                {#</div>#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#2x2">#}
+                                        {#<span class="fa fa-check"></span>2x2</label>#}
+                                {#</div>#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#3x3">#}
+                                        {#<span class="fa fa-check"></span>3x3</label>#}
+                                {#</div>#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#4x4">#}
+                                        {#<span class="fa fa-check"></span>4x4</label>#}
+                                {#</div>#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#5x5">#}
+                                        {#<span class="fa fa-check"></span>5x5</label>#}
+                                {#</div>#}
+                                {#<div class="checkbox-inline c-checkbox ">#}
+                                    {#<label>#}
+                                        {#<input type="checkbox" id="#Kita">#}
+                                        {#<span class="fa fa-check"></span>Kita</label>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<div class="row">#}
+                            {#<div class="form-group">#}
+                                {#<div class="col-sm-6 col-lg-6">#}
+                                    {#<input type="email" placeholder="Adresas" class="form-control">#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                    {#<div class="panel-footer">#}
+                        {#<div class="row text-center">#}
+                            {#<div class="col-xs-6">#}
+                                {#<button type="submit" class="btn btn-default btn-block">Filtruoti</button>#}
+                            {#</div>#}
+                        {#</div>#}
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,49 +130,12 @@
             </div>
         {% endfor %}
 
-        <div class="count">
-            Viso: {{ pagination.getTotalItemCount }} mačai <br>
-            <li><a href="{{ path('basket_planner_match_create') }}">Sukurti maca</a></li>
-        </div>
-
-        {#
-        {% for match in pagination %}
-    <li><strong>Mačo ID:</strong> {{ match.id }}</li>
-    <li><strong>Kūrėjo email:</strong> {{ match.owner.email }}</li>
-    <li><strong>Kūrėjo vardas:</strong> {{ match.owner.firstName }} {{ match.owner.lastName }}</li>
-    <li><strong>Aikštelės adresas:</strong> {{ match.court.address }}</li>
-    <li><strong>Aikštelės koordinatė(latitude):</strong> {{ match.court.latitude }}</li>
-    <li><strong>Aikštelės koordinate(longitude):</strong> {{ match.court.longitude }}</li>
-    <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
-    <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
-    <li>
-        {% if app.user in match.players %}
-            <strong>Nuoroda išėjimui:</strong>
-            <a href="{{ path('basket_planner_match_leave', {'id': match.id}) }}">
-                Išeiti iš mačo
-            </a>
-        {% else %}
-            <strong>Nuoroda prisijungimui:</strong>
-            <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
-                Prisijungti į mačą
-            </a>
-        {% endif %}
-    </li>
-    <li>
-        <strong>Nuoroda perziurai:</strong>
-        <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
-            Perziureti maca
-        </a>
-    </li>
-    <hr>
-{% endfor %}#}
-
         <div class="row">
             <div class="col-lg-4">
                 {% for match in pagination %}
                     <!-- START widget-->
                     <div class="panel widget">
-                       {{ google_map(map) }}
+                       {#{{ google_map(map) }}#}
 
                         <div class="panel-body bg-inverse">
                             <div class="row row-table text-center">
@@ -198,7 +194,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}

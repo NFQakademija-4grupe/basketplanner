@@ -31,14 +31,30 @@ class MatchController extends Controller
         $map = $loadMap->loadMarkers(false);
         $mapVariable = $map->getJavascriptVariable();
 
-        $repository = $this->getDoctrine()->getEntityManager()->getRepository('BasketPlannerMatchBundle:Match');
+        $qb = $this->getDoctrine()->getEntityManager()->getRepository('BasketPlannerMatchBundle:Match')->createQueryBuilder('m');
 
-        $query = $repository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.active = :active')
-            ->setParameter('active', true)
-            ->orderBy('m.createdAt', 'DESC')
-            ->getQuery();
+        $filterForm = $this->createForm(new FilterType());
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isValid())
+        {
+            // TODO: issiaiskinti formos submita
+            $query = $qb
+                ->select('m')
+                ->where('m.active = :active')
+                ->setParameter('active', true)
+                ->orderBy('m.createdAt', 'DESC')
+                ->getQuery();
+        }
+        else
+        {
+            $query = $qb
+                ->select('m')
+                ->where('m.active = :active')
+                ->setParameter('active', true)
+                ->orderBy('m.createdAt', 'DESC')
+                ->getQuery();
+        }
 
         $pagination = $this->get('knp_paginator')->paginate(
             $query,
@@ -46,9 +62,12 @@ class MatchController extends Controller
             9
         );
 
-        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', ['pagination' => $pagination,
+        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', [
+            'pagination' => $pagination,
             'map' => $map,
-            'mapVariable' => $mapVariable]);
+            'mapVariable' => $mapVariable,
+            'form' => $filterForm->createView()
+        ]);
     }
 
     /**
@@ -222,18 +241,5 @@ class MatchController extends Controller
 
         $this->addFlash('success', 'Sėkmingai išėjote iš mačo');
         return $this->redirectToRoute('basket_planner_match_list');
-    }
-
-    public function showFilterFormAction(Request $request)
-    {
-        $form = $this->createForm(new FilterType());
-
-        return $this->render(':partials:side-navigation.html.twig',
-            ['form' => $form->createView()]);
-    }
-
-    public function filterAction(Request $request)
-    {
-        // TODO: implement filter
     }
 }
