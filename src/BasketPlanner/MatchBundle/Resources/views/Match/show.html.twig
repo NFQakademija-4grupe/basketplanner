@@ -3,47 +3,172 @@
 
 {% block content %}
 
-{% for flash_message in app.session.flashbag.get('success') %}
-    <div style="color: #3fad46; font-size: 20px;">
-        {{ flash_message }}
-    </div>
-{% endfor %}
-
-{% for flash_message in app.session.flashbag.get('error') %}
-    <div style="color: #ed0600; font-size: 20px;">
-        {{ flash_message }}
-    </div>
-{% endfor %}
-
-{{ dump(match) }}
-Cia rodomas macas rastas pagal nurodyta ID. Jei maco neras, gausim 404 Not Found. <br>
-Visa maco informacija pasiekiama per `match` kintamaji.<br><br>
-
-{% if app.user == match.owner %}
-    Linkas matomas tik maco kurejui <br>
-    <a href="{{ path('basket_planner_match_edit', {'id' : match.id}) }}">Redaguoti maco aprasyma</a>
-{% endif %}
-
-<br><br>
-Visi maco zaidejai: <br>
-{% for player in match.players %}
-    <li>{{ player.fullName }}</li>
-{% endfor %}
-<br><br>
-
-Visos maco zinutes: <br>
-{% if match.comments is not empty %}
-    {% for comment in match.comments %}
-        <li><strong>Zinute:</strong> {{ comment.message }}, <strong>Autorius:</strong> {{ comment.user.fullName }}</li>
+    {% for flash_message in app.session.flashbag.get('success') %}
+        <div style="color: #3fad46; font-size: 20px;">
+            {{ flash_message }}
+        </div>
     {% endfor %}
-{% else %}
-    Niekas nieko neparase... :(
-{% endif %}
 
-<br><br>
+    {% for flash_message in app.session.flashbag.get('error') %}
+        <div style="color: #ed0600; font-size: 20px;">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    <div autoscroll="false" class="content-wrapper">
+        {{ dump(match) }}
+        {% if app.user == match.owner %}
+            Linkas matomas tik maco kurejui <br>
+            <a href="{{ path('basket_planner_match_edit', {'id' : match.id}) }}">Redaguoti maco aprasyma</a>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-8">
+                <div class="panel widget bg-warning">
+                    <div class="panel-body bg-inverse">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <em class="fa fa-calendar fa-3x"></em>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="text-md">{{ match.beginsAt.format('H:i') }}</div>
+                                                <p class="m0">{{ match.beginsAt.format('M d Y') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <em class="fa fa-trophy fa-3x"></em>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="text-md">{{ match.type.name }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <em class="fa fa-map-marker fa-3x"></em>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="text-md">{{ match.court.address }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <em class="fa fa-file-text fa-3x"></em>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <p class="m0">{{ match.description }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-2">
+                                                <em class="fa fa-users fa-3x"></em>
+                                            </div>
+                                            <div class="col-xs-10 text-right">
+                                                {% for player in match.players %}
+                                                    <img role="button" alt="Image"
+                                                         class='img-thumbnail img-circle thumb48'
+                                                         src='{{ player.profilePicture }}'
+                                                         data-content="{{ player.fullName }}"
+                                                         data-container="body" data-toggle="popover"
+                                                         data-placement="top"
+                                                         data-trigger="focus">
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                {#{{ google_map(map) }}#}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default panel-warning">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">Komentarai</div>
+                                    </div>
+                                    <!-- START list group-->
+                                    <div style="overflow-y:auto; height:180px" class="list-group">
+                                        <!-- START list group item-->
 
-<div id="komentaru-forma">
-    {{ render(controller('BasketPlannerMatchBundle:Comment:create', { 'id': match.id } )) }}
-</div>
+                                        {% if match.comments is not empty %}
+                                            {% for comment in match.comments %}
+                                                <a class="list-group-item">
+                                                    <div class="media">
+                                                        <div class="pull-left">
+                                                            <img src="{{ comment.user.profilePicture }}" alt="Image"
+                                                                 class="media-object img-circle thumb32"/>
+                                                        </div>
+                                                        <div class="media-body clearfix">
+                                                            <small class="pull-right">{{ comment.createdAt.format('M-d H:i') }}</small>
+                                                            <strong class="media-heading text-primary">
+                                                                <span class="text-left"></span>{{ comment.user.fullName }}
+                                                            </strong>
 
+                                                            <p class="mb-sm temp">
+                                                                <small>{{ comment.message }}
+                                                                </small>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        {% else %}
+                                            <a class="list-group-item">
+                                                <p class="mb-sm">
+                                                    <small>Niekas nieko neparase... :(
+                                                    </small>
+                                                </p>
+                                            </a>
+                                        {% endif %}
+                                        <!-- END list group item-->
+                                    </div>
+                                    <!-- END list group-->
+                                    <!-- START panel footer-->
+                                    <div class="panel-footer clearfix">
+                                        {{ render(controller('BasketPlannerMatchBundle:Comment:create', { 'id': match.id } )) }}
+
+                                    </div>
+                                    <!-- END panel-footer-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover'
+            });
+        });
+    </script>
 {% endblock %}

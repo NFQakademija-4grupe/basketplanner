@@ -1,48 +1,200 @@
-{# MAČŲ SĄRAŠAS SU PAGINATION #}
 {% extends '::base.html.twig' %}
-
 {% block content %}
+    <div ui-view="" autoscroll="false" class="content-wrapper">
 
-{% for flash_message in app.session.flashbag.get('error') %}
-    <div style="color: #ed0600; font-size: 20px;">
-        {{ flash_message }}
+        <h3>Sąrašas</h3>
+        <!-- START row-->
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel widget">
+                    <div class="panel-heading">Filtravimas</div>
+                    <form method="get" class="form-inline">
+                        <div class="panel-body">
+
+                            <div class="row">
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-lg-6">
+                                        <div id="datetimepicker1"
+                                             class="input-group date mb-lg">
+                                            <input type="text" class="form-control" placeholder="Nuo"/>
+                                 <span class="input-group-addon">
+                                    <span class="fa-calendar fa"></span>
+                                 </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6">
+                                        <div id="datetimepicker2"
+                                             class="input-group date mb-lg">
+                                            <input type="text" class="form-control" placeholder="Iki"/>
+                                 <span class="input-group-addon">
+                                    <span class="fa-calendar fa"></span>
+                                 </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#1x1">
+                                            <span class="fa fa-check"></span>1x1</label>
+                                    </div>
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#2x2">
+                                            <span class="fa fa-check"></span>2x2</label>
+                                    </div>
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#3x3">
+                                            <span class="fa fa-check"></span>3x3</label>
+                                    </div>
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#4x4">
+                                            <span class="fa fa-check"></span>4x4</label>
+                                    </div>
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#5x5">
+                                            <span class="fa fa-check"></span>5x5</label>
+                                    </div>
+                                    <div class="checkbox-inline c-checkbox ">
+                                        <label>
+                                            <input type="checkbox" id="#Kita">
+                                            <span class="fa fa-check"></span>Kita</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-lg-6">
+                                        <input type="email" placeholder="Adresas" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row text-center">
+                                <div class="col-xs-6">
+                                    <button type="submit" class="btn btn-default btn-block">Filtruoti</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- END row-->
+
+        {% for flash_message in app.session.flashbag.get('error') %}
+            <div style="color: #ed0600; font-size: 20px;">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        <div class="count">
+            Viso: {{ pagination.getTotalItemCount }} mačai <br>
+            <li><a href="{{ path('basket_planner_match_create') }}">Sukurti maca</a></li>
+        </div>
+
+        {#
+        {% for match in pagination %}
+            <li><strong>Mačo ID:</strong> {{ match.id }}</li>
+            <li><strong>Kūrėjo email:</strong> {{ match.owner.email }}</li>
+            <li><strong>Kūrėjo vardas:</strong> {{ match.owner.firstName }} {{ match.owner.lastName }}</li>
+            <li><strong>Aikštelės adresas:</strong> {{ match.court.address }}</li>
+            <li><strong>Aikštelės koordinatė(latitude):</strong> {{ match.court.latitude }}</li>
+            <li><strong>Aikštelės koordinate(longitude):</strong> {{ match.court.longitude }}</li>
+            <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
+            <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
+            <li>
+                <strong>Nuoroda prisijungimui:</strong>
+                <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
+                    Prisijungti į mačą
+                </a>
+            </li>
+            <li>
+                <strong>Nuoroda perziurai:</strong>
+                <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+                    Perziureti maca
+                </a>
+            </li>
+            <hr>
+        {% endfor %}#}
+
+        <div class="row">
+            <div class="col-lg-4">
+                {% for match in pagination %}
+                    <!-- START widget-->
+                    <div class="panel widget">
+                       {{ google_map(map) }}
+
+                        <div class="panel-body bg-inverse">
+                            <div class="row row-table text-center">
+                                <div class="col-xs-4">
+                                    <em class="fa fa-calendar fa-2x"></em>
+
+                                    <p class="m0">{{ match.beginsAt.format('H:i') }}</p>
+
+                                    <p class="m0">{{ match.beginsAt.format('M d Y') }}</p>
+
+                                </div>
+                                <div class="col-xs-4">
+                                    <em class="fa fa-trophy fa-2x"></em>
+
+                                    <p class="m0">
+                                        {{ match.type.name }}
+                                    </p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <em class="fa fa-map-marker fa-2x"></em>
+
+                                    <p class="m0">{{ match.court.address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body bg-inverse">
+                            <div class="row text-center">
+                                <div class="col-xs-4">
+                                    <a type="button" class="btn btn-block btn-warning"
+                                       href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+                                        <em class="fa fa-eye fa-2x"></em>
+
+                                        <p class="mobhide">DAUGIAU</p>
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <em class="fa fa-users fa-2x"></em>
+
+                                    <p class="m0">{{ match.playersCount }}/{{ match.type.players }}</p>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <a type="button" class="btn btn-block btn-warning"
+                                       href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
+                                        <em class="fa fa-sign-in fa-2x"></em>
+
+                                        <p class="mobhide">PRISIJUNGTI</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END widget-->
+                {% endfor %}
+            </div>
+        </div>
     </div>
-{% endfor %}
-
-<div class="count">
-    Viso: {{ pagination.getTotalItemCount }} mačai <br>
-    <li><a href="{{ path('basket_planner_match_create') }}">Sukurti maca</a></li>
-</div>
-<br><br><br>
-<hr>
-
-{% for match in pagination %}
-    <li><strong>Mačo ID:</strong> {{ match.id }}</li>
-    <li><strong>Kūrėjo email:</strong> {{ match.owner.email }}</li>
-    <li><strong>Kūrėjo vardas:</strong> {{ match.owner.firstName }} {{ match.owner.lastName }}</li>
-    <li><strong>Aikštelės adresas:</strong> {{ match.court.address }}</li>
-    <li><strong>Aikštelės koordinatė(latitude):</strong> {{ match.court.latitude }}</li>
-    <li><strong>Aikštelės koordinate(longitude):</strong> {{ match.court.longitude }}</li>
-    <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
-    <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
-    <li>
-        <strong>Nuoroda prisijungimui:</strong>
-        <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
-            Prisijungti į mačą
-        </a>
-    </li>
-    <li>
-        <strong>Nuoroda perziurai:</strong>
-        <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
-            Perziureti maca
-        </a>
-    </li>
-    <hr>
-{% endfor %}
 
 
-<div class="navigation">
-    {{ knp_pagination_render(pagination) }}
-</div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 
 {% endblock %}

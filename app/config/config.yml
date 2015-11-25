@@ -137,3 +137,6 @@ hwi_oauth:
 ivory_google_map:
     extensions:
         my_extension: basketplanner_match.map_extension
+    map:
+        width: "100%"
+        height: "240px"

@@ -1,58 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% block title %}BasketPlanner - Jûsø krepðinio organizatorius!{% endblock %}
+    </title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     {% block stylesheets %}
-    <!-- Bootstrap -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
-    <!-- jQuery UI -->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <!-- Icons -->
-    <link rel="stylesheet" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
-    <!-- Custom styles -->
-    <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('assets/style/app.css') }}">
+        <link type="text/css" rel="stylesheet" href="{{ asset('assets/style/font-awesome.min.css') }}">
+        <link type="text/css" rel="stylesheet" href="{{ asset('assets/style/bootstrap-datetimepicker.min.css') }}">
     {% endblock %}
 </head>
-<body>
 
-    <div class="container no-padding">
-        {% block main_body %}
-            {% if app.user %}
-                {% block header %}
-                    {% include 'partials/header.html.twig' %}
-                {% endblock %}
-
-                {% block side_navigation %}
-                    {% include 'partials/side-navigation.html.twig' %}
-                {% endblock %}
-
-                <section class="col-md-9 main-section">
-                    {% block content %}{% endblock %}
-                </section>
-                {% block footer %}
-                    {% include 'partials/footer.html.twig' %}
-                {% endblock %}
-            {% else  %}
-                {% block login %}
-                    {% render url('fos_user_security_login') %}
-                {% endblock %}
-            {%  endif %}
+<body id="body" class="wrapper layout-fixed">
+<!-- top navbar-->
+{% block main_body %}
+    {% if app.user %}
+        {% block header %}
+            {% include 'partials/topnavbar.html.twig' %}
         {% endblock %}
-    </div> <!-- /container -->
+        <!-- sidebar-->
+        {% block sidebar %}
+            {% include 'partials/sidebar.html.twig' %}
+        {% endblock %}
+        <section>
+            {% block content %}{% endblock %}
+        </section>
+        {% block footer %}
+            {% include 'partials/footer.html.twig' %}
+        {% endblock %}
+    {% else %}
+        {% block login %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/moment-with-langs.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/js.js') }}"></script>
+{% endblock %}
 
-
-    {% block javascripts %}
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script>
-            $(function() {
-                $( "#datepicker" ).datepicker();
-            });
-        </script>
-    {% endblock %}
-
+{% block scripts %}{% endblock %}
 </body>
 </html>

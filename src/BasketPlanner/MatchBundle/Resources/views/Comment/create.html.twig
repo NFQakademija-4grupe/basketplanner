@@ -1,7 +1,13 @@
 {{ form_start(form) }}
-<div>
-    {{ form_label(form.message, 'Žinutė') }}
+<div class="input-group">
     {{ form_errors(form.message) }}
-    {{ form_widget(form.message) }}
+    {{ form_widget(form.message, {'attr':{'class':'form-control input-md', 'placeholder':'Rašyti žinutę...'}}) }}
+    <span class="input-group-btn">
+
+        {{ form_widget(form.save, {'attr': {'class':'btn btn-default btn-md'}}) }}
+{#          <button type="submit" class="btn btn-default btn-md">
+              <i class="fa fa-paper-plane"></i>
+          </button>#}
+    </span>
 </div>
 {{ form_end(form) }}

@@ -16,8 +16,7 @@ class MatchType extends AbstractType
             ->add('description', 'textarea')
             ->add('save', 'submit', [
                 'label' => is_null($options['data']->getId()) ? 'Sukurti mačą' : 'Redaguoti'
-            ])
-        ;
+            ]);
 
         if (!$options['for_editing'])
         {
@@ -29,12 +28,11 @@ class MatchType extends AbstractType
                     'required' => true,
                     'expanded' => true,
                     'multiple' => false,
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er
                             ->createQueryBuilder('c');
                     }
-                ])
-            ;
+                ]);
         }
     }
 

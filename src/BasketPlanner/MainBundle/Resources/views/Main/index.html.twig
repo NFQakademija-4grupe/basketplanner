@@ -1,38 +1,167 @@
 {% extends '::base.html.twig' %}
+{% block login %}
+    <div class="ball-bg">
+<header class="ball-bg">
+    <div class="header-content">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6"></div>
+        <div class="row">
+            <div class="header-content-inner trans-back">
+                <h1>BasketPlanner</h1>
+                <hr>
+                <p>NFQ akademijos projektas. Pats geriausias!</p>
 
-{% block content %}
-    <div class="row match-row">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-lg btn-social btn-facebook center-block" href="{{ hwi_oauth_login_url('facebook') }}">
+                            <em class="fa fa-facebook fa-3x"></em>Prisijungti - Facebook
+                        </a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-lg btn-social btn-google center-block" href="{{ hwi_oauth_login_url('google') }}">
+                            <em class="fa fa-google-plus fa-3x" ></em>Prisijungti - Google+
+                        </a>
+                    </div>
 
-        <div class="col-md-12">
-            <h2>Visų mačų sąrašas</h2>
+                    <div class="col-sm-3"></div>
+                </div>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-4">
+                <!-- START widget-->
+                <div class="panel widget">
+                    <div gmap="" data-zoom="14" data-address="KAUNAS" data-toggle="gmap" class="gmap-sm"></div>
 
-        <div class="col-md-12">
-            <p><span class="fa fa-filter"></span> Rūšiuoti mačus pagal:
-                <a href="#"><span class="label label-primary no-border-radius">naujausius</span></a>
-                <a href="#"><span class="label label-primary no-border-radius">laiką iki mačo</span></a>
-                <a href="#"><span class="label label-primary no-border-radius">žaidėjų skaičių</span></a>
-                <a href="#"><span class="label label-primary no-border-radius">rajoną</span></a>
-            </p>
+
+                    <div class="panel-body bg-inverse">
+                        <div class="row row-table text-center">
+                            <div class="col-xs-4">
+                                <em class="fa fa-calendar fa-2x"></em>
+
+                                <p class="m0">Lapkričio 10, 2015</p>
+
+                                <p class="m0">19:00</p>
+                            </div>
+                            <div class="col-xs-4">
+                                <em class="icon-trophy fa-2x"></em>
+
+                                <p class="m0">
+                                    3x3
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <em class="fa fa-map-marker fa-2x"></em>
+
+                                <p class="m0">Street 123</p>
+
+                                <p class="m0">Location, Unknow</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body bg-inverse">
+                        <div class="row text-center">
+                            <div class="col-xs-4">
+                                <a href="#/perziura">
+                                    <button type="button" class="btn btn-block btn-warning ">
+                                        <em class="fa fa-eye fa-2x"></em>
+
+                                        <p class="mobhide">DAUGIAU</p>
+                                    </button>
+                                </a>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <em class="fa fa-users fa-2x"></em>
+
+                                <p class="m0">0/6</p>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-block btn-warning">
+                                    <em class="fa fa-sign-in fa-2x"></em>
+
+                                    <p class="mobhide">PRISIJUNGTI</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END widget-->
+            </div>
+
+            <div class="col-lg-2">
+
+            </div>
+            <div class="col-lg-4">
+                <!-- START widget-->
+                <div class="panel widget">
+                    <div gmap="" data-zoom="14" data-address="KAUNAS" data-toggle="gmap" class="gmap-sm"></div>
+
+
+                    <div class="panel-body bg-inverse">
+                        <div class="row row-table text-center">
+                            <div class="col-xs-4">
+                                <em class="fa fa-calendar fa-2x"></em>
+
+                                <p class="m0">Lapkričio 10, 2015</p>
+
+                                <p class="m0">19:00</p>
+                            </div>
+                            <div class="col-xs-4">
+                                <em class="icon-trophy fa-2x"></em>
+
+                                <p class="m0">
+                                    3x3
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <em class="fa fa-map-marker fa-2x"></em>
+
+                                <p class="m0">Street 123</p>
+
+                                <p class="m0">Location, Unknow</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body bg-inverse">
+                        <div class="row text-center">
+                            <div class="col-xs-4">
+                                <a href="perziura.html">
+                                    <button type="button" class="btn btn-block btn-warning ">
+                                        <em class="fa fa-eye fa-2x"></em>
+
+                                        <p class="mobhide">DAUGIAU</p>
+                                    </button>
+                                </a>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <em class="fa fa-users fa-2x"></em>
+
+                                <p class="m0">0/6</p>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-block btn-warning">
+                                    <em class="fa fa-sign-in fa-2x"></em>
+
+                                    <p class="mobhide">PRISIJUNGTI</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END widget-->
+            </div>
+
+            <div class="col-lg-1"></div>
         </div>
-
-        {% include 'BasketPlannerMainBundle:Main/partials:list-matches.html.twig' %}
 
     </div>
-
-    <div class="row pagination-row">
-        <div class="col-md-12 center">
-
-            <ul class="pagination custom-pagination">
-                <li class="disabled"><a href="#">«</a></li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">»</a></li>
-            </ul>
-
-        </div>
+    <div class="col-sm-3"></div>
+</header>
     </div>
 {% endblock %}

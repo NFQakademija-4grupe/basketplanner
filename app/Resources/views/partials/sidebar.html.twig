@@ -1,0 +1,49 @@
+<aside id="sidebar" class="aside">
+    <!-- START Sidebar (left)-->
+    <div id="sidebar_left" class="aside-inner">
+        <nav class="sidebar">
+            <!-- START sidebar nav-->
+            <ul class="nav">
+                <!-- START user info-->
+                <li class="has-user-block">
+                    <div class="item user-block">
+                        <!-- User picture-->
+                        <div class="user-block-picture">
+                            <div class="user-block-status">
+                                <img src="{{ app.user.profilePicture }}" alt="Avatar" width="60" height="60"
+                                     class="img-thumbnail img-circle"/>
+
+                                <div class="circle circle-success circle-lg"></div>
+                            </div>
+                        </div>
+                        <!-- Name and Job-->
+                        <div class="user-block-info">
+                            <span class="user-block-name">Sveiki, {{ app.user.fullName }}</span>
+                        </div>
+                    </div>
+                </li>
+                <!-- END user info-->
+                <li>
+                    <a href="{{ path('basket_planner_match_list') }}" title="Sąrašas">
+                        <em class=" fa fa-th-large"></em>
+                        <span>Sąrašas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('basket_planner_match_show', {'id':0}) }}" title="Mano Matchai">
+                        <em class=" fa fa-history"></em>
+                        <span>Mano Matchai</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('basket_planner_match_create') }}" title="Sukurti Matchą">
+                        <em class=" fa fa-plus"></em>
+                        <span>Sukurti Matchą</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END sidebar nav-->
+        </nav>
+    </div>
+    <!-- END Sidebar (left)-->
+</aside>

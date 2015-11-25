@@ -26,6 +26,10 @@ class MatchController extends Controller
      */
     public function listAction(Request $request, $page)
     {
+        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $map = $loadMap->loadMarkers(false);
+        $mapVariable = $map->getJavascriptVariable();
+
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('BasketPlannerMatchBundle:Match');
 
         $query = $repository->createQueryBuilder('m')
@@ -41,7 +45,10 @@ class MatchController extends Controller
             9
         );
 
-        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', array('pagination' => $pagination));
+        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', ['pagination' => $pagination,
+            'map' => $map,
+            'mapVariable' => $mapVariable
+        ]);
     }
 
     /**
@@ -52,7 +59,14 @@ class MatchController extends Controller
      */
     public function showAction(Match $match)
     {
-        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match]);
+        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $map = $loadMap->loadMarkers(false);
+        $mapVariable = $map->getJavascriptVariable();
+
+        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match,
+            'map' => $map,
+            'mapVariable' => $mapVariable
+        ]);
     }
 
     /**
@@ -122,6 +136,10 @@ class MatchController extends Controller
      */
     public function editAction(Request $request, Match $match)
     {
+        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $map = $loadMap->loadMarkers(false);
+        $mapVariable = $map->getJavascriptVariable();
+
         if ($match->getOwner() !== $this->getUser())
         {
             $this->addFlash('error', 'Mačo aprašymą gali redaguoti tik jį sukūręs vartotojas');
@@ -144,7 +162,9 @@ class MatchController extends Controller
         $courts = $em->getRepository('BasketPlannerMatchBundle:Court')->findByApproved(1);
 
         return $this->render('BasketPlannerMatchBundle:Match:create.html.twig',
-            ['form' => $form->createView(), 'courts' => $courts]);
+            ['form' => $form->createView(), 'courts' => $courts,
+                'map' => $map,
+                'mapVariable' => $mapVariable]);
     }
 
     /**
