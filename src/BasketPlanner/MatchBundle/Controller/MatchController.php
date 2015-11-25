@@ -5,6 +5,7 @@ namespace BasketPlanner\MatchBundle\Controller;
 
 use BasketPlanner\MatchBundle\Entity\Match;
 use BasketPlanner\MatchBundle\Entity\Court;
+use BasketPlanner\MatchBundle\Form\FilterType;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,7 +42,7 @@ class MatchController extends Controller
             9
         );
 
-        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', array('pagination' => $pagination));
+        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', ['pagination' => $pagination]);
     }
 
     /**
@@ -56,7 +57,7 @@ class MatchController extends Controller
     }
 
     /**
-     * Show match form/create match if form is submitted
+     * Show match form and create match if form is submitted
      *
      * @param Request $request
      * @return Response
@@ -80,7 +81,7 @@ class MatchController extends Controller
             $court = new Court();
             $court = $form["court"]->getData();
 
-            $entity = $em->getRepository('BasketPlanner\MatchBundle\Entity\Court')->findOneBy(array('id' => $court->getId()));
+            $entity = $em->getRepository('BasketPlannerMatchBundle:Court')->findOneBy(array('id' => $court->getId()));
 
             if ($entity == null){
                 $court->setId(null);
@@ -128,23 +129,19 @@ class MatchController extends Controller
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
 
-        $em =  $this->getDoctrine()->getManager();
-
         $form = $this->createForm(new MatchType(), $match, ['for_editing' => true]);
 
         $form->handleRequest($request);
 
         if ($form->isValid())
         {
+            $em =  $this->getDoctrine()->getManager();
             $em->flush();
             $this->addFlash('success', 'Mačo informacija sėkmingai pakeista!');
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
 
-        $courts = $em->getRepository('BasketPlannerMatchBundle:Court')->findByApproved(1);
-
-        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig',
-            ['form' => $form->createView(), 'courts' => $courts]);
+        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -168,15 +165,56 @@ class MatchController extends Controller
 
             } catch (UniqueConstraintViolationException $ex)
             {
-                $this->addFlash('error', 'Jūs jau esate prisijunge prie šio mačo');
+                $this->addFlash('error', 'Jūs jau esate prisijungę prie šio mačo');
             }
         }
         else
         {
-            $this->addFlash('error', 'Prie mačo prisijungti negalima. Surinktas reikimas žaidėjų skaičiu.');
+            $this->addFlash('error', 'Prie mačo prisijungti negalima. Surinktas reikiamas žaidėjų skaičiu.');
             return $this->redirectToRoute('basket_planner_match_list');
         }
 
         return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
+    }
+
+    public function leaveAction(Match $match)
+    {
+        $user = $this->getUser();
+
+        if (!$match->getPlayers()->contains($user)) {
+            $this->addFlash('error', 'Neįmanoma išeiti iš mačo prie kurio nesate prisijunge!');
+            return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
+        }
+
+//        if ($match->getOwner() == $user) {
+//            $match->setOwner(null);
+//        }
+
+        $match->removePlayer($user);
+        $match->decreasePlayersCount();
+
+        if ($match->getPlayersCount() == 0) {
+            $match->setActive(false);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->flush();
+
+        $this->addFlash('success', 'Sėkmingai išėjote iš mačo');
+        return $this->redirectToRoute('basket_planner_match_list');
+    }
+
+    public function showFilterFormAction(Request $request)
+    {
+        $form = $this->createForm(new FilterType());
+
+        return $this->render(':partials:side-navigation.html.twig',
+            ['form' => $form->createView()]);
+    }
+
+    public function filterAction(Request $request)
+    {
+        // TODO: implement filter
     }
 }

@@ -15,59 +15,41 @@
 
         <div class="col-md-12">
             <div class="panel panel-default no-border-top no-border-radius filter-panel no-margin-bottom">
-                <form action="#">
-                    <fieldset>
-                        <div class="form-group">
-                            <label for="#"><span class="fa fa-search"></span> Paieška</label>
-                            <input type="text" name="search" class="form-control no-border-radius" placeholder="paieška">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="#" class="control-label"><span class="fa fa-trophy"></span> Žaidimas</label>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> 1x1
-                                </label>
-                                <label>
-                                    <input type="checkbox"> 2x2
-                                </label>
-                                <label>
-                                    <input type="checkbox"> 3x3
-                                </label>
-                                <label>
-                                    <input type="checkbox"> 4x4
-                                </label>
-                                <label>
-                                    <input type="checkbox"> 5x5
-                                </label>
-                                <label>
-                                    <input type="checkbox"> Kita
-                                </label>
-                            </div>
-                        </div>
+                {{ form_start(form,  {'action': path('basket_planner_match_list'), 'method': 'GET'}) }}
 
-                        <div class="form-group">
-                            <label for="rajonas"><span class="fa fa-list"></span> Rajonas</label>
-                            <select class="form-control no-border-radius" id="rajonas">
-                                <option>pasirinkite rajoną</option>
-                                <option>Dainava</option>
-                                <option>Šančiai</option>
-                                <option>Gričiupis</option>
-                                <option>Aleksotas</option>
-                                <option>Vilijampolė</option>
-                            </select>
-                        </div>
+                <fieldset>
+                    <div class="form-group">
+                        {{ form_label(form.search_text, 'Paieška') }}
+                        {{ form_errors(form.search_text) }}
+                        {{ form_widget(form.search_text, {'attr': {'class': 'form-control no-border-radius', 'placeholder': 'paieška'}}) }}
+                    </div>
 
-                        <div class="form-group">
-                            <label for="rajonas"><span class="fa fa-calendar"></span> Data</label>
-                            <input class="form-control no-border-radius" id="datepicker" type="date" placeholder="mm/dd/MMMM">
-                        </div>
+                    <div class="form-group">
+                        {{ form_label(form.type, 'Žaidimo tipas', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_errors(form.type) }}
+                        {{ form_widget(form.type) }}
+                    </div>
 
-                        <div class="form-group center">
-                            <button class="btn btn-primary btn-block no-border-radius" type="submit"><span class="fa fa-search"></span> Ieškoti</button>
-                        </div>
-                    </fieldset>
-                </form>
+                    <div class="form-group">
+                        {{ form_label(form.min_date, 'Pradžia') }}
+                        {{ form_errors(form.min_date) }}
+                        {{ form_widget(form.min_date) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.max_date, 'Pabaiga') }}
+                        {{ form_errors(form.max_date) }}
+                        {{ form_widget(form.max_date) }}
+                    </div>
+
+                    <div class="form-group center">
+                        {{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}
+                    </div>
+
+                </fieldset>
+
+                {{ form_end(form) }}
             </div>
         </div>
 

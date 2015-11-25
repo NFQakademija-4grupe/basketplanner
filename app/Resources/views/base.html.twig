@@ -25,7 +25,7 @@
                 {% endblock %}
 
                 {% block side_navigation %}
-                    {% include 'partials/side-navigation.html.twig' %}
+                    {{ render(controller('BasketPlannerMatchBundle:Match:showFilterForm')) }}
                 {% endblock %}
 
                 <section class="col-md-9 main-section">

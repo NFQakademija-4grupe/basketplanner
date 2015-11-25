@@ -2,15 +2,17 @@
 
 {% block content %}
 
+    {% if map is defined %}
     <div id="map">
         {{ google_map(map) }}
     </div>
+    {% endif %}
 
     {{ form_start(form) }}
         <div>
             {{ form_label(form.description, 'Aprašymas') }}<br>
             {{ form_errors(form.description) }}
-            {{ form_widget(form.description, {'attr': {'class': 'ASDASDASDSA'}}) }}
+            {{ form_widget(form.description) }}
         </div>
         <br>
 

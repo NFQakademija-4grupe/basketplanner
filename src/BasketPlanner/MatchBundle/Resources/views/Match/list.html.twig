@@ -26,10 +26,17 @@
     <li><strong>Mačo tipas:</strong> {{ match.type.name }}</li>
     <li><strong>Žaidėjų skaičius:</strong>{{ match.playersCount }}/{{ match.type.players }}</li>
     <li>
-        <strong>Nuoroda prisijungimui:</strong>
-        <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
-            Prisijungti į mačą
-        </a>
+        {% if app.user in match.players %}
+            <strong>Nuoroda išėjimui:</strong>
+            <a href="{{ path('basket_planner_match_leave', {'id': match.id}) }}">
+                Išeiti iš mačo
+            </a>
+        {% else %}
+            <strong>Nuoroda prisijungimui:</strong>
+            <a href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
+                Prisijungti į mačą
+            </a>
+        {% endif %}
     </li>
     <li>
         <strong>Nuoroda perziurai:</strong>

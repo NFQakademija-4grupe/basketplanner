@@ -1,15 +1,48 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonus
- * Date: 2015-11-24
- * Time: 21:50
- */
 
 namespace BasketPlanner\MatchBundle\Form;
 
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Valid;
 
-class FilterType
+class FilterType extends AbstractType
 {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('search_text', 'text', [
+                'required' => false,
+                'constraints' => new Length(['min' => 5, 'minMessage' => 'Paieškos tekstas per trumpas'])
+            ])
+            ->add('type', 'entity', [
+                'class' => 'BasketPlanner\MatchBundle\Entity\Type',
+                'choice_label' => 'name',
+                'constraints' => new Valid(),
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('c');
+                }
+            ])
+            ->add('min_date', 'datetime', [
+                'data' => new \DateTime('now'),
+                'constraints' => new Range(['min' => 'now', 'minMessage' => 'Blogai nuordyta pradžios data'])
+            ])
+            ->add('max_date', 'datetime', [
+                'data' => new \DateTime('+5 days'),
+                'constraints' => new Range(['max' => '+5 days', 'maxMessage' => 'Blogai nurodyta pabaigos data'])
+            ])
+            ->add('search', 'submit', ['label' => 'Ieškoti'])
+        ;
+    }
 
+    public function getName()
+    {
+        return 'basket_planner_filter_match';
+    }
 }
