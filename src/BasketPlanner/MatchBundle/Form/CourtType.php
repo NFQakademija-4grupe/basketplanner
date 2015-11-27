@@ -24,8 +24,7 @@ class CourtType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'BasketPlanner\MatchBundle\Entity\Court',
-            'for_editing' => false
+            'data_class' => 'BasketPlanner\MatchBundle\Entity\Court'
         ]);
     }
 
