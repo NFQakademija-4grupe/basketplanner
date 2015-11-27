@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+{% block content %}
+<div autoscroll="false" class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- START panel-->
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>Sukurti komandą</h1></div>
+                {{ form_start(form, {'role':'form'}) }}
+                <div class="panel-body">
+                    {{ form_start(form, {'role':'form'}) }}
+
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control name', 'placeholder':'Pavadinimas'}}) }}
+
+                        {{ form_errors(form.description) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control description', 'placeholder':'Aprašymas', 'rows':'4'}}) }}
+                        <br>
+                        {{ form_label(form.type) }}
+                        {{ form_widget(form.type) }}
+                        {{ form_errors(form.type) }}
+
+                        <br>{{ form_widget(form.save, {'attr': {'class':'btn btn-sm btn-default'}}) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

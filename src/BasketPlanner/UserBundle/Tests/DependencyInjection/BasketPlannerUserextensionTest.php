@@ -9,6 +9,9 @@ abstract class BasketPlannerUserExtensionTest extends \PHPUnit_Framework_TestCas
 {
     private $extension;
     private $container;
+    private $configuration;
+    private $loader;
+    private $mock;
 
     protected function setUp()
     {
@@ -16,10 +19,41 @@ abstract class BasketPlannerUserExtensionTest extends \PHPUnit_Framework_TestCas
 
         $this->container = new ContainerBuilder();
         $this->container->registerExtension($this->extension);
+
+        $this->mock = $this->getMockBuilder('BasketPlanner\UserBundle\DependencyInjection\BasketPlannerUserExtension')
+            ->setMethods(array('processConfiguration'))
+            ->getMock();
+        $this->mock->expects($this->once())
+            ->method('processConfiguration');
+
+        $this->configuration = $this->getMockBuilder('BasketPlanner\UserBundle\DependencyInjection\Configuration');
+
+        $this->loader = $this->getMockBuilder('Loader\YamlFileLoader')
+            ->disableOriginalConstructor()
+            ->setMethods(array('load'))
+            ->getMock();
+        $this->loader->expects($this->once())
+            ->method('load')->willReturnCallback(function($file){
+                return array(
+                    $file => true
+                );
+            });
     }
 
-    public function testLoad(){
+    /**
+     *
+     * @param $configs
+     * @param $container
+     *
+     */
+    public function testLoad(array $configs, ContainerBuilder $container){
+        $configuration = $this->configuration;
+        $config = $this->mock->processConfiguration();
 
+        $loader = $this->loader;
+        $loader->load('services.yml');
+
+        $this->assertEquals(array('services.yml' => true), $loader->load('services.yml'));
     }
 
 

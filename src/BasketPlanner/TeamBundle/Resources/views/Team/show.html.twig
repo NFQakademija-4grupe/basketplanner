@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+
+{% block content %}
+
+
+    {{ dump() }}
+
+    <div autoscroll="false" class="content-wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- START panel-->
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h1>Komanda: {{ team.name }}</h1></div>
+                    <div class="panel-body">
+                        <div><h3>Aprašymas:</h3></div>
+                        <div>{{ team.description }}</div><br>
+                        <div><h3>Tipas:</h3></div>
+                        <div>{{ team.type.name }}</div><br>
+                        <div><h3>Nariai:</h3></div>
+                        {% for player in players %}
+                            <img role="button" alt="Image"
+                                 class='img-thumbnail img-circle thumb48'
+                                 src='{{ player.profilePicture }}'
+                                 data-content="{{ player.firstName }} {{ player.lastName }}"
+                                 data-container="body" data-toggle="popover"
+                                 data-placement="top"
+                                 data-trigger="focus">
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover'
+            });
+        });
+    </script>
+{% endblock %}

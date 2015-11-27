@@ -46,6 +46,6 @@ class ProfileFormType extends AbstractType {
 
     public function getName()
     {
-        return 'basketplanner_user_profile';
+        return 'basketplanner_user_form_profile';
     }
 }

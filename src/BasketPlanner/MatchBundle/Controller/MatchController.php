@@ -82,7 +82,8 @@ class MatchController extends Controller
     public function showAction(Match $match)
     {
         $loadMap = $this->get('basket_planner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
+        $court = $match->getCourt();
+        $map = $loadMap->loadMarkerById($court->getId());
         $mapVariable = $map->getJavascriptVariable();
 
         return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match,
