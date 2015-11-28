@@ -16,11 +16,6 @@
     {% endfor %}
 
     <div autoscroll="false" class="content-wrapper">
-
-        {% if app.user == match.owner %}
-            Linkas matomas tik maco kurejui <br>
-            <a href="{{ path('basket_planner_match_edit', {'id' : match.id}) }}">Redaguoti maco aprasyma</a>
-        {% endif %}
         <div class="row">
             <div class="col-sm-2">
             </div>
@@ -100,7 +95,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                {#{{ google_map(map) }}#}
+                                {{ google_map(map) }}
                             </div>
                         </div>
                         <div class="row">

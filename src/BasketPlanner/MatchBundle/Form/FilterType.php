@@ -5,9 +5,9 @@ namespace BasketPlanner\MatchBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Constraints\Valid;
 
 class FilterType extends AbstractType
 {
@@ -21,7 +21,6 @@ class FilterType extends AbstractType
             ->add('type', 'entity', [
                 'class' => 'BasketPlanner\MatchBundle\Entity\Type',
                 'choice_label' => 'name',
-                'constraints' => new Valid(),
                 'required' => false,
                 'expanded' => true,
                 'multiple' => true,
@@ -31,14 +30,22 @@ class FilterType extends AbstractType
             ])
             ->add('min_date', 'datetime', [
                 'data' => new \DateTime('now'),
-                'constraints' => new Range(['min' => 'now', 'minMessage' => 'Blogai nuordyta pradžios data'])
+                //'constraints' => new Range(['min' => '+1', 'minMessage' => 'Blogai nuordyta pradžios data'])
             ])
             ->add('max_date', 'datetime', [
                 'data' => new \DateTime('+5 days'),
-                'constraints' => new Range(['max' => '+5 days', 'maxMessage' => 'Blogai nurodyta pabaigos data'])
+                //'constraints' => new Range(['max' => '+30 days', 'maxMessage' => 'Blogai nurodyta pabaigos data'])
             ])
             ->add('search', 'submit', ['label' => 'Ieškoti'])
+            ->setMethod('GET')
         ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'csrf_protection' => false
+        ]);
     }
 
     public function getName()

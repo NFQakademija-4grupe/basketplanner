@@ -3,7 +3,7 @@
 namespace BasketPlanner\TeamBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Team
  *
@@ -25,21 +25,25 @@ class Team
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=80)
+     * @ORM\Column(name="name", type="string", length=80, unique = true)
      */
     private $name;
 
     /**
-     * @var string
+     * @ORM\ManyToOne(targetEntity="BasketPlanner\MatchBundle\Entity\Type")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      *
-     * @ORM\Column(name="type", type="string", length=15)
+     * @Assert\NotBlank(
+     *     message = "Prašome pasirinkti komandos tip?"
+     * )
+     * @Assert\Valid()
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="created", type="string", length=25)
+     * @ORM\Column(name="created", type="datetime")
      */
     private $created;
 

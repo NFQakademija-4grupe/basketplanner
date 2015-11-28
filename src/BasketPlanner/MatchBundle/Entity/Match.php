@@ -71,7 +71,7 @@ class Match
      * )
      * @Assert\Range(
      *     min = "now",
-     *     max = "+7 days",
+     *     max = "+30 days",
      *     minMessage = "Blogai nurodytas mačo laikas",
      *     maxMessage = "Mačą galima kurti ne daugiau kaip 7 dienom į priekį"
      * )

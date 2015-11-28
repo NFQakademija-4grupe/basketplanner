@@ -1,13 +1,12 @@
 <?php
 
-namespace BasketPlanner\MatchBundle\Form;
 
+namespace BasketPlanner\MatchBundle\Form;
 use BasketPlanner\MatchBundle\Entity\Court;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class MatchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -36,7 +35,6 @@ class MatchType extends AbstractType
                 ]);
         }
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -44,7 +42,6 @@ class MatchType extends AbstractType
             'for_editing' => false
         ]);
     }
-
     public function getName()
     {
         return 'basket_planner_create_match';

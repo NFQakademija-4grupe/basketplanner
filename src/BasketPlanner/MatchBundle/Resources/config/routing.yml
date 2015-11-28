@@ -49,3 +49,15 @@ basket_planner_comment_create:
     methods: [POST]
     requirements:
         id: \d+
+
+basket_planner_match_activity_index:
+    path:     /activity
+    defaults: { _controller: BasketPlannerMatchBundle:Activity:index }
+
+basket_planner_match_activity_created:
+    path:     /activity/created
+    defaults: { _controller: BasketPlannerMatchBundle:Activity:listCreated }
+
+basket_planner_match_activity_attended:
+    path:     /activity/attended
+    defaults: { _controller: BasketPlannerMatchBundle:Activity:listAttended }

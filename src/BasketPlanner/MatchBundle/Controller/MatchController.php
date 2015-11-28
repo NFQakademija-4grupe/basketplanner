@@ -1,6 +1,4 @@
 <?php
-// TODO: ar gali kurti maca, jei yra prisijunges prie maco
-// TODO: ar gali prisijungti prie maco, jei yra sukures maca
 namespace BasketPlanner\MatchBundle\Controller;
 
 use BasketPlanner\MatchBundle\Entity\Match;
@@ -9,6 +7,7 @@ use BasketPlanner\MatchBundle\Form\FilterType;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Ivory\GoogleMap\Overlays\Marker;
@@ -17,7 +16,6 @@ use Ivory\GoogleMap\Helper\MapHelper;
 
 class MatchController extends Controller
 {
-
     /**
      * Show all matches
      *
@@ -36,25 +34,30 @@ class MatchController extends Controller
         $filterForm = $this->createForm(new FilterType());
         $filterForm->handleRequest($request);
 
-        if ($filterForm->isValid())
+        $query = $qb->select('m');
+
+        if ($filterForm->isSubmitted())
         {
-            // TODO: issiaiskinti formos submita
-            $query = $qb
-                ->select('m')
-                ->where('m.active = :active')
-                ->setParameter('active', true)
-                ->orderBy('m.createdAt', 'DESC')
-                ->getQuery();
+            $formData = $filterForm->getData();
+
+            if (!is_null($formData['search_text'])) {
+               $query = $query
+                   ->andWhere('m.description LIKE :searchText')
+                   ->setParameter('searchText', '%'.$formData['search_text'].'%');
+            }
+
+            if (!$formData['type']->isEmpty()) {
+                $query = $query
+                    ->andWhere('m.type IN (:type)')
+                    ->setParameter('type', $formData['type']->toArray());
+            }
         }
-        else
-        {
-            $query = $qb
-                ->select('m')
-                ->where('m.active = :active')
-                ->setParameter('active', true)
-                ->orderBy('m.createdAt', 'DESC')
-                ->getQuery();
-        }
+
+        $query = $query
+            ->andWhere('m.active = :active')
+            ->setParameter('active', true)
+            ->orderBy('m.beginsAt')
+            ->getQuery();
 
         $pagination = $this->get('knp_paginator')->paginate(
             $query,
@@ -79,7 +82,8 @@ class MatchController extends Controller
     public function showAction(Match $match)
     {
         $loadMap = $this->get('basket_planner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
+        $court = $match->getCourt();
+        $map = $loadMap->loadMarkerById($court->getId());
         $mapVariable = $map->getJavascriptVariable();
 
         return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match,
@@ -186,7 +190,7 @@ class MatchController extends Controller
      * Join match
      *
      * @param Match $match
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function joinAction(Match $match)
     {
@@ -215,6 +219,12 @@ class MatchController extends Controller
         return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
     }
 
+    /**
+     * Leave match
+     *
+     * @param Match $match
+     * @return RedirectResponse
+     */
     public function leaveAction(Match $match)
     {
         $user = $this->getUser();
@@ -223,10 +233,6 @@ class MatchController extends Controller
             $this->addFlash('error', 'Neįmanoma išeiti iš mačo prie kurio nesate prisijunge!');
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
-
-//        if ($match->getOwner() == $user) {
-//            $match->setOwner(null);
-//        }
 
         $match->removePlayer($user);
         $match->decreasePlayersCount();

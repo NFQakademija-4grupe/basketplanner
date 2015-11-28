@@ -6,3 +6,8 @@ services:
     basketplanner_match.map_loader_service:
         class: BasketPlanner\MatchBundle\Services\GoogleMapLoaderService
         arguments: ['@service_container']
+
+    basketplanner_match.user_activity_service:
+        class: BasketPlanner\MatchBundle\Services\UserMatchActivityService
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"

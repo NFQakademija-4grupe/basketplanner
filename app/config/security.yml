@@ -34,7 +34,7 @@ security:
                 failure_path:      /
 
                 oauth_user_provider:
-                    service: basketplanner_user_provider
+                    service: basketplanner_user.provider
             logout:    true
             anonymous: true
 

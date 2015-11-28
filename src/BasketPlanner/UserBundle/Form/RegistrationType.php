@@ -26,6 +26,6 @@ class RegistrationType extends AbstractType
 
     public function getName()
     {
-        return 'basketplanner_user_registration';
+        return 'basketplanner_user_form_registration';
     }
 }

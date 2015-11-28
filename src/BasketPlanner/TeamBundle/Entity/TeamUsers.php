@@ -40,7 +40,7 @@ class TeamUsers
     /**
      * @var string
      *
-     * @ORM\Column(name="role", type="string", length=15)
+     * @ORM\Column(name="role", type="string", columnDefinition="enum('Owner', 'Assistant', 'Player')")
      */
     private $role;
 
@@ -53,54 +53,6 @@ class TeamUsers
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return TeamUsers
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set teamId
-     *
-     * @param integer $teamId
-     *
-     * @return TeamUsers
-     */
-    public function setTeamId($teamId)
-    {
-        $this->teamId = $teamId;
-
-        return $this;
-    }
-
-    /**
-     * Get teamId
-     *
-     * @return integer
-     */
-    public function getTeamId()
-    {
-        return $this->teamId;
     }
 
     /**

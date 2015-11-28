@@ -42,7 +42,7 @@ class Court
     /**
      * @var float
      *
-     * @ORM\Column(name="latitude", type="decimal", precision=18, scale=18, nullable=true)
+     * @ORM\Column(name="latitude", type="float", nullable=true)
      *
      * @Assert\NotBlank(
      *     message = "Blogai nurodytos koordinates"
@@ -57,7 +57,7 @@ class Court
     /**
      * @var float
      *
-     * @ORM\Column(name="longitude", type="decimal", precision=18, scale=18, nullable=true)
+     * @ORM\Column(name="longitude", type="float", nullable=true)
      *
      * @Assert\NotBlank(
      *     message = "Blogai nurodytos koordinates"
