@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     {% block css %}
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-        {% if false %}
+        {% if app.user %}
             {% block appcss %}
                 <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
             {% endblock %}
@@ -31,7 +31,7 @@
 <body id="body" class="wrapper layout-fixed">
 <!-- top navbar-->
 {% block main_body %}
-    {% if false %}
+    {% if app.user %}
         {% block header %}
             {% include 'partials/topnavbar.html.twig' %}
         {% endblock %}
@@ -58,7 +58,7 @@
     <script src="{{ asset('assets/js/js.js') }}"></script>
 
 
-    {% if not false %}
+    {% if not app.user %}
 {% block js %}
     <script src="{{ asset('assets/js/wow.js') }}"></script>
     <script src="{{ asset('assets/js/smooth-on-scroll.js') }}"></script>
