@@ -137,6 +137,9 @@
                     <div class="panel widget">
                        {#{{ google_map(map) }}#}
 
+                        <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=300x300&maptype=roadmap
+    &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
+    &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/>
                         <div class="panel-body bg-inverse">
                             <div class="row row-table text-center">
                                 <div class="col-xs-4">
