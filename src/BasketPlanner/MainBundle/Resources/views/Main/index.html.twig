@@ -1,167 +1,117 @@
 {% extends '::base.html.twig' %}
+
 {% block login %}
-    <div class="ball-bg">
-<header class="ball-bg">
-    <div class="header-content">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6"></div>
-        <div class="row">
-            <div class="header-content-inner trans-back">
-                <h1>BasketPlanner</h1>
-                <hr>
-                <p>NFQ akademijos projektas. Pats geriausias!</p>
+    <div class="content-wrap">
+        <header class="hero-area" id="home">
 
+            <div class="container">
+                <div class="col-md-12">
+
+                    <div class="navbar sticky-navigation navbar-fixed-top" role="navigation"
+                         data-spy="affix" data-offset-top="200">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <a class="logo-left " href="#"><i class="mdi-image-timelapse"></i>BasketPlanner</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contents text-right">
+                    <h1 class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">BasketPlanner - Jūsų
+                        krepšinio planuotojas</h1>
+
+                    <p class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">Lorem Ipsum bla Bla
+                        BLA</p>
+                        <a class="btn btn-lg btn-social btn-facebook wow fadeInUp "
+                           href="{{ hwi_oauth_login_url('facebook') }}" data-wow-duration="1000ms"
+                           data-wow-delay="400ms">
+                            <em class="fa fa-facebook fa-2x"></em>Prisijungti - Facebook
+                        </a>
+                        <a class="btn btn-lg btn-social btn-google wow fadeInUp"
+                           href="{{ hwi_oauth_login_url('google') }}" data-wow-duration="1000ms"
+                           data-wow-delay="400ms">
+                            <em class="fa fa-google-plus fa-2x"></em>Prisijungti - Google+
+                        </a>
+                </div>
+            </div>
+        </header>
+
+        <section id="features" class="section">
+            <div class="container">
+
+                <div class="section-header">
+                    <h1 class="section-title wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="100ms">Sistemos
+                        privalumai</h1>
+
+                    <h2 class="section-subtitle wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">Kodėl
+                        verta naudoti BasketPlanner?</h2>
+                </div>
                 <div class="row">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-3">
-                        <a class="btn btn-lg btn-social btn-facebook center-block" href="{{ hwi_oauth_login_url('facebook') }}">
-                            <em class="fa fa-facebook fa-3x"></em>Prisijungti - Facebook
-                        </a>
-                    </div>
-                    <div class="col-sm-3">
-                        <a class="btn btn-lg btn-social btn-google center-block" href="{{ hwi_oauth_login_url('google') }}">
-                            <em class="fa fa-google-plus fa-3x" ></em>Prisijungti - Google+
-                        </a>
-                    </div>
 
-                    <div class="col-sm-3"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-4">
-                <!-- START widget-->
-                <div class="panel widget">
-                    <div gmap="" data-zoom="14" data-address="KAUNAS" data-toggle="gmap" class="gmap-sm"></div>
-
-
-                    <div class="panel-body bg-inverse">
-                        <div class="row row-table text-center">
-                            <div class="col-xs-4">
-                                <em class="fa fa-calendar fa-2x"></em>
-
-                                <p class="m0">Lapkričio 10, 2015</p>
-
-                                <p class="m0">19:00</p>
+                    <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
+                        <div class="features">
+                            <div class="icon">
+                                <i class="fa fa-calendar" style="color:#FF9800"></i>
                             </div>
-                            <div class="col-xs-4">
-                                <em class="icon-trophy fa-2x"></em>
+                            <div class="features-text">
+                                <h4>Organizuosite žaidimus greitai</h4>
 
-                                <p class="m0">
-                                    3x3
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                                    Ipsum has been the industry's standard.
                                 </p>
                             </div>
-                            <div class="col-xs-4">
-                                <em class="fa fa-map-marker fa-2x"></em>
-
-                                <p class="m0">Street 123</p>
-
-                                <p class="m0">Location, Unknow</p>
-                            </div>
                         </div>
                     </div>
-                    <div class="panel-body bg-inverse">
-                        <div class="row text-center">
-                            <div class="col-xs-4">
-                                <a href="#/perziura">
-                                    <button type="button" class="btn btn-block btn-warning ">
-                                        <em class="fa fa-eye fa-2x"></em>
 
-                                        <p class="mobhide">DAUGIAU</p>
-                                    </button>
-                                </a>
+
+                    <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
+                        <div class="features">
+                            <div class="icon">
+                                <i class="fa fa-users" style="color:#FF9800"></i>
                             </div>
+                            <div class="features-text">
+                                <h4>Surasite kur pažaisti</h4>
 
-                            <div class="col-xs-4">
-                                <em class="fa fa-users fa-2x"></em>
-
-                                <p class="m0">0/6</p>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <button type="button" class="btn btn-block btn-warning">
-                                    <em class="fa fa-sign-in fa-2x"></em>
-
-                                    <p class="mobhide">PRISIJUNGTI</p>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END widget-->
-            </div>
-
-            <div class="col-lg-2">
-
-            </div>
-            <div class="col-lg-4">
-                <!-- START widget-->
-                <div class="panel widget">
-                    <div gmap="" data-zoom="14" data-address="KAUNAS" data-toggle="gmap" class="gmap-sm"></div>
-
-
-                    <div class="panel-body bg-inverse">
-                        <div class="row row-table text-center">
-                            <div class="col-xs-4">
-                                <em class="fa fa-calendar fa-2x"></em>
-
-                                <p class="m0">Lapkričio 10, 2015</p>
-
-                                <p class="m0">19:00</p>
-                            </div>
-                            <div class="col-xs-4">
-                                <em class="icon-trophy fa-2x"></em>
-
-                                <p class="m0">
-                                    3x3
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                                    Ipsum has been the industry's standard.
                                 </p>
                             </div>
-                            <div class="col-xs-4">
-                                <em class="fa fa-map-marker fa-2x"></em>
-
-                                <p class="m0">Street 123</p>
-
-                                <p class="m0">Location, Unknow</p>
-                            </div>
                         </div>
                     </div>
-                    <div class="panel-body bg-inverse">
-                        <div class="row text-center">
-                            <div class="col-xs-4">
-                                <a href="perziura.html">
-                                    <button type="button" class="btn btn-block btn-warning ">
-                                        <em class="fa fa-eye fa-2x"></em>
 
-                                        <p class="mobhide">DAUGIAU</p>
-                                    </button>
-                                </a>
+
+                    <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
+                        <div class="features">
+                            <div class="icon">
+                                <i class="fa fa-comments" style="color:#FF9800"></i>
                             </div>
+                            <div class="features-text">
+                                <h4>Surasite naujų draugų</h4>
 
-                            <div class="col-xs-4">
-                                <em class="fa fa-users fa-2x"></em>
-
-                                <p class="m0">0/6</p>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <button type="button" class="btn btn-block btn-warning">
-                                    <em class="fa fa-sign-in fa-2x"></em>
-
-                                    <p class="mobhide">PRISIJUNGTI</p>
-                                </button>
+                                <p>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                                    Ipsum has been the industry's standard.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END widget-->
             </div>
+        </section>
 
-            <div class="col-lg-1"></div>
-        </div>
 
-    </div>
-    <div class="col-sm-3"></div>
-</header>
+        <section id="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="copyright-text">
+                            © BasketPlanner 2015 Visos teisės saugomos
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 {% endblock %}
