@@ -41,20 +41,24 @@ class MatchController extends Controller
             $formData = $filterForm->getData();
 
             if (!is_null($formData['search_text'])) {
-               $query = $query
-                   ->andWhere('m.description LIKE :searchText')
+               $query = $query->andWhere('m.description LIKE :searchText')
                    ->setParameter('searchText', '%'.$formData['search_text'].'%');
             }
 
             if (!$formData['type']->isEmpty()) {
-                $query = $query
-                    ->andWhere('m.type IN (:type)')
+                $query = $query->andWhere('m.type IN (:type)')
                     ->setParameter('type', $formData['type']->toArray());
             }
 
-            $query = $query->where('m.beginsAt BETWEEN :startDate AND :endDate')
-                ->setParameter('startDate', $formData['min_date'])
-                ->setParameter('endDate', $formData['max_date']);
+            if (!is_null($formData['min_date'])) {
+                $query = $query->andWhere('m.beginsAt > :minDate')
+                    ->setParameter('minDate', $formData['min_date']);
+            }
+
+            if (!is_null($formData['max_date'])) {
+                $query = $query->andWhere('m.beginsAt < :maxDate')
+                    ->setParameter('maxDate', $formData['max_date']);
+            }
         }
 
         $query = $query
@@ -185,9 +189,11 @@ class MatchController extends Controller
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
 
-        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', ['form' => $form->createView(),
+        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [
+            'form' => $form->createView(),
             'map' => $map,
-            'mapVariable' => $mapVariable]);
+            'mapVariable' => $mapVariable
+        ]);
     }
 
     /**
