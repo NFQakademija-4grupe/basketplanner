@@ -51,6 +51,10 @@ class MatchController extends Controller
                     ->andWhere('m.type IN (:type)')
                     ->setParameter('type', $formData['type']->toArray());
             }
+
+            $query = $query->where('m.beginsAt BETWEEN :startDate AND :endDate')
+                ->setParameter('startDate', $formData['min_date'])
+                ->setParameter('endDate', $formData['max_date']);
         }
 
         $query = $query

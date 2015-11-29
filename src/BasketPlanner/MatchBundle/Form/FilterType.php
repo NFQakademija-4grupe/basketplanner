@@ -29,12 +29,16 @@ class FilterType extends AbstractType
                 }
             ])
             ->add('min_date', 'datetime', [
-                'data' => new \DateTime('now'),
-                //'constraints' => new Range(['min' => '+1', 'minMessage' => 'Blogai nuordyta pradžios data'])
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+                'data' => new \DateTime('+1 days'),
+                'constraints' => new Range(['min' => '+1', 'minMessage' => 'Blogai nuordyta pradžios data'])
             ])
             ->add('max_date', 'datetime', [
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
                 'data' => new \DateTime('+5 days'),
-                //'constraints' => new Range(['max' => '+30 days', 'maxMessage' => 'Blogai nurodyta pabaigos data'])
+                'constraints' => new Range(['max' => '+30 days', 'maxMessage' => 'Blogai nurodyta pabaigos data'])
             ])
             ->add('search', 'submit', ['label' => 'Ieškoti'])
             ->setMethod('GET')
