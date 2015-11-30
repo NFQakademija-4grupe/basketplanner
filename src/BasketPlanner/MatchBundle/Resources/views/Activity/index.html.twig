@@ -1,31 +1,200 @@
 {% extends '::base.html.twig' %}
 
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/style/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/style/dataTables.colVis.css') }}">
+{% endblock %}
 {% block content %}
-    <div autoscroll="false" class="content-wrapper">
+        <div autoscroll="false" class="content-wrapper">
+
         <div class="row">
-            <div class="col-sm-12">
-                <!-- START panel-->
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h1>Mano mačai</h1></div>
-                    <div class="panel-body">
-                        <div><h4>Sukurta:</h4></div>
-                        {% for match in createdMatches %}
-                            <div>{{  match.description }}</div>
-                            <div>{{  match.type.name }}</div>
-                            <div>{{  match.beginsAt.format('H:i') }}</div>
+            <div class="col-lg-4 col-md-12">
+                <!-- START widget-->
+                <div class="panel widget bg-warning">
+                    <div class="row row-table">
+                        <div class="col-xs-4 text-center bg-warning-dark pv-lg">
+                            <em class="fa fa-sign-in fa-3x"></em>
+                        </div>
+                        <div class="col-xs-8 pv-lg">
+                            <div class="h1 m0 text-bold">{{ attendedMatches|length }}</div>
+                            <div class="text-uppercase">Sudalyvauta matchų</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <!-- START widget-->
+                <div class="panel widget bg-warning">
+                    <div class="row row-table">
+                        <div class="col-xs-4 text-center bg-warning-dark pv-lg">
+                            <em class="fa fa-plus-circle fa-3x"></em>
+                        </div>
+                        <div class="col-xs-8 pv-lg">
+                            <div class="h1 m0 text-bold">{{ createdMatches|length }}</div>
+                            <div class="text-uppercase">Sukurta matchų</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <!-- START widget-->
+                <div class="panel widget bg-warning">
+                    <div class="row row-table">
+                        <div class="col-xs-4 text-center bg-warning-dark pv-lg">
+                            <em class="fa fa-trophy fa-3x"></em>
+                        </div>
+                        <div class="col-xs-8 pv-lg">
+                            <div class="h1 m0 text-bold">10</div>
+                            <div class="text-uppercase">Kažkokia statistika</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- START DATATABLE 1 -->
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default panel-warning">
+                        <div class="panel-heading panel-warning">Sukurtų matchų istorija
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table id="datatable1" class="table table-striped table-hover datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>Statusas</th>
+                                        <th>Data</th>
+                                        <th>Laikas</th>
+                                        <th>Vieta</th>
+                                        <th>Tipas</th>
+                                        <th>Dalyviai</th>
+                                        <th>Redagavimas</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for match in createdMatches %}
+                                    <tr>
+                                        {% if match.active %}
+                                            <td>Aktyvus</td>
+                                        {% else %}
+                                            <td>Pasibaigęs</td>
+                                        {% endif %}
+                                        <td>{{ match.beginsAt.format('M d Y') }}</td>
+                                        <td>{{ match.beginsAt.format('H:i') }}</td>
+                                        <td>{{ match.court.address }}</td>
+                                        <td>{{ match.type.name }}</td>
+                                        <td>{{ match.playersCount }}</td>
+                                        <td>
 
-                            <br>
-                        {% endfor %}
+                                            <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+                                                <em class="fa fa-search">
+                                                </em>
+                                            </a>
+                                            <a href="{{ path('basket_planner_match_edit', {'id': match.id}) }}">
+                                            <em class="fa fa-edit" data-toggle="modal" data-target="#redagavimas"></em>
+                                            </a>
+                                            <em class="fa fa-trash-o"></em>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- START DATATABLE 2 -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default  panel-warning">
+                        <div class="panel-heading panel-green">Dalyvaujamų matchų istorija
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table id="datatable2" class="table table-striped table-hover datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>Statusas</th>
+                                        <th>Data</th>
+                                        <th>Laikas</th>
+                                        <th>Vieta</th>
+                                        <th>Tipas</th>
+                                        <th>Dalyviai</th>
+                                        <th>Redagavimas</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for match in attendedMatches %}
+                                    <tr>
+                                        {% if match.active %}
+                                            <td>Aktyvus</td>
+                                        {% else %}
+                                            <td>Pasibaigęs</td>
+                                        {% endif %}
+                                        <td>{{ match.beginsAt.format('M d Y') }}</td>
+                                        <td>{{ match.beginsAt.format('H:i') }}</td>
+                                        <td>{{ match.court.address }}</td>
+                                        <td>{{ match.type.name }}</td>
+                                        <td>{{ match.playersCount }}</td>
+                                        <td>
 
-                        <div><h4>Dalyvauta:</h4></div>
-                        {% for match in attendedMatches %}
-                            <div>{{  match.description }}</div>
-                            <div>{{  match.type.name }}</div>
-                            <div>{{  match.beginsAt.format('H:i') }}</div>
-                        {% endfor %}
+                                            <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+                                                <em class="fa fa-search">
+                                                </em>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" charset="utf8" src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8" src="{{ asset('assets/js/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+            src="{{ asset('assets/js/dataTables.bootstrapPagination.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'L',
+                pickTime: false
+            });
+            $('#datetimepicker2').datetimepicker({
+                format: 'HH:mm',
+                pickDate: false,
+                pickSeconds: false,
+                pick12HourFormat: false
+            });
+        });
+        $(document).ready(function () {
+            $('#datatable1, #datatable2').DataTable({
+                'paging': true,  // Table pagination
+                'ordering': true,  // Column ordering
+                'info': true,  // Bottom left status text
+                // Text translation options
+                // Note the required keywords between underscores (e.g _MENU_)
+                oLanguage: {
+                    sSearch: 'Paieška:',
+                    sLengthMenu: '_MENU_ įrašų puslapyje',
+                    info: 'Rodomas _PAGE_ puslapis iš _PAGES_',
+                    zeroRecords: 'Matchų nerasta.',
+                    infoEmpty: 'No records available',
+                    infoFiltered: '(filtered from _MAX_ total records)'
+                }
+            });
+        });
+    </script>
 {% endblock %}
