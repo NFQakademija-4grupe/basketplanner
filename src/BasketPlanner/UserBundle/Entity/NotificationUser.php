@@ -1,0 +1,20 @@
+<?php
+
+namespace BasketPlanner\UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="notifications_users")
+ */
+class NotificationUser
+{
+    private $id;
+    private $notification;
+    private $user;
+    private $seen;
+
+
+}

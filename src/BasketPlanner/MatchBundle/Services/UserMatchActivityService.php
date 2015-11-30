@@ -4,13 +4,16 @@ namespace BasketPlanner\MatchBundle\Services;
 
 use BasketPlanner\MatchBundle\Entity\Match;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class UserMatchActivityService{
 
     private $entityManager;
+    private $logger;
 
-    public function __construct(EntityManager $entityManager){
+    public function __construct(EntityManager $entityManager, LoggerInterface $logger = null){
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -28,7 +31,9 @@ class UserMatchActivityService{
                 array(),
                 $limit);
         }catch ( \Exception  $e){
-            die(var_dump('adsad'));
+            if($this->logger != null){
+                $this->logger->error('An error occurred while trying to load user activity: '.$e->getMessage());
+            }
         }
 
         return $results;
@@ -46,17 +51,20 @@ class UserMatchActivityService{
         try{
             $query = $this->entityManager
                 ->createQuery('
-                    SELECT m, t  FROM BasketPlanner\MatchBundle\Entity\Match m
+                    SELECT m, t, c  FROM BasketPlanner\MatchBundle\Entity\Match m
                     INNER JOIN m.players u
                         WITH u = :user
                     LEFT JOIN m.type t
+                    LEFT JOIN m.court c
                     WHERE m.owner <> :userId')
                 ->setParameter('user', $user)
                 ->setParameter('userId', $user->getId());
 
             $results = $query->getArrayResult();
         }catch ( \Exception  $e){
-            die(var_dump('failed'));
+            if($this->logger != null){
+                $this->logger->error('An error occurred while trying to load user activity: '.$e->getMessage());
+            }
         }
 
         return $results;

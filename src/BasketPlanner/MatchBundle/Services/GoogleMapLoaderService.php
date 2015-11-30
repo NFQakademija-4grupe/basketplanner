@@ -30,6 +30,7 @@ class GoogleMapLoaderService{
             $map->setCenter(54.9120769, 23.9515808, true);
             $map->setMapOption('zoom', 10);
             $map->setMapOption('disableDefaultUI', false);
+            $map->setMapOption('addMarker', true);
 
             $courts = $this->container->get('doctrine')->getManager()
                 ->getRepository('BasketPlannerMatchBundle:Court')->findByApproved(true);
@@ -78,7 +79,8 @@ class GoogleMapLoaderService{
 
             $map->setCenter($court->getLatitude(), $court->getLongitude(), true);
             $map->setMapOption('zoom', 10);
-            $map->setMapOption('disableDefaultUI', true);
+            $map->setMapOption('disableDefaultUI', false);
+            $map->setMapOption('addMarker', false);
 
             $marker = new Marker();
             $marker->setPosition($court->getLatitude(), $court->getLongitude(), true);

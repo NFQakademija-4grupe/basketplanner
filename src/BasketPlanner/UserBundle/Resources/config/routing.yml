@@ -1,0 +1,6 @@
+basket_planner_user_profile:
+   path: /{id}
+   defaults: { _controller: BasketPlannerUserBundle:Profile:show }
+   methods: [GET]
+   requirements:
+       id: \d+

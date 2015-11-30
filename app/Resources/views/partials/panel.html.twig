@@ -1,0 +1,13 @@
+{% block panel_container %}
+<div autoscroll="false" class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- START panel-->
+            <div class="panel panel-default">
+                {% block panel_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

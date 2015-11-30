@@ -18,7 +18,7 @@ class Team
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\TeamUsers", mappedBy="team", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="TeamUser.php", mappedBy="team", cascade={"all"})
      */
     private $id;
 
@@ -34,7 +34,7 @@ class Team
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      *
      * @Assert\NotBlank(
-     *     message = "Prašome pasirinkti komandos tip?"
+     *     message = "Praï¿½ome pasirinkti komandos tip?"
      * )
      * @Assert\Valid()
      */

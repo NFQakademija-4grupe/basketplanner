@@ -43,10 +43,12 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                     var geocoder;
                     var marker;
                     function initialize() {
-                        geocoder = new google.maps.Geocoder();
-                        google.maps.event.addListener(mapVariable, "click", function(event) {
-                            placeMarker(event.latLng);
-                        });
+                        if (mapVariable.addMarker === true){
+                            geocoder = new google.maps.Geocoder();
+                            google.maps.event.addListener(mapVariable, "click", function(event) {
+                                placeMarker(event.latLng);
+                            });
+                        }
                     }
                     function placeMarker(location) {
                         if (marker == null){
@@ -68,6 +70,7 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                             geocodePosition(marker.getPosition());
                         }
                     }
+
                     function geocodePosition(pos) {
                         geocoder.geocode({
                             latLng: pos
@@ -86,6 +89,7 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                         var contentText = str + "<br>";
                         marker.markerAddress = str;
                         marker.info.setContent(contentText);
+                        new google.maps.event.trigger( marker, "click");
                     }
                     initialize();'.PHP_EOL;
     }

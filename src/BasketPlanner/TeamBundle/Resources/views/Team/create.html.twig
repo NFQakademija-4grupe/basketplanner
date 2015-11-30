@@ -1,10 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block content %}
-<div autoscroll="false" class="content-wrapper">
-    <div class="row">
-        <div class="col-sm-12">
-            <!-- START panel-->
-            <div class="panel panel-default">
+    {% embed  'partials/panel.html.twig' %}
+        {% block panel_content %}
                 <div class="panel-heading"><h1>Sukurti komandą</h1></div>
                 {{ form_start(form, {'role':'form'}) }}
                 <div class="panel-body">
@@ -23,8 +20,6 @@
                         <br>{{ form_widget(form.save, {'attr': {'class':'btn btn-sm btn-default'}}) }}
                     {{ form_end(form) }}
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}

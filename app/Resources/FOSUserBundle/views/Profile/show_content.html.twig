@@ -1,14 +1,32 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-<div class="fos_user_user_show">
-    <p><img src="{{ user.profilePicture }}"/></p>
-    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
-    <p>{{ 'profile.show.first_name'|trans }}: {{ user.firstName }}</p>
-    <p>{{ 'profile.show.last_name'|trans }}: {{ user.lastName }}</p>
-    <p>{{ 'profile.show.gender'|trans }}: {{ user.gender }}</p>
-    <p>{{ 'profile.show.age'|trans }}: {{ user.age }}</p>
+<div autoscroll="false" class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- START panel-->
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>Vartotojas: {{ user.fullName }}</h1></div>
+                    <div class="panel-body">
+                        <div class="fos_user_user_show">
+                            <img role="button" alt="Image"
+                                 class='img-thumbnail img-circle thumb48'
+                                 src='{{ user.profilePicture }}'
+                                 data-content="{{ user.fullName }}"
+                                 data-container="body" data-toggle="popover"
+                                 data-placement="top"
+                                 data-trigger="focus">
+                            <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+                            <p>{{ 'profile.show.first_name'|trans }}: {{ user.firstName }}</p>
+                            <p>{{ 'profile.show.last_name'|trans }}: {{ user.lastName }}</p>
+                            <p>{{ 'profile.show.gender'|trans }}: {{ user.gender }}</p>
+                            <p>{{ 'profile.show.age'|trans }}: {{ user.age }}</p>
 
-    <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary">{{ 'profile.edit.edit'|trans }}</a><br>
-    <br>
-
+                            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary">{{ 'profile.edit.edit'|trans }}</a><br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
