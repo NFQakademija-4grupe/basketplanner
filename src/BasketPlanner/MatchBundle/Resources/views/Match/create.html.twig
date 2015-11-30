@@ -1,111 +1,129 @@
 {% extends '::base.html.twig' %}
 {% block content %}
-        <div autoscroll="false" class="content-wrapper">
-            <div class="row">
-                <div class="col-sm-12">
-                    <!-- START panel-->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Sukurti matchą</div>
-                        {{ form_start(form, {'role':'form'}) }}
-                        <div class="panel-body">
-                            <div class="col-sm-6">
+    <div autoscroll="false" class="content-wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- START panel-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Sukurti matchą</div>
+                    {{ form_start(form, {'role':'form'}) }}
+                    <div class="panel-body">
+                        <div class="col-sm-6">
 
-                                {% if form.beginsAt is defined  %}
-                                            {{ form_errors(form.beginsAt) }}
-                                            {{ form_widget(form.beginsAt) }}
-                                {% endif %}
-
-{#                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">&#123;&#35;
-                                            {{ form_label(form.type, {'attr': {'class': 'radio-inline c-radio'}}) }}
-                                            {{ form_errors(form.type) }}
-                                            {{ form_widget(form.type) }}&#35;&#125;
-
-                                            <label class="radio-inline c-radio">
-                                                <input id="1x1" type="radio" name="i-radio" value="#1x1">
-                                                <span class="fa fa-circle"></span>1x1</label>
-                                            <label class="radio-inline c-radio">
-                                                <input id="2x2" type="radio" name="i-radio" value="#2x2">
-                                                <span class="fa fa-circle"></span>2x2</label>
-                                            <label class="radio-inline c-radio">
-                                                <input id="3x3" type="radio" name="i-radio" value="#3x3">
-                                                <span class="fa fa-circle"></span>3x3</label>
-                                            <label class="radio-inline c-radio">
-                                                <input id="4x4" type="radio" name="i-radio" value="#4x4">
-                                                <span class="fa fa-circle"></span>4x4</label>
-                                            <label class="radio-inline c-radio">
-                                                <input id="5x5" type="radio" name="i-radio" value="#5x5">
-                                                <span class="fa fa-circle"></span>5x5</label>
-                                            <label class="radio-inline c-radio">
-                                                <input id="Kita" type="radio" name="i-radio" value="#Kita">
-                                                <span class="fa fa-circle"></span>Kita</label>
-                                        </div>
-                                    </div>
-                                </div>#}
+                            {% if form.beginsAt is defined %}
+                                {{ form_label(form.beginsAt, 'Matcho data ir laikas') }}
+                                {{ form_errors(form.beginsAt) }}
+                                {{ form_widget(form.beginsAt) }}
+                            {% endif %}
+                            {% if form.type is defined %}
                                 <div class="row">
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <div>
-                                                {{ form_errors(form.description) }}
-                                                {{ form_widget(form.description, {'attr': {'class': 'form-control description', 'placeholder':'Aprašymas', 'rows':'4'}}) }}
+                                        {{ form_errors(form.type) }}
+                                            <div class="del">
+                                                {{ form_widget(form.type) }}</div>
+                                            <div id="basket_planner_create_match_type">
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_1">
+                                                    <input id="basket_planner_create_match_type_1" name="basket_planner_create_match[type]" required="required" type="radio" value="1">
+                                                    <span class="fa fa-circle"></span>1x1</label>
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_2">
+                                                    <input id="basket_planner_create_match_type_2" name="basket_planner_create_match[type]" required="required" type="radio" value="2">
+                                                    <span class="fa fa-circle"></span>2x2</label>
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_3">
+                                                    <input id="basket_planner_create_match_type_3" name="basket_planner_create_match[type]" required="required" type="radio" value="3">
+                                                    <span class="fa fa-circle"></span>3x3</label>
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_4">
+                                                    <input id="basket_planner_create_match_type_4" name="basket_planner_create_match[type]" required="required" type="radio" value="4">
+                                                    <span class="fa fa-circle"></span>4x4</label>
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_5">
+                                                    <input id="basket_planner_create_match_type_5" name="basket_planner_create_match[type]" required="required" type="radio" value="5">
+                                                    <span class="fa fa-circle"></span>5x5</label>
+
+                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_6">
+                                                    <input id="basket_planner_create_match_type_6" name="basket_planner_create_match[type]" required="required" type="radio" value="Kita">
+                                                    <span class="fa fa-circle"></span>Kita</label>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                {% if map is defined %}
-                                    <div id="map">
-                                        {{ google_map(map) }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-12">
-                            <div class="row">
-                                    <div class="col-sm-1">
-                                        <div class="form-group">
-                                            {{ form_widget(form.save, {'attr': {'class':'btn btn-sm btn-default'}}) }}
-                                        </div>
-                                    </div>
+                            {% endif %}
 
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <div class="checkbox c-checkbox">
-                                                <label>
-                                                    <input type="checkbox" checked=""/>
-                                                    <span class="fa fa-check"></span>Sutinku su taisyklėmis</label>
+                            {% if form.court is defined %}
+                                <div class="row" style="display:none">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                {{ form_errors(form.court) }}
+                                                {{ form_widget(form.court, {'attr': {'placeholder':'Adresas'}}) }}
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div>
+                                            {{ form_errors(form.description) }}
+                                            {{ form_widget(form.description, {'attr': {'class': 'form-control description', 'placeholder':'Aprašymas', 'rows':'4'}}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            {% if map is defined %}
+                                <div id="map">
+                                    {{ google_map(map) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        {{ form_widget(form.save, {'attr': {'class':'btn btn-sm btn-default'}}) }}
+                                    </div>
+                                </div>
+
+                                <!--<div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="checkbox c-checkbox">
+                                            <label>
+                                                <input type="checkbox" checked=""/>
+                                                <span class="fa fa-check"></span>Sutinku su taisyklėmis</label>
+                                        </div>
+                                    </div>-->
+                                </div>
                                 <div class="col-sm-8">
                                 </div>
                             </div>
-                            </div>
                         </div>
-                        {{ form_end(form) }}
-
                     </div>
+                    {{ form_end(form) }}
+
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}
 {% block scripts %}
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
 
-            $("#basket_planner_create_match_beginsAt_time").wrap('<div class="form-group"><div class="row"></div></div>');
-            $("#basket_planner_create_match_beginsAt_date").wrap('<div class="form-group"><div class="row"></div></div>');
-            $("#basket_planner_create_match_beginsAt_date_year").wrap('<div class="col-sm-12 col-md-4"></div>')
+            $("#basket_planner_create_match_beginsAt").wrap('<div class="row"></div>');
+            $("#basket_planner_create_match_beginsAt_time").wrap('<div class="form-group"><div class="col-sm-12 col-lg-3"></div></div>')
                     .addClass('form-control');
-            $("#basket_planner_create_match_beginsAt_date_month").wrap('<div class="col-sm-12 col-md-4"></div>')
+            $("#basket_planner_create_match_beginsAt_date").wrap('<div class="form-group"><div class="col-sm-12 col-lg-3"></div></div>')
                     .addClass('form-control');
-            $("#basket_planner_create_match_beginsAt_date_day").wrap('<div class="col-sm-12 col-md-4"></div>')
-                    .addClass('form-control');
-            $("#basket_planner_create_match_beginsAt_time_hour").wrap('<div class="col-sm-6 col-md-4"></div>')
-                    .addClass('form-control');
-            $("#basket_planner_create_match_beginsAt_time_minute").wrap('<div class="col-sm-6 col-md-4"></div>')
-                    .addClass('form-control');
+            $(".del").remove();
         });
     </script>
 {% endblock %}

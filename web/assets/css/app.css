@@ -18268,3 +18268,6 @@ body,
     width: 90%;
     word-wrap: break-word;
 }
+#basket_planner_create_match_type{
+    margin-top: 15px;
+}
