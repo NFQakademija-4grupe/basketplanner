@@ -41,22 +41,22 @@ class MatchController extends Controller
             $formData = $filterForm->getData();
 
             if (!is_null($formData['search_text'])) {
-               $query = $query->andWhere('m.description LIKE :searchText')
+               $query = $query->orWhere('m.description LIKE :searchText')
                    ->setParameter('searchText', '%'.$formData['search_text'].'%');
             }
 
             if (!$formData['type']->isEmpty()) {
-                $query = $query->andWhere('m.type IN (:type)')
+                $query = $query->orWhere('m.type IN (:type)')
                     ->setParameter('type', $formData['type']->toArray());
             }
 
             if (!is_null($formData['min_date'])) {
-                $query = $query->andWhere('m.beginsAt > :minDate')
+                $query = $query->orWhere('m.beginsAt > :minDate')
                     ->setParameter('minDate', $formData['min_date']);
             }
 
             if (!is_null($formData['max_date'])) {
-                $query = $query->andWhere('m.beginsAt < :maxDate')
+                $query = $query->orWhere('m.beginsAt < :maxDate')
                     ->setParameter('maxDate', $formData['max_date']);
             }
         }
@@ -122,18 +122,15 @@ class MatchController extends Controller
 
         if ($form->isValid())
         {
-            $court = new Court();
-            $court = $form["court"]->getData();
+            $courtId = $form['court']->getData()->getId();
 
-            $entity = $em->getRepository('BasketPlannerMatchBundle:Court')->findOneBy(array('id' => $court->getId()));
+            $court = $em->getRepository('BasketPlannerMatchBundle:Court')->findOneBy(['id' => $courtId]);
 
-            if ($entity == null){
-                $court->setId(null);
+            if (is_null($court)) {
+                $court = $match->getCourt();
                 $court->setApproved(false);
                 $em->persist($court);
                 $em->flush();
-            }else{
-                $court = $entity;
             }
 
             $user = $this->getUser();

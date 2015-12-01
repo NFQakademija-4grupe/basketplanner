@@ -25,20 +25,4 @@ class ActivityController extends Controller
             'attendedMatches' => $userAttendedMatches,
         ]);
     }
-
-    /**
-     * Show user created matches
-     */
-    public function listCreatedAction()
-    {
-        return $this->render('BasketPlannerMatchBundle:Activity:created.html.twig');
-    }
-
-    /**
-     * Show user attended matches
-     */
-    public function listAttendedAction()
-    {
-        return $this->render('BasketPlannerMatchBundle:Activity:attended.html.twig');
-    }
 }
