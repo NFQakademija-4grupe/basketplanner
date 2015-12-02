@@ -85,7 +85,6 @@ swiftmailer:
     host:      smtp.gmail.com
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    spool:     { type: memory }
 
 fos_user:
     db_driver: orm
@@ -139,3 +138,31 @@ ivory_google_map:
     map:
         width: "100%"
         height: "240px"
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:     'localhost'
+            port:     5672
+            user:     'guest'
+            password: 'guest'
+            vhost:    '/'
+            lazy:     false
+            connection_timeout: 3
+            read_write_timeout: 3
+
+            # requires php-amqplib v2.4.1+ and PHP5.4+
+            keepalive: false
+
+            # requires php-amqplib v2.4.1+
+            heartbeat: 0
+    producers:
+        send_email:
+            connection:       default
+            exchange_options: {name: 'send-email', type: direct}
+    consumers:
+        send_email:
+            connection:       default
+            exchange_options: {name: 'send-email', type: direct}
+            queue_options:    {name: 'send-email'}
+            callback:         basketplanner_user.send_email_service

@@ -2,22 +2,19 @@
 
 namespace BasketPlanner\UserBundle\Security\User;
 
-use BasketPlanner\UserBundle\Events\RegistrationEvent;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class OAuthUserProvider extends BaseClass
 {
-    /**
-     * @var EventDispatcher
-     */
-    protected $dispatcher;
 
-    public function __construct($userManager, array $properties, $dispatcher){
+    protected $container;
+
+    public function __construct($userManager, array $properties,Container $container){
         parent::__construct($userManager, $properties);
-        $this->dispatcher = $dispatcher;
+        $this->container = $container;
     }
 
     /**
@@ -90,8 +87,15 @@ class OAuthUserProvider extends BaseClass
             $user->setPlainPassword($password);
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
+            $message = 'Sveiki '.$user->getFullName().', sveikiname sėkmingai prisijugus prie BasketPlanner bendruomenės.';
 
-            $this->dispatcher->dispatch('registration.event', new RegistrationEvent($user));
+            $msg = array(
+                'email' => $user->getEmail(),
+                'subject' => 'Sveikiname užsiregistravus BasketPlanner svetainėje.',
+                'message' => $message
+            );
+
+            $this->container->get('old_sound_rabbit_mq.send_email_producer')->publish(serialize($msg), 'send_email');
 
             return $user;
         }

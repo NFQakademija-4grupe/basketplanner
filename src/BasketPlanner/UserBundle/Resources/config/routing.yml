@@ -4,3 +4,7 @@ basket_planner_user_profile:
    methods: [GET]
    requirements:
        id: \d+
+
+basket_planner_user_notification:
+   path: /notifications
+   defaults: { _controller: BasketPlannerUserBundle:Notification:show }

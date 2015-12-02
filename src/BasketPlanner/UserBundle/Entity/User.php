@@ -3,6 +3,7 @@
 namespace BasketPlanner\UserBundle\Entity;
 
 use BasketPlanner\MatchBundle\Entity\Match;
+use BasketPlanner\TeamBundle\Entity\TeamUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,6 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="TeamUser.php", mappedBy="user", cascade={"all"})
      */
     protected $id;
 
@@ -130,9 +130,21 @@ class User extends BaseUser
      */
     protected $googleAccessToken;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BasketPlanner\UserBundle\Entity\NotificationUser", mappedBy="user")
+     */
+    protected $notificationUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\TeamUser", mappedBy="user")
+     */
+    protected $teamUser;
+
     public function __construct()
     {
         parent::__construct();
+        $this->notificationUser = new ArrayCollection();
+        $this->teamUser = new ArrayCollection();
         $this->createdMatches = new ArrayCollection();
         $this->joinedMatches = new ArrayCollection();
     }
@@ -390,7 +402,6 @@ class User extends BaseUser
         return $this->profileUpdated;
     }
 
-
     /**
      * Add createdMatch
      *
@@ -458,4 +469,73 @@ class User extends BaseUser
     {
         return $this->joinedMatches;
     }
+
+    /**
+     * Add notification to user
+     *
+     * @param \BasketPlanner\UserBundle\Entity\NotificationUser $notification
+     * @return User
+     */
+    public function addNotificationUser(NotificationUser $notification)
+    {
+        $this->notificationUser[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification from user
+     *
+     * @param \BasketPlanner\UserBundle\Entity\NotificationUser $notification
+     */
+    public function removeNotificationUser(NotificationUser $notification)
+    {
+        $this->notificationUser->removeElement($notification);
+    }
+
+    /**
+     * Get notifications to user
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotificationUser()
+    {
+        return $this->notificationUser;
+    }
+
+    //
+
+    /**
+     * Add team
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\TeamUser $team
+     * @return User
+     */
+    public function addTeamUser(TeamUser $team)
+    {
+        $this->teamUser[] = $team;
+
+        return $this;
+    }
+
+    /**
+     * Remove team
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\TeamUser $team
+     */
+    public function removeTeamUser(TeamUser $team)
+    {
+        $this->teamUser->removeElement($team);
+    }
+
+    /**
+     * Get team where
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamUser()
+    {
+        return $this->teamUser;
+    }
+
 }

@@ -53,14 +53,15 @@
                                     </div>
                                 </div>
                             {% endif %}
-
+                            <br>
                             {% if form.court is defined %}
-                                <div class="row" style="display:none">
+                                <div class="row">
                                     <div class="form-group">
                                         <div class="col-sm-12">
                                             <div>
                                                 {{ form_errors(form.court) }}
-                                                {{ form_widget(form.court, {'attr': {'placeholder':'Adresas'}}) }}
+                                                {{ form_widget(form.court.address, {'attr': {'class': 'form-control', 'placeholder':'Pažymėkite aikštelę žemėlapyje', 'READONLY': 'true'}}) }}
+                                                {{ form_widget(form.court, {'attr': {'style':'display:none'}}) }}
                                             </div>
                                         </div>
                                     </div>

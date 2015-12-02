@@ -4,7 +4,7 @@ namespace BasketPlanner\TeamBundle\Controller;
 
 use BasketPlanner\TeamBundle\Form\TeamType;
 use BasketPlanner\TeamBundle\Entity\Team;
-use BasketPlanner\TeamBundle\Entity\TeamUsers;
+use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\MatchBundle\Entity\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +41,7 @@ class TeamController extends Controller
 
             $user = $this->getUser();
 
-            $teamPlayer = new TeamUsers();
+            $teamPlayer = new TeamUser();
             $teamPlayer->setUser($user);
             $teamPlayer->setTeam($team);
             $teamPlayer->setRole('Owner');
@@ -63,7 +63,7 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
         $players = $em->createQuery("
             SELECT u.id, u.firstName, u.lastName, u.profilePicture, tp.role
-                FROM BasketPlannerTeamBundle:TeamUsers tp
+                FROM BasketPlannerTeamBundle:TeamUser tp
                 JOIN BasketPlannerUserBundle:User u
                 WITH tp.user = u.id
                 WHERE tp.team = ".$team->getId())->getArrayResult();

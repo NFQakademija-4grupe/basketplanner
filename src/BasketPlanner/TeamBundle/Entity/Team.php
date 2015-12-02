@@ -2,12 +2,15 @@
 
 namespace BasketPlanner\TeamBundle\Entity;
 
+use BasketPlanner\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Team
  *
- * @ORM\Table()
+ * @ORM\Table(name="team")
  * @ORM\Entity
  */
 class Team
@@ -18,7 +21,6 @@ class Team
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToMany(targetEntity="TeamUser.php", mappedBy="team", cascade={"all"})
      */
     private $id;
 
@@ -54,6 +56,17 @@ class Team
      */
     private $description;
 
+    /**
+     * team users association
+     *
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\TeamUser", mappedBy="team")
+     */
+    protected $teamUser;
+
+    public function __construct()
+    {
+        $this->teamUser = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -159,5 +172,38 @@ class Team
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add team member
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\TeamUser $teamUser
+     * @return Team
+     */
+    public function addTeamUser($teamUser)
+    {
+        $this->teamUser[] = $teamUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove team member
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\TeamUser $teamUser
+     */
+    public function removeTeamUser($teamUser)
+    {
+        $this->teamUser->removeElement($teamUser);
+    }
+
+    /**
+     * Get team members
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamUser()
+    {
+        return $this->teamUser;
     }
 }

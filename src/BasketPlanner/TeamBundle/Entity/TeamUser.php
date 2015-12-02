@@ -8,10 +8,10 @@ use BasketPlanner\UserBundle\Entity\User;
 /**
  * TeamUsers
  *
- * @ORM\Table()
+ * @ORM\Table(name="team_user")
  * @ORM\Entity
  */
-class TeamUsers
+class TeamUser
 {
     /**
      * @var integer
@@ -23,16 +23,17 @@ class TeamUsers
     private $id;
 
     /**
-     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="BasketPlanner\UserBundle\Entity\User", inversedBy="id", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="BasketPlanner\UserBundle\Entity\User", inversedBy="teamUser")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
      */
     private $user;
 
     /**
-     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="BasketPlanner\TeamBundle\Entity\Team", inversedBy="id", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="BasketPlanner\TeamBundle\Entity\Team", inversedBy="teamUser")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      *
      */
     private $team;
@@ -60,7 +61,7 @@ class TeamUsers
      *
      * @param string $role
      *
-     * @return TeamUsers
+     * @return TeamUser
      */
     public function setRole($role)
     {
@@ -83,10 +84,9 @@ class TeamUsers
      * Set user
      *
      * @param \BasketPlanner\UserBundle\Entity\User $user
-     *
-     * @return TeamUsers
+     * @return TeamUser
      */
-    public function setUser(\BasketPlanner\UserBundle\Entity\User $user = null)
+    public function setUser($user = null)
     {
         $this->user = $user;
 
@@ -107,10 +107,9 @@ class TeamUsers
      * Set team
      *
      * @param \BasketPlanner\TeamBundle\Entity\Team $team
-     *
-     * @return TeamUsers
+     * @return TeamUser
      */
-    public function setTeam(\BasketPlanner\TeamBundle\Entity\Team $team = null)
+    public function setTeam($team = null)
     {
         $this->team = $team;
 
@@ -126,4 +125,5 @@ class TeamUsers
     {
         return $this->team;
     }
+
 }

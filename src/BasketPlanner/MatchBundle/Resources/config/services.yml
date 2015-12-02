@@ -5,10 +5,12 @@ services:
 
     basketplanner_match.map_loader_service:
         class: BasketPlanner\MatchBundle\Services\GoogleMapLoaderService
-        arguments: ['@service_container']
+        arguments:
+            map: "@ivory_google_map.map="
+            mapEvent: "@ivory_google_map.event="
+            entityManager: "@doctrine.orm.entity_manager"
 
     basketplanner_match.user_activity_service:
         class: BasketPlanner\MatchBundle\Services\UserMatchActivityService
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
-            logger: "@logger"

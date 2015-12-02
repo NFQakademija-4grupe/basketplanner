@@ -4,7 +4,7 @@ parameters:
 services:
     basketplanner_user.provider:
         class: "%basketplanner_user.provider.class%"
-        arguments: [@fos_user.user_manager, {facebook: facebookId, google: googleId}, @event_dispatcher]
+        arguments: [@fos_user.user_manager, {facebook: facebookId, google: googleId}, @service_container]
 
     basketplanner_user.form.registration:
         class: BasketPlanner\UserBundle\Form\RegistrationType
@@ -17,10 +17,12 @@ services:
         tags:
             - { name: form.type, alias: basketplanner_user_form_profile }
 
-    basketplanner_user.event_listener:
-        class: BasketPlanner\UserBundle\Listeners\UserEventsListener
+    basketplanner_user.notification.service:
+        class: BasketPlanner\UserBundle\Service\NotificationService
         arguments:
-            templating: "@twig"
+            entityManager: "@doctrine.orm.entity_manager"
+
+    basketplanner_user.send_email_service:
+        class: BasketPlanner\UserBundle\Consumer\SendEmailConsumer
+        arguments:
             mailer: "@mailer"
-        tags:
-        - { name: kernel.event_listener, event: registration.event, method: onRegistrationEvent }
