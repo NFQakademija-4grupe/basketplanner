@@ -14967,8 +14967,8 @@ x:-o-prefocus,
 .c-radio input[type=checkbox]:checked + span,
 .c-checkbox input[type=radio]:checked + span,
 .c-radio input[type=radio]:checked + span {
-    border-color: #5d9cec;
-    background-color: #5d9cec;
+    border-color: #FF9800;
+    background-color: #FF9800;
 }
 
 .c-checkbox input[type=radio]:checked + span,
@@ -14978,7 +14978,7 @@ x:-o-prefocus,
 
 .c-checkbox input[type=radio]:checked + span:before,
 .c-radio input[type=radio]:checked + span:before {
-    color: #5d9cec;
+    color: #FF9800;
 }
 
 .c-checkbox input[type=checkbox]:disabled + span,
@@ -18436,4 +18436,10 @@ a.btn-match:before {
 }
 #basket_planner_create_match_type{
     margin-top: 7px;
+}
+@media (min-width: 768px) {
+    .table-responsive {
+        min-height: .01%;
+        overflow-x: hidden;
+    }
 }

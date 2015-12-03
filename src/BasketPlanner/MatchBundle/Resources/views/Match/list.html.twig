@@ -1,7 +1,6 @@
 {% extends '::base.html.twig' %}
 
     {% block stylesheets %}
-        <link href="{{ asset('assets/css/toastr.css') }}" rel="stylesheet"/>
     {% endblock %}
 {% block content %}
     <div ui-view="" autoscroll="false" class="content-wrapper">
@@ -13,7 +12,8 @@
 
                         {{ form_start(form) }}
 
-
+                                {{ form_errors(form.min_date) }}
+                                {{ form_errors(form.max_date) }}
                             <div class="form-group">
                                 <div class="col-lg-4 col-sm-12">
                                 {{ form_errors(form.search_text) }}
@@ -21,60 +21,60 @@
                                 </div>
                             </div>
 
-                                {{ form_errors(form.min_date) }}
-                                {{ form_widget(form.min_date) }}
-                                {{ form_errors(form.max_date) }}
-                                {{ form_widget(form.max_date) }}
 
+                            <div class="form-group">
+                                {{ form_widget(form.min_date, {'attr': {'style':'display:none'}}) }}
+                                {{ form_widget(form.max_date, {'attr': {'style':'display:none'}}) }}
+                            </div>
                             {% if form.type is defined %}
                                     <div class="form-group">
                                         <div class="col-sm-12 col-lg-4">
                                             {{ form_errors(form.type) }}
                                             <div class="del">
-                                                {{ form_widget(form.type, {'attr': {'style': 'display:none;'}}) }}</div>
-                                            <div id="basket_planner_create_match_type" style="margin-top: 5px;">
+                                                {{ form_widget(form.type, {'attr': {'style':'display:none'}}) }}</div>
+                                            <div id="basket_planner_filter_match_type" style="margin-top: 5px;">
 
-                                                <label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_1">
-                                                    <input id="basket_planner_create_match_type_1"
-                                                           name="basket_planner_create_match[type]"
-                                                           type="radio" value="1">
-                                                    <span class="fa fa-circle"></span>1x1</label>
+                                                <label class="checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_1">
+                                                    <input id="basket_planner_filter_match_type_1"
+                                                           name="basket_planner_filter_match[type][]"
+                                                           type="checkbox" value="1">
+                                                    <span class="fa fa-check"></span>1x1</label>
 
-                                                <label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_2">
-                                                    <input id="basket_planner_create_match_type_2"
-                                                           name="basket_planner_create_match[type]"
-                                                           type="radio" value="2">
-                                                    <span class="fa fa-circle"></span>2x2</label>
+                                                <label class="checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_2">
+                                                    <input id="basket_planner_filter_match_type_2"
+                                                           name="basket_planner_filter_match[type][]"
+                                                           type="checkbox" value="2">
+                                                    <span class="fa fa-check"></span>2x2</label>
 
-                                                <label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_3">
-                                                    <input id="basket_planner_create_match_type_3"
-                                                           name="basket_planner_create_match[type]"
-                                                           type="radio" value="3">
-                                                    <span class="fa fa-circle"></span>3x3</label>
+                                                <label class="checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_3">
+                                                    <input id="basket_planner_filter_match_type_3"
+                                                           name="basket_planner_filter_match[type][]"
+                                                           type="checkbox" value="3">
+                                                    <span class="fa fa-check"></span>3x3</label>
 
-                                                <label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_4">
-                                                    <input id="basket_planner_create_match_type_4"
-                                                           name="basket_planner_create_match[type]"
-                                                           type="radio" value="4">
-                                                    <span class="fa fa-circle"></span>4x4</label>
+                                                <label class="checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_4">
+                                                    <input id="basket_planner_filter_match_type_4"
+                                                           name="basket_planner_filter_match[type][]"
+                                                           type="checkbox" value="4">
+                                                    <span class="fa fa-check"></span>4x4</label>
 
-                                                <label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_5">
-                                                    <input id="basket_planner_create_match_type_5"
-                                                           name="basket_planner_create_match[type]"
-                                                           type="radio" value="5">
-                                                    <span class="fa fa-circle"></span>5x5</label>
+                                                <label class="checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_5">
+                                                    <input id="basket_planner_filter_match_type_5"
+                                                           name="basket_planner_filter_match[type][]"
+                                                           type="checkbox" value="5">
+                                                    <span class="fa fa-check"></span>5x5</label>
 
-                                                {#<label class="required radio-inline c-radio"
-                                                       for="basket_planner_create_match_type_6">
-                                                    <input id="basket_planner_create_match_type_6"
-                                                           name="basket_planner_create_match[type]" required="required"
-                                                           type="radio" value="Kita">
-                                                    <span class="fa fa-circle"></span>Kita</label>#}
+                                                {#<label class="required checkbox-inline c-checkbox"
+                                                       for="basket_planner_filter_match_type_6">
+                                                    <input id="basket_planner_filter_match_type_6"
+                                                           name="basket_planner_filter_match[type]" required="required"
+                                                           type="checkbox" value="Kita">
+                                                    <span class="fa fa-check"></span>Kita</label>#}
 
                                             </div>
                                         </div>
@@ -172,7 +172,34 @@
             $("#basket_planner_filter_match_max_date").wrap('<div class="form-group"><div class="col-lg-2 col-sm-6"></div></div>');
             $("#basket_planner_filter_match_max_date_time").addClass('form-control');
             $("#basket_planner_filter_match_max_date_date").addClass('form-control');
+
+            $("#basket_planner_filter_match_min_date_time").attr('type', 'text');
+            $("#basket_planner_filter_match_min_date_date").attr('type', 'text');
+            $("#basket_planner_filter_match_max_date_time").attr('type', 'text');
+            $("#basket_planner_filter_match_max_date_date").attr('type', 'text');
+
+            $("#basket_planner_filter_match_min_date_time").attr('placeholder', 'Laikas nuo');
+            $("#basket_planner_filter_match_min_date_date").attr('placeholder', 'Data nuo');
+            $("#basket_planner_filter_match_max_date_time").attr('placeholder', 'Laikas iki');
+            $("#basket_planner_filter_match_max_date_date").attr('placeholder', 'Data iki');
+
+            $("#basket_planner_filter_match_min_date_time").removeAttr('value');
+            $("#basket_planner_filter_match_min_date_date").removeAttr('value');
+            $("#basket_planner_filter_match_max_date_time").removeAttr('value');
+            $("#basket_planner_filter_match_max_date_date").removeAttr('value');
             $(".del").remove();
+            $('#basket_planner_filter_match_min_date_date, #basket_planner_filter_match_max_date_date').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: 'lt',
+                useCurrent: true,
+                allowInputToggle: true
+            });
+            $("#basket_planner_filter_match_min_date_time, #basket_planner_filter_match_max_date_time").datetimepicker({
+                format: 'HH:mm',
+                locale: 'lt'
+            });
+            $("#basket_planner_filter_match_min_date").removeAttr('style');
+            $("#basket_planner_filter_match_max_date").removeAttr('style');
         });
     </script>
 {% endblock %}

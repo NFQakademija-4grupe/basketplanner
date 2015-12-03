@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="form-group">
                                     {% if form.beginsAt is defined %}
-                                        {{ form_widget(form.beginsAt) }}
+                                        {{ form_widget(form.beginsAt, {'attr': {'style':'display:none'}}) }}
                                     {% endif %}
                                     {% if form.type is defined %}
                                     <div class="col-sm-12 col-lg-6">
@@ -113,17 +113,6 @@
                                         {{ form_widget(form.save, {'attr': {'class':'btn btn-sm btn-default'}}) }}
                                     </div>
                                 </div>
-
-                                <!--<div class="col-sm-3">
-                                    <div class="form-group">
-                                        <div class="checkbox c-checkbox">
-                                            <label>
-                                                <input type="checkbox" checked=""/>
-                                                <span class="fa fa-check"></span>Sutinku su taisyklėmis</label>
-                                        </div>
-                                    </div>
-                                </div>-->
-                                <div class="col-sm-8">
                                 </div>
                             </div>
                         </div>
@@ -143,6 +132,24 @@
             $("#basket_planner_create_match_beginsAt_date")
                     .addClass('form-control');
             $(".del").remove();
+            $("#basket_planner_create_match_beginsAt_date").attr('type', 'text');
+            $("#basket_planner_create_match_beginsAt_time").attr('type', 'text');
+            $("#basket_planner_create_match_beginsAt_date").attr('placeholder', 'Data');
+            $("#basket_planner_create_match_beginsAt_time").attr('placeholder', 'Laikas');
+            $("#basket_planner_create_match_beginsAt_date").removeAttr('value');
+            $("#basket_planner_create_match_beginsAt_time").removeAttr('value');
+
+            $('#basket_planner_create_match_beginsAt_date').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: 'lt',
+                useCurrent: true,
+                allowInputToggle: true
+            });
+            $('#basket_planner_create_match_beginsAt_time').datetimepicker({
+                format: 'HH:mm',
+                locale: 'lt'
+            });
+            $("#basket_planner_create_match_beginsAt").removeAttr('style');
         });
     </script>
 {% endblock %}

@@ -13,11 +13,6 @@
     {% endif %}
 {% endblock %}
 
-{%- block form_widget_simple -%}
-    {%- set type = type|default('text') -%}
-    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-{%- endblock form_widget_simple -%}
-
 {%- block datetime_widget -%}
     {% if widget == 'single_text' %}
         {{- block('form_widget_simple') -}}
@@ -33,7 +28,7 @@
 
 {%- block date_widget -%}
     {%- if widget == 'single_text' -%}
-        <div class="col-sm-6 col-lg-3 ">
+        <div class="col-lg-2 col-sm-6">
             {{ block('form_widget_simple') }}
         </div>
     {%- else -%}
@@ -49,7 +44,7 @@
 
 {%- block time_widget -%}
     {%- if widget == 'single_text' -%}
-        <div class="col-sm-6 col-lg-3 ">
+        <div class="col-lg-2 col-sm-6">
             {{ block('form_widget_simple') }}
         </div>
     {%- else -%}
