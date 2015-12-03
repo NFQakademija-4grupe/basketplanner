@@ -1,4 +1,4 @@
-/*var isCollapsed = false;
+var isCollapsed = false;
 
 function collapse(){
 	if(isCollapsed){
@@ -13,7 +13,7 @@ function collapse(){
 		document.getElementById('sidebar').style.width = "70px";
 	}
 	isCollapsed = !isCollapsed;
-}*/
+}
 (function ($) {
 	"use strict";
 
