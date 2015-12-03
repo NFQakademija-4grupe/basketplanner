@@ -251,7 +251,7 @@ class Match
      *
      * @return Match
      */
-    public function setOwner(User $owner = null)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
 

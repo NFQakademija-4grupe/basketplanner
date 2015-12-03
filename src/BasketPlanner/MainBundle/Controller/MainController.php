@@ -10,6 +10,13 @@ class MainController extends Controller
 {
     public function indexAction()
     {
+        $auth_checker = $this->get('security.authorization_checker');
+        $isRoleUser = $auth_checker->isGranted('ROLE_USER');
+
+        if ($isRoleUser) {
+            return $this->redirectToRoute('basket_planner_match_list');
+        }
+
         return $this->render('BasketPlannerMainBundle:Main:index.html.twig');
     }
 

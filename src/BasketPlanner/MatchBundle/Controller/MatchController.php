@@ -3,7 +3,6 @@ namespace BasketPlanner\MatchBundle\Controller;
 
 use BasketPlanner\MatchBundle\Entity\Match;
 use BasketPlanner\MatchBundle\Entity\Court;
-use BasketPlanner\MatchBundle\Form\FilterType;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,71 +15,18 @@ use Ivory\GoogleMap\Helper\MapHelper;
 
 class MatchController extends Controller
 {
-    const MATCHES_PER_PAGE = 8;
-
     /**
      * Show all matches
      *
      * @param Request $request
-     * @param int $page
      * @return Response
      */
-    public function listAction(Request $request, $page)
+    public function listAction(Request $request)
     {
-        $loadMap = $this->get('basketplanner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
-        $mapVariable = $map->getJavascriptVariable();
+        $matchLoader = $this->get('basketplanner_match.match_loader_service');
+        $loadedData = $matchLoader->loadMatchesAndForm($request);
 
-        $qb = $this->getDoctrine()->getEntityManager()->getRepository('BasketPlannerMatchBundle:Match')->createQueryBuilder('m');
-
-        $filterForm = $this->createForm(new FilterType());
-        $filterForm->handleRequest($request);
-
-        $query = $qb->select('m');
-
-        if ($filterForm->isSubmitted())
-        {
-            $formData = $filterForm->getData();
-
-            if (!is_null($formData['search_text'])) {
-               $query = $query->orWhere('m.description LIKE :searchText')
-                   ->setParameter('searchText', '%'.$formData['search_text'].'%');
-            }
-
-            if (!$formData['type']->isEmpty()) {
-                $query = $query->orWhere('m.type IN (:type)')
-                    ->setParameter('type', $formData['type']->toArray());
-            }
-
-            if (!is_null($formData['min_date'])) {
-                $query = $query->orWhere('m.beginsAt > :minDate')
-                    ->setParameter('minDate', $formData['min_date']);
-            }
-
-            if (!is_null($formData['max_date'])) {
-                $query = $query->orWhere('m.beginsAt < :maxDate')
-                    ->setParameter('maxDate', $formData['max_date']);
-            }
-        }
-
-        $query = $query
-            ->andWhere('m.active = :active')
-            ->setParameter('active', true)
-            ->orderBy('m.beginsAt')
-            ->getQuery();
-
-        $pagination = $this->get('knp_paginator')->paginate(
-            $query,
-            $request->query->getInt('page', $page),
-            self::MATCHES_PER_PAGE
-        );
-
-        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', [
-            'pagination' => $pagination,
-            'map' => $map,
-            'mapVariable' => $mapVariable,
-            'form' => $filterForm->createView()
-        ]);
+        return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', $loadedData);
     }
 
     /**
@@ -92,14 +38,9 @@ class MatchController extends Controller
     public function showAction(Match $match)
     {
         $loadMap = $this->get('basketplanner_match.map_loader_service');
-        $court = $match->getCourt();
-        $map = $loadMap->loadMarkerById($court->getId());
-        $mapVariable = $map->getJavascriptVariable();
+        $map = $loadMap->loadMarkerById($match->getCourt()->getId());
 
-        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match,
-            'map' => $map,
-            'mapVariable' => $mapVariable
-        ]);
+        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match, 'map' => $map]);
     }
 
     /**
@@ -112,49 +53,16 @@ class MatchController extends Controller
     {
         $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkers(false);
-        $mapVariable = $map->getJavascriptVariable();
 
-        $match = new Match();
+        $matchLoader = $this->get('basketplanner_match.match_loader_service');
+        $data = $matchLoader->saveMatch($request, $this->getUser());
 
-        $form = $this->createForm(new MatchType(), $match);
-
-        $form->handleRequest($request);
-
-        $em = $this->getDoctrine()->getManager();
-
-        if ($form->isValid())
-        {
-            $courtId = $form['court']->getData()->getId();
-
-            $court = $em->getRepository('BasketPlannerMatchBundle:Court')->findOneBy(['id' => $courtId]);
-
-            if (is_null($court)) {
-                $court = $match->getCourt();
-                $court->setApproved(false);
-                $em->persist($court);
-                $em->flush();
-            }
-
-            $user = $this->getUser();
-
-            $match->setOwner($user);
-            $match->addPlayer($user);
-            $match->setPlayersCount(1);
-            $match->setCourt($court);
-            $match->setActive(true);
-            $match->setCreatedAt(new \DateTime('now'));
-
-            $em->persist($match);
-            $em->flush();
-
-            return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
+        if ($data['matchSaved']) {
+            $this->addFlash('success', 'Sėkmingai sukurtas mačas!');
+            return $this->redirectToRoute('basket_planner_match_show', ['id' => $data['match']->getId()]);
         }
 
-        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [
-            'form' => $form->createView(),
-            'map' => $map,
-            'mapVariable' => $mapVariable,
-        ]);
+        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [ 'form' => $data['form'], 'map' => $map]);
     }
 
     /**
