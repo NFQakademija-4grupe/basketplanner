@@ -16,6 +16,8 @@ use Ivory\GoogleMap\Helper\MapHelper;
 
 class MatchController extends Controller
 {
+    const MATCHES_PER_PAGE = 8;
+
     /**
      * Show all matches
      *
@@ -70,7 +72,7 @@ class MatchController extends Controller
         $pagination = $this->get('knp_paginator')->paginate(
             $query,
             $request->query->getInt('page', $page),
-            9
+            self::MATCHES_PER_PAGE
         );
 
         return $this->render('BasketPlannerMatchBundle:Match:list.html.twig', [
@@ -152,44 +154,6 @@ class MatchController extends Controller
             'form' => $form->createView(),
             'map' => $map,
             'mapVariable' => $mapVariable,
-        ]);
-    }
-
-    /**
-     * Edit match
-     *
-     * @param Request $request
-     * @param Match $match
-     * @return Response
-     */
-    public function editAction(Request $request, Match $match)
-    {
-        $loadMap = $this->get('basketplanner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
-        $mapVariable = $map->getJavascriptVariable();
-
-        if ($match->getOwner() !== $this->getUser())
-        {
-            $this->addFlash('error', 'Mačo aprašymą gali redaguoti tik jį sukūręs vartotojas');
-            return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
-        }
-
-        $form = $this->createForm(new MatchType(), $match, ['for_editing' => true]);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid())
-        {
-            $em =  $this->getDoctrine()->getManager();
-            $em->flush();
-            $this->addFlash('success', 'Mačo informacija sėkmingai pakeista!');
-            return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
-        }
-
-        return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [
-            'form' => $form->createView(),
-            'map' => $map,
-            'mapVariable' => $mapVariable
         ]);
     }
 

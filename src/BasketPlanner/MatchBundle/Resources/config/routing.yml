@@ -3,24 +3,12 @@ basket_planner_match_create:
     defaults: { _controller: BasketPlannerMatchBundle:Match:create }
     methods: [GET, POST]
 
-basket_planner_match_edit:
-    path:     /edit/{id}
-    defaults: { _controller: BasketPlannerMatchBundle:Match:edit }
-    methods: [GET, POST]
-    requirements:
-        id: \d+
-
 basket_planner_match_list:
     path: /{page}
     defaults: { _controller: BasketPlannerMatchBundle:Match:list, page: 1 }
     methods: [GET]
     requirements:
         page: \d+
-
-basket_planner_match_filter:
-    path: /filter
-    defaults: { _controller: BasketPlannerMatchBundle:Match:filter }
-    methods: [GET]
 
 basket_planner_match_leave:
    path: /leave/{id}
