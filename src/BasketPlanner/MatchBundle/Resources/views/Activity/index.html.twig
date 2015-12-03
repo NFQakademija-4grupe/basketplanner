@@ -70,7 +70,6 @@
                                         <th>Vieta</th>
                                         <th>Tipas</th>
                                         <th>Dalyviai</th>
-                                        <th>Redagavimas</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -86,17 +85,6 @@
                                         <td>{{ match.court.address }}</td>
                                         <td>{{ match.type.name }}</td>
                                         <td>{{ match.playersCount }}</td>
-                                        <td>
-
-                                            <a href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
-                                                <em class="fa fa-search">
-                                                </em>
-                                            </a>
-                                            <a href="{{ path('basket_planner_match_edit', {'id': match.id}) }}">
-                                            <em class="fa fa-edit" data-toggle="modal" data-target="#redagavimas"></em>
-                                            </a>
-                                            <em class="fa fa-trash-o"></em>
-                                        </td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>

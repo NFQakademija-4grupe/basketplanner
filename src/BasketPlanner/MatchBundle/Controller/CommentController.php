@@ -22,13 +22,21 @@ class CommentController extends Controller
 
         if ($form->isValid())
         {
-            $comment->setCreatedAt(new \DateTime('now'));
-            $comment->setMatch($match);
-            $comment->setUser($this->getUser());
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
+            if (!$match->getPlayers()->contains($this->getUser()))
+            {
+                $this->addFlash('error', 'Tik prisijungę žaidėjai gali rašyti žinutes.');
+            }
+            else
+            {
+                $comment->setCreatedAt(new \DateTime('now'));
+                $comment->setMatch($match);
+                $comment->setUser($this->getUser());
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($comment);
+                $em->flush();
+            }
 
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
