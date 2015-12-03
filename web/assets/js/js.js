@@ -1,4 +1,4 @@
-var isCollapsed = false;
+/*var isCollapsed = false;
 
 function collapse(){
 	if(isCollapsed){
@@ -13,4 +13,21 @@ function collapse(){
 		document.getElementById('sidebar').style.width = "70px";
 	}
 	isCollapsed = !isCollapsed;
-}
+}*/
+(function ($) {
+	"use strict";
+
+
+	// upcoming event filter
+	function matchPanelAnimated () {
+		var matchPanelAnimatedContent = $('#match-list .tab-content-wrap');
+		if (matchPanelAnimatedContent) {
+			matchPanelAnimatedContent.mixItUp();
+		};
+	}
+
+	// doc ready
+	$(document).on('ready', function () {
+		matchPanelAnimated();
+	});
+})(jQuery);

@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% form_theme form '::Form/fields.html.twig' %}
 {% block content %}
     <div autoscroll="false" class="content-wrapper">
         <div class="row">
@@ -8,50 +9,69 @@
                     <div class="panel-heading"><h2>Sukurti mačą</h2></div>
                     {{ form_start(form, {'role':'form'}) }}
                     <div class="panel-body">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12 col-lg-6">
 
                             {% if form.beginsAt is defined %}
-                                {{ form_label(form.beginsAt, 'Matcho data ir laikas') }}
                                 {{ form_errors(form.beginsAt) }}
-                                {{ form_widget(form.beginsAt) }}
                             {% endif %}
-                            {% if form.type is defined %}
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                        {{ form_errors(form.type) }}
-                                            <div class="del">
-                                                {{ form_widget(form.type) }}</div>
-                                            <div id="basket_planner_create_match_type">
+                            <div class="row">
+                                <div class="form-group">
+                                    {% if form.beginsAt is defined %}
+                                        {{ form_widget(form.beginsAt) }}
+                                    {% endif %}
+                                    {% if form.type is defined %}
+                                    <div class="col-sm-12 col-lg-6">
+                                        <div class="del" style="display:none">
+                                            {{ form_widget(form.type) }}</div>
+                                        <div id="basket_planner_create_match_type">
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_1">
-                                                    <input id="basket_planner_create_match_type_1" name="basket_planner_create_match[type]" required="required" type="radio" value="1">
-                                                    <span class="fa fa-circle"></span>1x1</label>
+                                            {{ form_errors(form.type) }}
+                                            <label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_1">
+                                                <input id="basket_planner_create_match_type_1"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="1">
+                                                <span class="fa fa-circle"></span>1x1</label>
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_2">
-                                                    <input id="basket_planner_create_match_type_2" name="basket_planner_create_match[type]" required="required" type="radio" value="2">
-                                                    <span class="fa fa-circle"></span>2x2</label>
+                                            <label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_2">
+                                                <input id="basket_planner_create_match_type_2"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="2">
+                                                <span class="fa fa-circle"></span>2x2</label>
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_3">
-                                                    <input id="basket_planner_create_match_type_3" name="basket_planner_create_match[type]" required="required" type="radio" value="3">
-                                                    <span class="fa fa-circle"></span>3x3</label>
+                                            <label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_3">
+                                                <input id="basket_planner_create_match_type_3"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="3">
+                                                <span class="fa fa-circle"></span>3x3</label>
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_4">
-                                                    <input id="basket_planner_create_match_type_4" name="basket_planner_create_match[type]" required="required" type="radio" value="4">
-                                                    <span class="fa fa-circle"></span>4x4</label>
+                                            <label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_4">
+                                                <input id="basket_planner_create_match_type_4"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="4">
+                                                <span class="fa fa-circle"></span>4x4</label>
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_5">
-                                                    <input id="basket_planner_create_match_type_5" name="basket_planner_create_match[type]" required="required" type="radio" value="5">
-                                                    <span class="fa fa-circle"></span>5x5</label>
+                                            <label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_5">
+                                                <input id="basket_planner_create_match_type_5"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="5">
+                                                <span class="fa fa-circle"></span>5x5</label>
 
-                                                <label class="required radio-inline c-radio" for="basket_planner_create_match_type_6">
-                                                    <input id="basket_planner_create_match_type_6" name="basket_planner_create_match[type]" required="required" type="radio" value="Kita">
-                                                    <span class="fa fa-circle"></span>Kita</label>
+                                            {#<label class="required radio-inline c-radio"
+                                                   for="basket_planner_create_match_type_6">
+                                                <input id="basket_planner_create_match_type_6"
+                                                       name="basket_planner_create_match[type]" required="required"
+                                                       type="radio" value="Kita">
+                                                <span class="fa fa-circle"></span>Kita</label>#}
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             {% endif %}
                             <br>
                             {% if form.court is defined %}
@@ -101,8 +121,8 @@
                                                 <input type="checkbox" checked=""/>
                                                 <span class="fa fa-check"></span>Sutinku su taisyklėmis</label>
                                         </div>
-                                    </div>-->
-                                </div>
+                                    </div>
+                                </div>-->
                                 <div class="col-sm-8">
                                 </div>
                             </div>
@@ -118,11 +138,9 @@
 {% block scripts %}
     <script>
         $(document).ready(function () {
-
-            $("#basket_planner_create_match_beginsAt").wrap('<div class="row"></div>');
-            $("#basket_planner_create_match_beginsAt_time").wrap('<div class="form-group"><div class="col-sm-12 col-lg-3"></div></div>')
+            $("#basket_planner_create_match_beginsAt_time")
                     .addClass('form-control');
-            $("#basket_planner_create_match_beginsAt_date").wrap('<div class="form-group"><div class="col-sm-12 col-lg-3"></div></div>')
+            $("#basket_planner_create_match_beginsAt_date")
                     .addClass('form-control');
             $(".del").remove();
         });

@@ -1,125 +1,102 @@
 {% extends '::base.html.twig' %}
+
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/toastr.css') }}" rel="stylesheet"/>
+    {% endblock %}
 {% block content %}
     <div ui-view="" autoscroll="false" class="content-wrapper">
-
-        <h3>Sąrašas</h3>
         <!-- START row-->
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <div class="panel widget">
-                    <div class="panel-heading"><h3>Filtravimas</h3></div>
                     <div class="panel-body">
 
                         {{ form_start(form) }}
 
-                        <fieldset>
+
                             <div class="form-group">
-                                {{ form_label(form.search_text, 'Paieška') }}
+                                <div class="col-lg-4 col-sm-12">
                                 {{ form_errors(form.search_text) }}
-                                {{ form_widget(form.search_text, {'attr': {'class': 'form-control no-border-radius', 'placeholder': 'Paieška'}}) }}
+                                {{ form_widget(form.search_text, {'attr': {'class': 'form-control', 'placeholder': 'Paieška'}}) }}
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                {{ form_label(form.type, 'Žaidimo tipas', {'label_attr': {'class': 'control-label'}}) }}
-                                {{ form_errors(form.type) }}
-                                {{ form_widget(form.type) }}
-                            </div>
-
-                            <div class="form-group">
-                                {{ form_label(form.min_date, 'Pradžia(Data ir laikas)') }}
                                 {{ form_errors(form.min_date) }}
                                 {{ form_widget(form.min_date) }}
-                            </div>
-
-                            <div class="form-group">
-                                {{ form_label(form.max_date, 'Pabaiga(Data ir laikas)') }}
                                 {{ form_errors(form.max_date) }}
                                 {{ form_widget(form.max_date) }}
-                            </div>
 
+                            {% if form.type is defined %}
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-lg-4">
+                                            {{ form_errors(form.type) }}
+                                            <div class="del">
+                                                {{ form_widget(form.type, {'attr': {'style': 'display:none;'}}) }}</div>
+                                            <div id="basket_planner_create_match_type" style="margin-top: 5px;">
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_1">
+                                                    <input id="basket_planner_create_match_type_1"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="1">
+                                                    <span class="fa fa-circle"></span>1x1</label>
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_2">
+                                                    <input id="basket_planner_create_match_type_2"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="2">
+                                                    <span class="fa fa-circle"></span>2x2</label>
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_3">
+                                                    <input id="basket_planner_create_match_type_3"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="3">
+                                                    <span class="fa fa-circle"></span>3x3</label>
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_4">
+                                                    <input id="basket_planner_create_match_type_4"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="4">
+                                                    <span class="fa fa-circle"></span>4x4</label>
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_5">
+                                                    <input id="basket_planner_create_match_type_5"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="5">
+                                                    <span class="fa fa-circle"></span>5x5</label>
+
+                                                <label class="required radio-inline c-radio"
+                                                       for="basket_planner_create_match_type_6">
+                                                    <input id="basket_planner_create_match_type_6"
+                                                           name="basket_planner_create_match[type]" required="required"
+                                                           type="radio" value="Kita">
+                                                    <span class="fa fa-circle"></span>Kita</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endif %}
                             <div class="form-group center">
-                                {{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}
+                                {#{{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}#}
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <div class="form-group">
+                                                {{ form_widget(form.search, {'attr': {'class':'btn btn-sm btn-default no-border-radius btn-match'}}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                        </fieldset>
 
                         {{ form_end(form) }}
-
-                        {#<div class="row">#}
-                        {#</div>#}
-                        {#<div class="row">#}
-                            {#<div class="form-group">#}
-                                {#<div class="col-sm-6 col-lg-6">#}
-                                    {#<div id="datetimepicker1"#}
-                                         {#class="input-group date mb-lg">#}
-                                        {#<input type="text" class="form-control" placeholder="Nuo"/>#}
-                             {#<span class="input-group-addon">#}
-                                {#<span class="fa-calendar fa"></span>#}
-                             {#</span>#}
-                                    {#</div>#}
-                                {#</div>#}
-                                {#<div class="col-sm-6 col-lg-6">#}
-                                    {#<div id="datetimepicker2"#}
-                                         {#class="input-group date mb-lg">#}
-                                        {#<input type="text" class="form-control" placeholder="Iki"/>#}
-                             {#<span class="input-group-addon">#}
-                                {#<span class="fa-calendar fa"></span>#}
-                             {#</span>#}
-                                    {#</div>#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#<div class="row">#}
-                            {#<div class="form-group">#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#1x1">#}
-                                        {#<span class="fa fa-check"></span>1x1</label>#}
-                                {#</div>#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#2x2">#}
-                                        {#<span class="fa fa-check"></span>2x2</label>#}
-                                {#</div>#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#3x3">#}
-                                        {#<span class="fa fa-check"></span>3x3</label>#}
-                                {#</div>#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#4x4">#}
-                                        {#<span class="fa fa-check"></span>4x4</label>#}
-                                {#</div>#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#5x5">#}
-                                        {#<span class="fa fa-check"></span>5x5</label>#}
-                                {#</div>#}
-                                {#<div class="checkbox-inline c-checkbox ">#}
-                                    {#<label>#}
-                                        {#<input type="checkbox" id="#Kita">#}
-                                        {#<span class="fa fa-check"></span>Kita</label>#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#<div class="row">#}
-                            {#<div class="form-group">#}
-                                {#<div class="col-sm-6 col-lg-6">#}
-                                    {#<input type="email" placeholder="Adresas" class="form-control">#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                    {#</div>#}
-                    {#<div class="panel-footer">#}
-                        {#<div class="row text-center">#}
-                            {#<div class="col-xs-6">#}
-                                {#<button type="submit" class="btn btn-default btn-block">Filtruoti</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
         <!-- END row-->
 
@@ -131,76 +108,133 @@
 
         <div class="row">
             <div class="col-lg-12">
-                {% for match in pagination %}
-                    <div class="col-lg-4">
-                        <!-- START widget-->
-                        <div class="panel widget">
-                           {#{{ google_map(map) }}#}
+                {#<div class="col-lg-4">
+                    <!-- START widget-->
+                    <div class="panel widget">
+                        &#123;&#35;{{ google_map(map) }}&#35;&#125;
 
-                            <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=300x300&maptype=roadmap
-        &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
-        &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/>
-                            <div class="panel-body bg-inverse">
-                                <div class="row row-table text-center">
-                                    <div class="col-xs-4">
-                                        <em class="fa fa-calendar fa-2x"></em>
+                        <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=300x300&maptype=roadmap
+    &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
+    &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/>
 
-                                        <p class="m0">{{ match.beginsAt.format('H:i') }}</p>
+                        <div class="panel-body bg-inverse">
+                            <div class="row row-table text-center">
+                                <div class="col-xs-4">
+                                    <em class="fa fa-calendar fa-2x"></em>
 
-                                        <p class="m0">{{ match.beginsAt.format('M d Y') }}</p>
+                                    <p class="m0">{{ match.beginsAt.format('H:i') }}</p>
 
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <em class="fa fa-trophy fa-2x"></em>
+                                    <p class="m0">{{ match.beginsAt.format('M d Y') }}</p>
 
-                                        <p class="m0">
-                                            {{ match.type.name }}
-                                        </p>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <em class="fa fa-map-marker fa-2x"></em>
+                                </div>
+                                <div class="col-xs-4">
+                                    <em class="fa fa-trophy fa-2x"></em>
 
-                                        <p class="m0">{{ match.court.address }}</p>
-                                    </div>
+                                    <p class="m0">
+                                        {{ match.type.name }}
+                                    </p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <em class="fa fa-map-marker fa-2x"></em>
+
+                                    <p class="m0">{{ match.court.address }}</p>
                                 </div>
                             </div>
-                            <div class="panel-body bg-inverse">
-                                <div class="row text-center">
-                                    <div class="col-xs-4">
-                                        <a type="button" class="btn btn-block btn-warning"
-                                           href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
-                                            <em class="fa fa-eye fa-2x"></em>
+                        </div>
+                        <div class="panel-body bg-inverse">
+                            <div class="row text-center">
+                                <div class="col-xs-4">
+                                    <a type="button" class="btn btn-block btn-warning"
+                                       href="{{ path('basket_planner_match_show', {'id': match.id}) }}">
+                                        <em class="fa fa-eye fa-2x"></em>
 
-                                            <p class="mobhide">DAUGIAU</p>
-                                        </a>
-                                    </div>
+                                        <p class="mobhide">DAUGIAU</p>
+                                    </a>
+                                </div>
 
-                                    <div class="col-xs-4">
-                                        <em class="fa fa-users fa-2x"></em>
+                                <div class="col-xs-4">
+                                    <em class="fa fa-users fa-2x"></em>
 
-                                        <p class="m0">{{ match.playersCount }}/{{ match.type.players }}</p>
-                                    </div>
+                                    <p class="m0">{{ match.playersCount }}/{{ match.type.players }}</p>
+                                </div>
 
-                                    <div class="col-xs-4">
-                                        <a type="button" class="btn btn-block btn-warning" style="padding:6px 0px;"
-                                           href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
-                                            <em class="fa fa-sign-in fa-2x"></em>
+                                <div class="col-xs-4">
+                                    <a type="button" class="btn btn-block btn-warning" style="padding:6px 0px;"
+                                       href="{{ path('basket_planner_match_join', {'id': match.id}) }}">
+                                        <em class="fa fa-sign-in fa-2x"></em>
 
-                                            <p class="mobhide">PRISIJUNGTI</p>
-                                        </a>
-                                    </div>
+                                        <p class="mobhide">PRISIJUNGTI</p>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- END widget-->
-                {% endfor %}
+                </div>#}
+                <div id="match-list">
+                        <div class="tab-content-wrap row">
+
+                            {% for match in pagination %}
+                                <div class="col-lg-3 col-md-4 col-sm-6 mix hvr-float-shadow wow fadeIn" style="margin-bottom: 25px;">
+                                    <div class="img-holder"><img
+                                                src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=380x200&maptype=roadmap
+        &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
+        &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/></div>
+                                    <div class="content-wrap">
+                                        <img src="{{ match.owner.profilePicture }}" alt="" class="author-img">
+
+                                        <div class="meta">
+                                            <ul>
+                                                <li>
+                                                    <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
+                                                </li>
+                                                <li>
+                                                    <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
+                                                </li>
+                                                <li>
+                                                    <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
+                                                </li>
+                                                <li>
+                                                    <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <a class="btn-match hvr-bounce-to-right orange"
+                                           href="{{ path('basket_planner_match_join', {'id': match.id}) }}"><i
+                                                    class="fa fa-sign-in"></i> Prisijungti</a>
+                                        <a class="btn-match hvr-bounce-to-right orange"
+                                           href="{{ path('basket_planner_match_show', {'id': match.id}) }}"><i
+                                                    class="fa fa-eye"></i> Peržiūrėti</a>
+
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                <!-- END widget-->
             </div>
         </div>
-    </div>
 
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    {#<script src="{{ asset('assets/js/toastr.js') }}"></script>#}
+
+    <script>
+        $(document).ready(function () {
+
+            $("#basket_planner_filter_match_min_date").wrap('<div class="form-group"><div class="col-lg-2 col-sm-6"></div></div>');
+            $("#basket_planner_filter_match_min_date_time").addClass('form-control');
+            $("#basket_planner_filter_match_min_date_date").addClass('form-control');
+
+            $("#basket_planner_filter_match_max_date").wrap('<div class="form-group"><div class="col-lg-2 col-sm-6"></div></div>');
+            $("#basket_planner_filter_match_max_date_time").addClass('form-control');
+            $("#basket_planner_filter_match_max_date_date").addClass('form-control');
+            $(".del").remove();
+        });
+    </script>
 {% endblock %}
