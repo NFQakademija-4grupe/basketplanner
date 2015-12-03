@@ -1,8 +1,5 @@
-{% extends '::base.html.twig' %}
-
+{% extends '::landing.html.twig' %}
 {% block login %}
-
-
     <div class="content-wrap">
         <header class="hero-area" id="home">
 
@@ -24,16 +21,16 @@
 
                     <p class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">Lorem Ipsum bla Bla
                         BLA</p>
-                        <a class="btn btn-lg btn-social btn-facebook wow fadeInUp "
-                           href="{{ hwi_oauth_login_url('facebook') }}" data-wow-duration="1000ms"
-                           data-wow-delay="400ms">
-                            <em class="fa fa-facebook fa-2x"></em>Prisijungti - Facebook
-                        </a>
-                        <a class="btn btn-lg btn-social btn-google wow fadeInUp"
-                           href="{{ hwi_oauth_login_url('google') }}" data-wow-duration="1000ms"
-                           data-wow-delay="400ms">
-                            <em class="fa fa-google-plus fa-2x"></em>Prisijungti - Google+
-                        </a>
+                    <a class="btn btn-lg btn-social btn-facebook wow fadeInUp "
+                       href="{{ hwi_oauth_login_url('facebook') }}" data-wow-duration="1000ms"
+                       data-wow-delay="400ms">
+                        <em class="fa fa-facebook fa-2x"></em>Prisijungti - Facebook
+                    </a>
+                    <a class="btn btn-lg btn-social btn-google wow fadeInUp"
+                       href="{{ hwi_oauth_login_url('google') }}" data-wow-duration="1000ms"
+                       data-wow-delay="400ms">
+                        <em class="fa fa-google-plus fa-2x"></em>Prisijungti - Google+
+                    </a>
                 </div>
             </div>
         </header>
@@ -117,3 +114,15 @@
         </section>
     </div>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('assets/js/wow.js') }}"></script>
+    <script>
+        jQuery(function ($) {
+
+            //Initiat WOW JS
+            new WOW().init();
+        });
+
+    </script>
+{% endblock scripts %}

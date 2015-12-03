@@ -8,11 +8,11 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     {% block css %}
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
         <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/hover.css') }}">
-        <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
+        <link href="{{ asset('assets/css/ripples.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/animate.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     {% endblock %}
     {% block stylesheets %}
     {% endblock %}
@@ -22,26 +22,12 @@
 <body id="body" class="wrapper layout-fixed">
 <!-- top navbar-->
 {% block main_body %}
-        {% block header %}
-            {% include 'partials/topnavbar.html.twig' %}
-        {% endblock %}
-        <!-- sidebar-->
-        {% block sidebar %}
-            {% include 'partials/sidebar.html.twig' %}
-        {% endblock %}
-        <section>
-            {% block content %}{% endblock %}
-        </section>
-        {% block footer %}
-            {% include 'partials/footer.html.twig' %}
+        {% block login %}
         {% endblock %}
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/moment-with-locales.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.mixitup.min.js') }}"></script>
     <script src="{{ asset('assets/js/smooth-on-scroll.js') }}"></script>
     <script src="{{ asset('assets/js/smooth-scroll.js') }}"></script>
     <script src="{{ asset('assets/js/js.js') }}"></script>
