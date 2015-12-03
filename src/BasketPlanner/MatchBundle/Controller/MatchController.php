@@ -25,7 +25,7 @@ class MatchController extends Controller
      */
     public function listAction(Request $request, $page)
     {
-        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkers(false);
         $mapVariable = $map->getJavascriptVariable();
 
@@ -89,7 +89,7 @@ class MatchController extends Controller
      */
     public function showAction(Match $match)
     {
-        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $loadMap = $this->get('basketplanner_match.map_loader_service');
         $court = $match->getCourt();
         $map = $loadMap->loadMarkerById($court->getId());
         $mapVariable = $map->getJavascriptVariable();
@@ -108,7 +108,7 @@ class MatchController extends Controller
      */
     public function createAction(Request $request)
     {
-        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkers(false);
         $mapVariable = $map->getJavascriptVariable();
 
@@ -164,7 +164,7 @@ class MatchController extends Controller
      */
     public function editAction(Request $request, Match $match)
     {
-        $loadMap = $this->get('basket_planner_match.map_loader_service');
+        $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkers(false);
         $mapVariable = $map->getJavascriptVariable();
 
@@ -208,9 +208,17 @@ class MatchController extends Controller
                 $match->addPlayer($this->getUser());
                 $match->increasePlayersCount();
 
-                $this->getDoctrine()->getManager()->flush();
+                //$this->getDoctrine()->getManager()->flush();
 
                 $this->addFlash('success', 'Sėkmingai prisijungėte prie mačo!');
+
+                $full = false;
+                if($match->getPlayersCount() == $match->getType()->getPlayers()){
+                    $full = true;
+                }
+
+                $notificationService = $this->get('basketplanner_user.notifications_service');
+                $notificationService->matchJoinNotification($match->getId(), $this->getUser()->getId(), $full);
 
             } catch (UniqueConstraintViolationException $ex)
             {

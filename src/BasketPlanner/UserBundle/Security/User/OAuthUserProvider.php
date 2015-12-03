@@ -87,14 +87,14 @@ class OAuthUserProvider extends BaseClass
             $user->setPlainPassword($password);
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
-            $message = 'Sveiki '.$user->getFullName().', sveikiname sėkmingai prisijugus prie BasketPlanner bendruomenės.';
 
+            //welcoming email message
+            $message = 'Sveiki '.$user->getFullName().', sveikiname sėkmingai prisijugus prie BasketPlanner bendruomenės.';
             $msg = array(
                 'email' => $user->getEmail(),
                 'subject' => 'Sveikiname užsiregistravus BasketPlanner svetainėje.',
                 'message' => $message
             );
-
             $this->container->get('old_sound_rabbit_mq.send_email_producer')->publish(serialize($msg), 'send_email');
 
             return $user;

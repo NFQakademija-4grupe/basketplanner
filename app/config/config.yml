@@ -160,9 +160,17 @@ old_sound_rabbit_mq:
         send_email:
             connection:       default
             exchange_options: {name: 'send-email', type: direct}
+        notifications:
+            connection:       default
+            exchange_options: {name: 'notifications', type: direct}
     consumers:
         send_email:
             connection:       default
             exchange_options: {name: 'send-email', type: direct}
             queue_options:    {name: 'send-email'}
             callback:         basketplanner_user.send_email_service
+        notifications:
+            connection:       default
+            exchange_options: {name: 'notifications', type: direct}
+            queue_options:    {name: 'notifications'}
+            callback:         basketplanner_user.notification_consumer_service

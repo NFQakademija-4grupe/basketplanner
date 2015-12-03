@@ -17,12 +17,23 @@ services:
         tags:
             - { name: form.type, alias: basketplanner_user_form_profile }
 
-    basketplanner_user.notification.service:
-        class: BasketPlanner\UserBundle\Service\NotificationService
-        arguments:
-            entityManager: "@doctrine.orm.entity_manager"
-
     basketplanner_user.send_email_service:
         class: BasketPlanner\UserBundle\Consumer\SendEmailConsumer
         arguments:
             mailer: "@mailer"
+            logger: "@logger"
+
+    basketplanner_user.notification_consumer_service:
+        class: BasketPlanner\UserBundle\Consumer\NotificationConsumer
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+            logger: "@logger"
+
+    basketplanner_user.notifications_service:
+        class: BasketPlanner\UserBundle\Service\NotificationService
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+            emailProducer: "@old_sound_rabbit_mq.send_email_producer"
+            notificationsProducer: "@old_sound_rabbit_mq.notifications_producer"
+            router: "@router"
+

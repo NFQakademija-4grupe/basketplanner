@@ -18,7 +18,7 @@ class NotificationController extends Controller
      */
     public function showAction()
     {
-        $notifications = $this->get('basketplanner_user.notification.service');
+        $notifications = $this->get('basketplanner_user.notifications_service');
 
         return $this->render('BasketPlannerUserBundle:Notification:show.html.twig');
     }

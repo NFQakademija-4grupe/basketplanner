@@ -26,9 +26,12 @@ class SendEmailConsumer implements ConsumerInterface
             ->setSubject($subject)
             ->setFrom(array('noreply@basketplanner.lt' => 'BasketPlanner'))
             ->setTo($email)
-            ->setBody($message)
-        ;
+            ->setBody($message);
 
-        $this->mailer->send($mail);
+        $delivered = $this->mailer->send($mail);
+
+        if(!$delivered){
+            return false;
+        }
     }
 }

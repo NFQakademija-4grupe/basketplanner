@@ -2,12 +2,32 @@
 
 namespace BasketPlanner\MainBundle\Controller;
 
+use BasketPlanner\MainBundle\Entity\CronTask;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends Controller
 {
     public function indexAction()
     {
         return $this->render('BasketPlannerMainBundle:Main:index.html.twig');
+    }
+
+    public function cronAction()
+    {
+        $entity = new CronTask();
+
+        $entity
+            ->setName('Upcoming matches check')
+            ->setInterval(3600) // Run once every hour
+            ->setCommands(array(
+                'match:check-upcoming'
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
+
+        return new Response('OK!');
     }
 }
