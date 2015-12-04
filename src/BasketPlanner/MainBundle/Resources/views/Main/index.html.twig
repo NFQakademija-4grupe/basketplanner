@@ -47,24 +47,45 @@
                         Naujausi mačai
                     </h2>
 
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="match-list">
+                                <div class="tab-content-wrap row">
 
-                    {% for match in matches %}
-                    <ul>
-                        <li>
-                            <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
-                        </li>
-                        <li>
-                            <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
-                        </li>
-                        <li>
-                            <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
-                        </li>
-                        <li>
-                            <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
-                        </li>
-                    </ul>
-                        <br><br>
-                    {% endfor %}
+                                    {% for match in matches %}
+                                        <div class="col-lg-4 col-md-4 col-sm-6 mix hvr-float-shadow wow fadeIn" style="margin-bottom: 25px;">
+                                            <div class="img-holder"><img
+                                                        src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=380x200&maptype=roadmap
+        &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
+        &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/></div>
+                                            <div class="content-wrap">
+                                                <img src="{{ match.owner.profilePicture }}" alt="" class="author-img thumb48">
+
+                                                <div class="meta">
+                                                    <ul>
+                                                        <li>
+                                                            <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!-- END widget-->
+                        </div>
+                    </div>
                 </div>
 
                 <div class="section-header">
@@ -86,7 +107,7 @@
                             <div class="features-text">
                                 <h4>Organizuosite žaidimus patogiai</h4>
                                 <p>
-                                    BasketPlanner leis Jums vos kelių migtukų spragtelėjimu greitai bei patogiai sukurti
+                                    BasketPlanner leis Jums vos keliais mygtukų spragtelėjimais greitai bei patogiai sukurti
                                     arba prisijungti prie jau esamo krepšinio mačo!
                                 </p>
                             </div>
@@ -103,7 +124,7 @@
                                 <h4>Visos aikštelės vienoje vietoje</h4>
                                 <p>
                                     BasketPlanner žino visas Kaune esančias krepšinio aikšteles,
-                                    todel Jums nereiks gaišti laiko bandant surasti vietą mačui.
+                                    todėl Jums nereikės gaišti laiko bandant surasti vietą mačui.
                                 </p>
                             </div>
                         </div>
