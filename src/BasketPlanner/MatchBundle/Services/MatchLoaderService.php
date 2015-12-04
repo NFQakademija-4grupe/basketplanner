@@ -44,7 +44,7 @@ class MatchLoaderService
             $formData = $filterForm->getData();
 
             if (!is_null($formData['search_text'])) {
-                $query = $query->orWhere('m.description LIKE :searchText')
+                $query = $query->andWhere('m.description LIKE :searchText')
                     ->setParameter('searchText', '%'.$formData['search_text'].'%');
             }
 
@@ -53,14 +53,20 @@ class MatchLoaderService
                     ->setParameter('type', $formData['type']->toArray());
             }
 
-            // TODO: kai nurodyti abu, tada darom su inbetween, jei ne, po viena
-            if (!is_null($formData['min_date'])) {
+            if (!is_null($formData['min_date']) && !is_null($formData['max_date']))
+            {
+                $query = $query->andWhere('m.beginsAt BETWEEN :minDate AND :maxDate')
+                    ->setParameter('minDate', $formData['min_date'])
+                    ->setParameter('maxDate', $formData['max_date']);
+            }
+            else if (!is_null($formData['min_date']))
+            {
                 $query = $query->andWhere('m.beginsAt > :minDate')
                     ->setParameter('minDate', $formData['min_date']);
             }
-
-            if (!is_null($formData['max_date'])) {
-                $query = $query->orWhere('m.beginsAt < :maxDate')
+            else if (!is_null($formData['max_date']))
+            {
+                $query = $query->andWhere('m.beginsAt < :maxDate')
                     ->setParameter('maxDate', $formData['max_date']);
             }
         }
@@ -122,6 +128,17 @@ class MatchLoaderService
             $results['match'] = $match;
             $results['matchSaved'] = true;
         }
+
+        return $results;
+    }
+
+    public function getLatest($num)
+    {
+        $qb = $this->em->getRepository('BasketPlannerMatchBundle:Match')->createQueryBuilder('m');
+        $results = $qb->setMaxResults($num)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
 
         return $results;
     }

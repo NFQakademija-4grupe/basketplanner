@@ -17,7 +17,10 @@ class MainController extends Controller
             return $this->redirectToRoute('basket_planner_match_list');
         }
 
-        return $this->render('BasketPlannerMainBundle:Main:index.html.twig');
+        $matchLoader = $this->get('basketplanner_match.match_loader_service');
+        $latestMatches = $matchLoader->getLatest(3);
+
+        return $this->render('BasketPlannerMainBundle:Main:index.html.twig', ['matches' => $latestMatches]);
     }
 
     public function cronAction()

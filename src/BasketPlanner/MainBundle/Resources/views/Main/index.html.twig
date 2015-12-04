@@ -19,17 +19,18 @@
                     <h1 class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">BasketPlanner - Jūsų
                         krepšinio planuotojas</h1>
 
-                    <p class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">Lorem Ipsum bla Bla
-                        BLA</p>
+                    <p class="wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">
+                        Nieko nelauk ir junkis į mačą jau dabar!
+                    </p>
                     <a class="btn btn-lg btn-social btn-facebook wow fadeInUp "
                        href="{{ hwi_oauth_login_url('facebook') }}" data-wow-duration="1000ms"
                        data-wow-delay="400ms">
-                        <em class="fa fa-facebook fa-2x"></em>Prisijungti - Facebook
+                        <em class="fa fa-facebook fa-2x"></em>Prisijungti su Facebook
                     </a>
                     <a class="btn btn-lg btn-social btn-google wow fadeInUp"
                        href="{{ hwi_oauth_login_url('google') }}" data-wow-duration="1000ms"
                        data-wow-delay="400ms">
-                        <em class="fa fa-google-plus fa-2x"></em>Prisijungti - Google+
+                        <em class="fa fa-google-plus fa-2x"></em>Prisijungti su Google+
                     </a>
                 </div>
             </div>
@@ -39,12 +40,42 @@
             <div class="container">
 
                 <div class="section-header">
-                    <h1 class="section-title wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="100ms">Sistemos
-                        privalumai</h1>
+                    <h1 class="section-title wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="100ms">
+                        Nepraleisk progos sužaisti!
+                    </h1>
+                    <h2 class="section-subtitle wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">
+                        Naujausi mačai
+                    </h2>
 
-                    <h2 class="section-subtitle wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">Kodėl
-                        verta naudoti BasketPlanner?</h2>
+
+                    {% for match in matches %}
+                    <ul>
+                        <li>
+                            <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
+                        </li>
+                        <li>
+                            <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
+                        </li>
+                        <li>
+                            <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
+                        </li>
+                        <li>
+                            <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
+                        </li>
+                    </ul>
+                        <br><br>
+                    {% endfor %}
                 </div>
+
+                <div class="section-header">
+                    <h1 class="section-title wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="100ms">
+                        Kodėl verta naudoti BasketPlanner?
+                    </h1>
+                    <h2 class="section-subtitle wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="400ms">
+                        Tai tikrai Jums patiks
+                    </h2>
+                </div>
+
                 <div class="row">
 
                     <div class="col-md-4 col-sm-6 wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
@@ -53,11 +84,10 @@
                                 <i class="fa fa-calendar" style="color:#FF9800"></i>
                             </div>
                             <div class="features-text">
-                                <h4>Organizuosite žaidimus greitai</h4>
-
+                                <h4>Organizuosite žaidimus patogiai</h4>
                                 <p>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard.
+                                    BasketPlanner leis Jums vos kelių migtukų spragtelėjimu greitai bei patogiai sukurti
+                                    arba prisijungti prie jau esamo krepšinio mačo!
                                 </p>
                             </div>
                         </div>
@@ -70,11 +100,10 @@
                                 <i class="fa fa-users" style="color:#FF9800"></i>
                             </div>
                             <div class="features-text">
-                                <h4>Surasite kur pažaisti</h4>
-
+                                <h4>Visos aikštelės vienoje vietoje</h4>
                                 <p>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard.
+                                    BasketPlanner žino visas Kaune esančias krepšinio aikšteles,
+                                    todel Jums nereiks gaišti laiko bandant surasti vietą mačui.
                                 </p>
                             </div>
                         </div>
@@ -87,11 +116,9 @@
                                 <i class="fa fa-comments" style="color:#FF9800"></i>
                             </div>
                             <div class="features-text">
-                                <h4>Surasite naujų draugų</h4>
-
+                                <h4>Nauji draugai</h4>
                                 <p>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard.
+                                    Sukurdami arba dalyvaudami mačuose susipažinsite su naujais žmonėmis!
                                 </p>
                             </div>
                         </div>
