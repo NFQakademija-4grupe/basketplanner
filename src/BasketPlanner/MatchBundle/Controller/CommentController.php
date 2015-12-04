@@ -12,35 +12,13 @@ class CommentController extends Controller
 {
     public function createAction(Request $request, Match $match)
     {
-        $comment = new Comment();
+        $commentLoader = $this->get('basketplanner_match.comment_loader_service');
+        $data = $commentLoader->saveComment($request, $match, $this->getUser());
 
-        $form = $this->createForm(new CommentType(), $comment, [
-            'action' => $this->generateUrl('basket_planner_comment_create', ['id' => $match->getId()])
-        ]);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid())
-        {
-
-            if (!$match->getPlayers()->contains($this->getUser()))
-            {
-                $this->addFlash('error', 'Tik prisijungę žaidėjai gali rašyti žinutes.');
-            }
-            else
-            {
-                $comment->setCreatedAt(new \DateTime('now'));
-                $comment->setMatch($match);
-                $comment->setUser($this->getUser());
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($comment);
-                $em->flush();
-            }
-
+        if ($data['redirectToMatch']) {
             return $this->redirectToRoute('basket_planner_match_show', ['id' => $match->getId()]);
         }
 
-        return $this->render('BasketPlannerMatchBundle:Comment:create.html.twig', ['form' => $form->createView()]);
+        return $this->render('BasketPlannerMatchBundle:Comment:create.html.twig', ['form' => $data['form']]);
     }
 }

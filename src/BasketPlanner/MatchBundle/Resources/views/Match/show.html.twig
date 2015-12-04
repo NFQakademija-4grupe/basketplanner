@@ -149,7 +149,10 @@
                                     <!-- END panel-footer-->
                                     {% else %}
                                     <div class="panel-footer clearfix">
-                                        <p style="color: #858b8d;">Tik prisijungę vartotojai gali rašyti žinutes...</p>
+                                        <p style="color: #858b8d;">
+                                            Tik prisijungę į mačą žaidėjai gali rašyti žinutes...
+                                            <a class="btn btn-warning" href="{{ path('basket_planner_match_join', {'id': match.id}) }}">Prisijungti</a>
+                                        </p>
                                     </div>
                                     {% endif %}
                                 </div>

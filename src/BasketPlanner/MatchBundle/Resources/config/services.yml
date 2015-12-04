@@ -23,3 +23,11 @@ services:
             formFactory: "@form.factory"
             paginator: "@knp_paginator"
             session: "@session"
+
+    basketplanner_match.comment_loader_service:
+        class: BasketPlanner\MatchBundle\Services\CommentLoaderService
+        arguments:
+            em: "@doctrine.orm.entity_manager"
+            formFactory: "@form.factory"
+            session: "@session"
+            router: "@router"
