@@ -136,10 +136,10 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <a class="btn-match hvr-bounce-to-right orange"
+                                        <a class="btn-match"
                                            href="{{ path('basket_planner_match_join', {'id': match.id}) }}"><i
                                                     class="fa fa-sign-in"></i> Prisijungti</a>
-                                        <a class="btn-match hvr-bounce-to-right orange"
+                                        <a class="btn-match"
                                            href="{{ path('basket_planner_match_show', {'id': match.id}) }}"><i
                                                     class="fa fa-eye"></i> Peržiūrėti</a>
 
@@ -192,7 +192,8 @@
                 format: 'YYYY-MM-DD',
                 locale: 'lt',
                 useCurrent: true,
-                allowInputToggle: true
+                allowInputToggle: true,
+                debug:true
             });
             $("#basket_planner_filter_match_min_date_time, #basket_planner_filter_match_max_date_time").datetimepicker({
                 format: 'HH:mm',
