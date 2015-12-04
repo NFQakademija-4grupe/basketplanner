@@ -17,27 +17,32 @@
                         <!-- Name and Job-->
                         <div class="user-block-info">
                             <span class="user-block-name">Sveiki, {{ app.user.fullName }}</span>
-                            <a href="{{ path('logout') }}" style="color:#fff"> <i class="fa fa-sign-out"></i> Atsijungti</a>
                         </div>
                     </div>
                 </li>
                 <!-- END user info-->
                 <li>
-                    <a href="{{ path('basket_planner_match_list') }}" title="Sąrašas">
-                        <em class=" fa fa-th-large"></em>
-                        <span>Pagrindinis</span>
+                    <a href="{{ path('basket_planner_match_list') }}" title="Pagrindinis">
+                        <i class=" fa fa-home"></i>
+                        <span> Pagrindinis</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('basket_planner_match_activity_index') }}" title="Mano Matchai">
-                        <em class=" fa fa-history"></em>
-                        <span>Mano Matchai</span>
+                    <a href="{{ path('basket_planner_match_activity_index') }}" title="Mano mačai">
+                        <i class=" fa fa-th-list"></i>
+                        <span> Mano mačai</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('basket_planner_match_create') }}" title="Sukurti Matchą">
-                        <em class=" fa fa-plus"></em>
-                        <span>Sukurti Matchą</span>
+                    <a href="{{ path('basket_planner_match_create') }}" title="Sukurti mačą">
+                        <i class=" fa fa-plus-circle"></i>
+                        <span> Sukurti mačą</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('logout') }}" title="Atsijungti">
+                        <i class=" fa fa-sign-out"></i>
+                        <span> Atsijungti</span>
                     </a>
                 </li>
             </ul>
