@@ -85,25 +85,21 @@ class NotificationService {
     }
 
     /**
-     * get notifications dedicated to user
-     *
-     * @var User $user
-     * @var boolean $seen   tells to get only unseen (false) or all (true) notifications
-     *
-     * @return array
-     */
-    public function getNotifications($user, $seen){
-
-    }
-
-    /**
      * get unread notifications count dedicated to user
      *
-     * @var User $user
+     * @var integer $user
      *
      * @return integer
      */
     public function getUnreadNotificationsCount($user){
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(n.user)')
+            ->from('BasketPlannerUserBundle:NotificationUser','n')
+            ->where('n.user = '.$user)
+            ->where('n.seen = false');
+        $count = $query->getQuery()->getSingleScalarResult();
 
+        return $count;
     }
 }

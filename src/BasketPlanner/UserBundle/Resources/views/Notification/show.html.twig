@@ -1,16 +1,21 @@
 {% extends '::base.html.twig' %}
-
 {% block content %}
-    <div autoscroll="false" class="content-wrapper">
-        <div class="row">
-            <div class="col-sm-12">
-                <!-- START panel-->
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h1>Pranešimai: </h1></div>
-                    <div class="panel-body">
+    {% embed  'partials/panel.html.twig' %}
+        {% block panel_content %}
+            <div class="panel-heading"><h1>Pranešimai</h1></div>
+                <div class="panel-body">
+                    {% for notification in notifications %}
+                        <div><h3>{{ notification.title }}</h3></div>
+                        <div>{{ notification.text }}</div>
+                        <div><a class="btn-match orange" href="{{ notification.link }}">
+                        <i class="fa fa-eye"></i> Peržiūrėti</a></div>
+                    {% endfor %}
+
+                    <div class="navigation">
+                        {{ knp_pagination_render(notifications) }}
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}

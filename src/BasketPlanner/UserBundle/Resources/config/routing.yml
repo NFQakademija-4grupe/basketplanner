@@ -6,5 +6,8 @@ basket_planner_user_profile:
        id: \d+
 
 basket_planner_user_notification:
-   path: /notifications
-   defaults: { _controller: BasketPlannerUserBundle:Notification:show }
+   path: /notifications/{page}
+   defaults: { _controller: BasketPlannerUserBundle:Notification:show, page: 1 }
+   methods: [GET]
+   requirements:
+      page: \d+

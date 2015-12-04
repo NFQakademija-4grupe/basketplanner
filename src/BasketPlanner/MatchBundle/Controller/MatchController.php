@@ -172,7 +172,7 @@ class MatchController extends Controller
                 $match->addPlayer($this->getUser());
                 $match->increasePlayersCount();
 
-                //$this->getDoctrine()->getManager()->flush();
+                $this->getDoctrine()->getManager()->flush();
 
                 $this->addFlash('success', 'Sėkmingai prisijungėte prie mačo!');
 
