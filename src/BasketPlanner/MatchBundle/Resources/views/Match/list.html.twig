@@ -136,9 +136,15 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        {% if app.user in match.players %}
+                                        <a class="btn-match"
+                                           href="{{ path('basket_planner_match_leave', {'id': match.id}) }}"><i
+                                                    class="fa fa-sign-out"></i> Išeiti</a>
+                                        {% else %}
                                         <a class="btn-match"
                                            href="{{ path('basket_planner_match_join', {'id': match.id}) }}"><i
                                                     class="fa fa-sign-in"></i> Prisijungti</a>
+                                        {% endif %}
                                         <a class="btn-match"
                                            href="{{ path('basket_planner_match_show', {'id': match.id}) }}"><i
                                                     class="fa fa-eye"></i> Peržiūrėti</a>

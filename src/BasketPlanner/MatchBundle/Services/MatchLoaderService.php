@@ -6,10 +6,13 @@ use BasketPlanner\MatchBundle\Entity\Match;
 use BasketPlanner\MatchBundle\Form\FilterType;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use BasketPlanner\UserBundle\Entity\User;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Knp\Component\Pager\Paginator;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
+use BasketPlanner\UserBundle\Service\NotificationService;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 
 class MatchLoaderService
@@ -22,11 +25,14 @@ class MatchLoaderService
 
     private $paginator;
 
-    public function __construct(EntityManager $entityManager, FormFactory $formFactory, Paginator $paginator)
+    private $session;
+
+    public function __construct(EntityManager $em, FormFactory $formFactory, Paginator $paginator, Session $session)
     {
-        $this->em = $entityManager;
+        $this->em = $em;
         $this->formFactory = $formFactory;
         $this->paginator = $paginator;
+        $this->session = $session;
     }
 
     public function loadMatchesAndForm(Request $request)
@@ -125,6 +131,8 @@ class MatchLoaderService
             $this->em->persist($match);
             $this->em->flush();
 
+            $this->session->getFlashBag()->add('success', 'Sėkmingai sukurtas mačas!');
+
             $results['match'] = $match;
             $results['matchSaved'] = true;
         }
@@ -141,5 +149,62 @@ class MatchLoaderService
             ->getResult();
 
         return $results;
+    }
+
+    public function joinMatch(Match $match, User $user, NotificationService $notificationService)
+    {
+        if ($match->getPlayersCount() < $match->getType()->getPlayers())
+        {
+            try
+            {
+                $match->addPlayer($user);
+                $match->increasePlayersCount();
+
+                $this->em->persist($match);
+                $this->em->flush();
+
+                $this->session->getFlashBag()->add('success', 'Sėkmingai prisijungėte prie mačo!');
+
+                $full = false;
+                if($match->getPlayersCount() == $match->getType()->getPlayers()) {
+                    $full = true;
+                }
+
+                $notificationService->matchJoinNotification($match->getId(), $user->getId(), $full);
+            }
+            catch (UniqueConstraintViolationException $ex)
+            {
+                $this->session->getFlashBag()->add('error', 'Jūs jau esate prisijungę prie šio mačo');
+            }
+        }
+        else
+        {
+            $this->session->getFlashBag()->add('error', 'Prie mačo prisijungti negalima. Surinktas reikiamas žaidėjų skaičiu.');
+            return false;
+        }
+
+        return true;
+    }
+
+    public function leaveMatch(Match $match, User $user)
+    {
+        if (!$match->getPlayers()->contains($user)) {
+            $this->session->getFlashBag()->add('error', 'Neįmanoma išeiti iš mačo prie kurio nesate prisijunge!');
+            return false;
+        }
+
+        $match->removePlayer($user);
+        $match->decreasePlayersCount();
+
+        if ($match->getPlayersCount() == 0) {
+            $match->setActive(false);
+        }
+
+        $this->em->persist($match);
+        $this->em->flush();
+
+        $this->session->getFlashBag()->add('success', 'Sėkmingai išėjote iš mačo');
+
+        return true;
     }
 }

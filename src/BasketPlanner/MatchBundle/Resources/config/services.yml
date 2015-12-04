@@ -22,3 +22,4 @@ services:
             em: "@doctrine.orm.entity_manager"
             formFactory: "@form.factory"
             paginator: "@knp_paginator"
+            session: "@session"
