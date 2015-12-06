@@ -14,6 +14,26 @@ function collapse(){
 	}
 	isCollapsed = !isCollapsed;
 }
+$('body.aside-toggled').removeClass('aside-toggled');
+
+var $body = $('body');
+
+$('.toggler')
+    .on('click', function (e) {
+        e.preventDefault();
+        var classname = 'aside-toggled';
+
+        if(classname) {
+            if( $body.hasClass(classname) ) {
+                $body.removeClass(classname);
+            }
+            else {
+                $body.addClass(classname);
+            }
+
+        }
+
+    });
 (function ($) {
 	"use strict";
 
