@@ -173,38 +173,29 @@
         $(document).ready(function () {
 
             $("#min_date").wrap('<div class="form-group"><div class="col-lg-2 col-sm-6"></div></div>');
-            $("#min_date_time").addClass('form-control');
-            $("#min_date_date").addClass('form-control');
+            $("#min_date").addClass('form-control');
 
             $("#max_date").wrap('<div class="form-group"><div class="col-lg-2 col-sm-6"></div></div>');
-            $("#max_date_time").addClass('form-control');
-            $("#max_date_date").addClass('form-control');
+            $("#max_date").addClass('form-control');
 
-            $("#min_date_time").attr('type', 'text');
-            $("#min_date_date").attr('type', 'text');
-            $("#max_date_time").attr('type', 'text');
-            $("#max_date_date").attr('type', 'text');
+            $("#min_date").attr('type', 'text');
+            $("#max_date").attr('type', 'text');
 
-            $("#min_date_time").attr('placeholder', 'Laikas nuo');
-            $("#min_date_date").attr('placeholder', 'Data nuo');
-            $("#max_date_time").attr('placeholder', 'Laikas iki');
-            $("#max_date_date").attr('placeholder', 'Data iki');
+            $("#min_date").attr('placeholder', 'Pradžios data ir laikas');
+            $("#max_date").attr('placeholder', 'Pabaigos data ir laikas');
 
-            $("#min_date_time").removeAttr('value');
-            $("#min_date_date").removeAttr('value');
-            $("#max_date_time").removeAttr('value');
-            $("#max_date_date").removeAttr('value');
+            $("#min_date").removeAttr('value');
+            $("#max_date").removeAttr('value');
             $(".del").remove();
-            $('#min_date_date, #max_date_date').datetimepicker({
-                format: 'YYYY-MM-DD',
+            $('#min_date, #max_date').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
                 locale: 'lt',
                 useCurrent: true,
                 allowInputToggle: true,
-                debug:true
-            });
-            $("#min_date_time, #max_date_time").datetimepicker({
-                format: 'HH:mm',
-                locale: 'lt'
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar"
+                }
             });
             $("#min_date").removeAttr('style');
             $("#max_date").removeAttr('style');
