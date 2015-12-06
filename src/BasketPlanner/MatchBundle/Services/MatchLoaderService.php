@@ -39,7 +39,7 @@ class MatchLoaderService
     {
         $qb = $this->em->getRepository('BasketPlannerMatchBundle:Match')->createQueryBuilder('m');
 
-        $filterForm = $this->formFactory->create(new FilterType());
+        $filterForm = $this->formFactory->createNamed('', new FilterType());
         $filterForm->handleRequest($request);
 
         $query = $qb->select('m');
@@ -50,7 +50,8 @@ class MatchLoaderService
             $formData = $filterForm->getData();
 
             if (!is_null($formData['search_text'])) {
-                $query = $query->andWhere('m.description LIKE :searchText')
+                $query = $query
+                    ->andWhere('m.description LIKE :searchText')
                     ->setParameter('searchText', '%'.$formData['search_text'].'%');
             }
 
