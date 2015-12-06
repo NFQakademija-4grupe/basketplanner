@@ -8,10 +8,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Class UpcomingMatchCommand
+ * Class ExpiredMatchCommand
  * @package BasketPlanner\MatchBundle\Command
  */
-class UpcomingMatchCommand extends ContainerAwareCommand
+class ExpiredMatchCommand extends ContainerAwareCommand
 {
 
     /**
@@ -20,8 +20,8 @@ class UpcomingMatchCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('match:check-upcoming')
-            ->setDescription('Check for upcoming matches and then pass them for notification');
+            ->setName('match:check-expired')
+            ->setDescription('Check for expired matches and then change their status');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -41,20 +41,14 @@ class UpcomingMatchCommand extends ContainerAwareCommand
             'This command does something <info>' . $inputInterface->getOption('env') . '</info> environment'
         );
 
-        $date1 = new \DateTime('+11 hours');
-        $date2 = new \DateTime('+12 hours');
-
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $query = $em->createQueryBuilder()
-                    ->select("m, u")
+                    ->select("m")
                     ->from("BasketPlannerMatchBundle:Match", "m")
-                    ->leftJoin("m.players", "u")
-                    ->where("m.beginsAt > :date1")
-                    ->andWhere("m.beginsAt < :date2")
-                    ->setParameter('date1', $date1)
-                    ->setParameter('date2', $date2);
-
+                    ->where("m.active = true")
+                    ->andWhere("m.createdAt<CURRENT_TIMESTAMP()");
+        
         $outputInterface->writeln('Done');
     }
 

@@ -5,10 +5,26 @@
             <div class="panel-heading"><h1>Pranešimai</h1></div>
                 <div class="panel-body">
                     {% for notification in notifications %}
-                        <div><h3>{{ notification.title }}</h3></div>
-                        <div>{{ notification.text }}</div>
-                        <div><a class="btn-match orange" href="{{ notification.link }}">
-                        <i class="fa fa-eye"></i> Peržiūrėti</a></div>
+                    <div class="notification" data-notification-id="{{ notification[0].id }}">
+                        <div class="notification-title" data-notification-seen="{{ notification['seen'] ? 'Yes':'No' }}">
+                            {{ notification[0].date.format('M d Y H:i') }}
+                            <h3>{{ notification[0].title }}</h3>
+                        </div>
+                        <div class="notification-text notification-text-hide">
+                            <div>{{ notification[0].text }}</div>
+                            <div>
+                                <a class="btn-match orange" href="{{ notification[0].link }}">
+                                    <i class="fa fa-eye"></i> Peržiūrėti
+                                </a>
+                            </div>
+                            <div>
+                                <a class="btn-match orange notification-delete">
+                                    <i class="fa fa-eye"></i> Pašalinti
+                                </a>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
                     {% endfor %}
 
                     <div class="navigation">
@@ -18,4 +34,50 @@
             </div>
         {% endblock %}
     {% endembed %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('.notification-title').click(function(){
+            var parent = $(this).parent();
+            var seen = $(this).attr("data-notification-seen");
+
+            parent.children('.notification-text').slideToggle('slow');
+
+            if(seen = 'No'){
+                var id = parent.attr("data-notification-id");
+                var data = 'id=' + id ;
+                $.ajax({
+                    type: "POST",
+                    url: '{{path('basket_planner_user_notification.update_status')}}',
+                    data: data,
+                    success: function(msg) {
+                        seen.attr("data-notification-seen", "Yes");
+                    },
+                    error: function(e){
+                        console.log('Ops! Something wrong!');
+                    }
+                });
+            }
+        });
+
+        $(".notification-delete").click(function(){
+            var id = $(this).parent().parent().parent().attr("data-notification-id");
+            var data = 'id=' + id ;
+            var parent = $(this).parent().parent();
+            $.ajax({
+                type: "POST",
+                url: '{{path('basket_planner_user_notification.delete')}}',
+                data: data,
+                success: function(msg) {
+                    parent.fadeOut('slow', function() {$(this).remove();});
+                },
+                error: function(e){
+                    console.log('Ops! Something wrong!');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

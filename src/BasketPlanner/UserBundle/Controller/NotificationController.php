@@ -23,9 +23,12 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()
                    ->getEntityManager()->createQueryBuilder();
 
-        $query = $em->select('n')
+        $query = $em->select('n, u.seen')
                     ->from('BasketPlannerUserBundle:Notification', 'n')
-                    ->innerJoin('n.notificationUser', 'u')
+                    ->leftJoin('BasketPlanner\UserBundle\Entity\NotificationUser',
+                        'u',
+                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                        'n.id = u.notification')
                     ->where('u.user = :user')
                     ->setParameter('user', $this->getUser());
 
@@ -38,6 +41,58 @@ class NotificationController extends Controller
         return $this->render('BasketPlannerUserBundle:Notification:show.html.twig', [
           'notifications' => $notifications,
       ]);
+    }
+
+    public function deleteAction(Request $request){
+        if($request->isXmlHttpRequest()) {
+            $id = $request->get('id');
+
+            $em = $this->getDoctrine()->getEntityManager();
+
+            $repository = $em->getRepository('BasketPlannerUserBundle:NotificationUser');
+            $notifiedUser = $repository->findOneBy(array('notification'=> $id, 'user'=> $this->getUser()->getId() ));
+
+            $query = $em->createQuery('SELECT COUNT(n.id) FROM BasketPlanner\UserBundle\Entity\NotificationUser n WHERE n.notification ='.$id);
+            $count = $query->getSingleScalarResult();
+
+            if($count == 1 ){
+                $notificationRepository = $em->getRepository('BasketPlannerUserBundle:Notification');
+                $notification = $notificationRepository->findOneBy(array('id' => $id));
+
+                $em->remove($notifiedUser);
+                $em->remove($notification);
+                $em->flush();
+            }else if($count > 1){
+                $em->remove($notifiedUser);
+                $em->flush();
+            }
+
+            $response = json_encode(array('delete' => 'yes'));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
+
+    public function updateStatusAction(Request $request){
+        if($request->isXmlHttpRequest()) {
+            $id = $request->get('id');
+
+            $em = $this->getDoctrine()->getEntityManager();
+
+            $repository = $em->getRepository('BasketPlannerUserBundle:NotificationUser');
+            $notifiedUser = $repository->findOneBy(array('notification'=> $id, 'user'=> $this->getUser()->getId() ));
+            $notifiedUser->setSeen(true);
+            $em->persist($notifiedUser);
+            $em->flush();
+
+            $response = json_encode(array('seen' => 'yes'));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
     }
 
 }

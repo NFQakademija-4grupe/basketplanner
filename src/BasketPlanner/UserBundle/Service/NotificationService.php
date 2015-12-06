@@ -49,40 +49,70 @@ class NotificationService {
                 ->setParameter('matchId', $matchId)
                 ->setParameter('userId', $userId);
             $results = $query->getArrayResult();
+
+            $subject = 'BasketPlanner - surinktas mačas.';
             foreach ($results as $result) {
                 $message = 'Sveiki ' . $result['firstName'] . ' ' . $result['lastName'] . ', mačas,
                      kuriame Jūs dalyvaujate, buvo surinktas.
                      Norėdami peržiūrėti prisijungusius žaidėjus ar kitą informaciją spauskite ant nuorodos:
                      <a href="'.$url.'">Mačo peržiūra</a>';
-                $msg = array(
-                    'email' => $result['email'],
-                    'subject' => 'BasketPlanner - surinktas mačas.',
-                    'message' => $message
-                );
-                $this->emailProducer->publish(serialize($msg), 'send_email');
+                $this->sendNotification($result['email'], $subject, $message);
             }
         }else{
             $query = $this->entityManager
                 ->createQuery('
-                SELECT u.id FROM BasketPlanner\MatchBundle\Entity\Match m
-                INNER JOIN m.players u
-                WHERE m.id = :matchId
-                AND u.id <> :userId')
+                    SELECT u.id FROM BasketPlanner\MatchBundle\Entity\Match m
+                    INNER JOIN m.players u
+                    WHERE m.id = :matchId
+                    AND u.id <> :userId
+                ')
                 ->setParameter('matchId', $matchId)
                 ->setParameter('userId', $userId);
-            $results = $query->getArrayResult();
+            $users = $query->getArrayResult();
 
             $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($userId);
             $text = 'Naujas žaidėjas prisijungė prie mačo. Norėdami sužinoti detalesnę informaciją peržiūrėkite mačą.';
-            $msg = array(
-                'title' => $user->getFirstName().' prisijungė prie mačo!',
-                'text' => $text,
-                'link' => $url,
-                'users' => $results
-            );
-            $this->notificationsProducer->publish(serialize($msg), 'notifications');
+            $title = $user->getFirstName().' prisijungė prie mačo!';
+            $this->createNotification($title, $text, $url, $users);
         }
     }
+
+    /**
+     * create notification
+     *
+     * @var string $title
+     * @var string $text
+     * @var string $url
+     * @var array $users
+     *
+     */
+    public function createNotification($title, $text, $url, $users){
+        $msg = array(
+            'title' => $title,
+            'text' => $text,
+            'link' => $url,
+            'users' => $users
+        );
+        $this->notificationsProducer->publish(serialize($msg), 'notifications');
+    }
+
+    /**
+     * send notification
+     *
+     * @var string $email
+     * @var string $subject
+     * @var string $message
+     *
+     */
+    public function sendNotification($email, $subject, $message){
+        $msg = array(
+            'email' => $email,
+            'subject' => $subject,
+            'message' => $message
+        );
+        $this->emailProducer->publish(serialize($msg), 'send_email');
+    }
+
 
     /**
      * get unread notifications count dedicated to user

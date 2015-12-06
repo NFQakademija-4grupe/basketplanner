@@ -6,6 +6,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Security\Core\Util\SecureRandom;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 
 class OAuthUserProvider extends BaseClass
 {
@@ -95,8 +96,11 @@ class OAuthUserProvider extends BaseClass
                 'subject' => 'Sveikiname užsiregistravus BasketPlanner svetainėje.',
                 'message' => $message
             );
-            $this->container->get('old_sound_rabbit_mq.send_email_producer')->publish(serialize($msg), 'send_email');
-
+            try {
+                $this->container->get('old_sound_rabbit_mq.send_email_producer')->publish(serialize($msg), 'send_email');
+            }catch (AMQPTimeoutException $e){
+                //nothing to do
+            }
             return $user;
         }
         //if user exists - go with the HWIOAuth way

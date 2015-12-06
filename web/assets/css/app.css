@@ -18512,3 +18512,7 @@ a.btn-match:before {
         overflow-x: hidden;
     }
 }
+
+.notification-text-hide {
+    display:none;
+}

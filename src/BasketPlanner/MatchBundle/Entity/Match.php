@@ -108,6 +108,11 @@ class Match
      */
     protected $active;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    protected $notified;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -324,6 +329,30 @@ class Match
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set notified
+     *
+     * @param boolean $notified
+     *
+     * @return Match
+     */
+    public function setNotified($notified)
+    {
+        $this->notified = $notified;
+
+        return $this;
+    }
+
+    /**
+     * Get notified
+     *
+     * @return boolean
+     */
+    public function getNotified()
+    {
+        return $this->notified;
     }
 
     /**

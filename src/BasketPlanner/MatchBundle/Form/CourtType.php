@@ -12,12 +12,14 @@ class CourtType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('id', 'integer')
+            ->add('id', 'integer', array('required' => false))
             ->add('address', 'text')
             ->add('latitude', 'number', array(
-                'precision' => 18))
+                'precision' => 18,
+                'required' => false))
             ->add('longitude', 'number', array(
-                'precision' => 18))
+                'precision' => 18,
+                'required' => false))
         ;
     }
 
