@@ -8,6 +8,7 @@ use BasketPlanner\MatchBundle\Form\MatchType;
 use BasketPlanner\UserBundle\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 use Knp\Component\Pager\Paginator;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,8 +51,9 @@ class MatchLoaderService
             $formData = $filterForm->getData();
 
             if (!is_null($formData['search_text'])) {
-                $query = $query
+                $query = $query->leftJoin('m.court', 'c', Join::WITH, 'm.court = c.id')
                     ->andWhere('m.description LIKE :searchText')
+                    ->orWhere('c.address LIKE :searchText')
                     ->setParameter('searchText', '%'.$formData['search_text'].'%');
             }
 
@@ -128,6 +130,7 @@ class MatchLoaderService
             $match->setCourt($court);
             $match->setActive(true);
             $match->setCreatedAt(new \DateTime('now'));
+            $match->setNotified(0);
 
             $this->em->persist($match);
             $this->em->flush();
