@@ -37,7 +37,7 @@ class GoogleMapLoaderService{
         $map->setMapOption('disableDefaultUI', false);
         $map->setMapOption('addMarker', true);
 
-        $courts = $this->entityManager->getRepository('BasketPlannerMatchBundle:Court')->findByApproved(true);
+        $courts = $this->entityManager->getRepository('BasketPlannerMatchBundle:Court')->findByApproved($type);
 
         foreach($courts as $court){
             $marker = new Marker();

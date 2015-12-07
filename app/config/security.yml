@@ -54,5 +54,7 @@ security:
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/team, roles: ROLE_USER }
         - { path: ^/match, roles: ROLE_USER }
+        - { path: ^/match/courts, roles: ROLE_ADMIN }
+        - { path: ^/cron, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/user, roles: ROLE_USER }

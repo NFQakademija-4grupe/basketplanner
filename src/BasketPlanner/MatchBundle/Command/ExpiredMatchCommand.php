@@ -38,7 +38,7 @@ class ExpiredMatchCommand extends ContainerAwareCommand
     protected function execute(InputInterface $inputInterface, OutputInterface $outputInterface)
     {
         $outputInterface->writeln(
-            'This command does something <info>' . $inputInterface->getOption('env') . '</info> environment'
+            'Check expired matches and change their status'
         );
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
@@ -47,9 +47,21 @@ class ExpiredMatchCommand extends ContainerAwareCommand
                     ->select("m")
                     ->from("BasketPlannerMatchBundle:Match", "m")
                     ->where("m.active = true")
-                    ->andWhere("m.createdAt<CURRENT_TIMESTAMP()");
-        
-        $outputInterface->writeln('Done');
+                    ->andWhere("m.createdAt<CURRENT_TIMESTAMP()")
+                    ->getQuery();
+        $expiredMatches = $query->execute();
+
+        $counter = 0;
+
+        foreach($expiredMatches as $match){
+            $match->setActive(false);
+            $em->persist($match);
+            $em->flush();
+
+            $counter++;
+        }
+
+        $outputInterface->writeln('Done. Total <info>' . $counter . '</info> matches updated.');
     }
 
 }

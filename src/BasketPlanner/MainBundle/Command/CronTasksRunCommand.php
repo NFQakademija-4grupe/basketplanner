@@ -37,7 +37,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
             $run = (time() >= $nextrun);
 
             if ($run) {
-                $output->writeln(sprintf('Running Cron Task <info>%s</info>', $crontask));
+                $output->writeln(sprintf('Running Cron Task <info>%s</info>', $crontask->getName()));
 
                 // Set $lastrun for this crontask
                 $crontask->setLastRun(new \DateTime());

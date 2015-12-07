@@ -38,7 +38,7 @@ class UpcomingMatchCommand extends ContainerAwareCommand
     protected function execute(InputInterface $inputInterface, OutputInterface $outputInterface)
     {
         $outputInterface->writeln(
-            'This command does something <info>' . $inputInterface->getOption('env') . '</info> environment'
+            'Notify users for upcoming matches.'
         );
 
         $date1 = new \DateTime('+11 hours');
@@ -52,10 +52,37 @@ class UpcomingMatchCommand extends ContainerAwareCommand
                     ->leftJoin("m.players", "u")
                     ->where("m.beginsAt > :date1")
                     ->andWhere("m.beginsAt < :date2")
+                    ->andWhere("m.notified = false")
                     ->setParameter('date1', $date1)
-                    ->setParameter('date2', $date2);
+                    ->setParameter('date2', $date2)
+                    ->getQuery();
+        $upcomingMatches = $query->execute();
 
-        $outputInterface->writeln('Done');
+        $counter = 0;
+
+        $notificationService = $this->getContainer()->get('basketplanner_user.notifications_service');
+        $router = $this->getContainer()->get('router');
+
+        foreach($upcomingMatches as $match){
+            $players = $match->getPlayers();
+            $subject = 'BasketPlanner - artėjantis mačas.';
+            $url = $router->generate('basket_planner_match_show', ['id' => $match->getId()], true);
+
+            foreach($players as $player) {
+                $message = 'Sveiki ' . $player->getFullName() . ', norime informuoti, jog šiandien įvyks mačas, kuriame Jūs dalyvaujate.
+                     Norėdami peržiūrėti prisijungusius žaidėjus ar kitą informaciją spauskite ant nuorodos:
+                     <a href="'.$url.'">Mačo peržiūra</a>';
+                $notificationService->sendNotification($player->getEmail(), $subject, $message);
+            }
+
+            $match->setNotified(true);
+            $em->persist($match);
+            $em->flush();
+
+            $counter++;
+        }
+
+        $outputInterface->writeln('Done. Total <info>' . $counter . '</info> upcoming matches notified.');
     }
 
 }

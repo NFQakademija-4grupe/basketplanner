@@ -53,7 +53,7 @@ class MatchController extends Controller
         }
 
         $loadMap = $this->get('basketplanner_match.map_loader_service');
-        $map = $loadMap->loadMarkers(false);
+        $map = $loadMap->loadMarkers(true);
 
         return $this->render('BasketPlannerMatchBundle:Match:create.html.twig', [ 'form' => $data['form'], 'map' => $map]);
     }

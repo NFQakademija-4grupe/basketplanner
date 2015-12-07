@@ -91,16 +91,10 @@ class OAuthUserProvider extends BaseClass
 
             //welcoming email message
             $message = 'Sveiki '.$user->getFullName().', sveikiname sėkmingai prisijugus prie BasketPlanner bendruomenės.';
-            $msg = array(
-                'email' => $user->getEmail(),
-                'subject' => 'Sveikiname užsiregistravus BasketPlanner svetainėje.',
-                'message' => $message
-            );
-            try {
-                $this->container->get('old_sound_rabbit_mq.send_email_producer')->publish(serialize($msg), 'send_email');
-            }catch (AMQPTimeoutException $e){
-                //nothing to do
-            }
+            $subject = 'Sveikiname užsiregistravus BasketPlanner svetainėje.';
+
+            $this->container->get('basketplanner_user.notifications_service')->sendNotification($user->getEmail(), $subject, $message);
+
             return $user;
         }
         //if user exists - go with the HWIOAuth way

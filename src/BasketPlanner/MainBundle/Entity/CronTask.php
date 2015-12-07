@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @UniqueEntity("name")
+ * @UniqueEntity(fields={"name"})
  */
 class CronTask
 {
@@ -20,7 +20,7 @@ class CronTask
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private $name;
 

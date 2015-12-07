@@ -4,23 +4,22 @@
         {% block panel_content %}
             <div class="panel-heading"><h1>Pranešimai</h1></div>
                 <div class="panel-body">
+                    <div class="col-sm-12 col-lg-6">
+                    {% if notifications is empty %}
+                        <div class="notification">Pranešimų nėra.</div>
+                    {% endif %}
                     {% for notification in notifications %}
                     <div class="notification" data-notification-id="{{ notification[0].id }}">
                         <div class="notification-title" data-notification-seen="{{ notification['seen'] ? 'Yes':'No' }}">
-                            {{ notification[0].date.format('M d Y H:i') }}
-                            <h3>{{ notification[0].title }}</h3>
+                            <div style="float:left; padding-right: 10px;"><h4>{{ notification[0].date.format('M d Y H:i') }}</h4></div>
+                            {{ notification['seen'] ? '':'<div class="notification-seen"  style="float:left; padding-right:10px;"><p style="background-color:#F57C00; float:left; color:white; padding:0 5px;">Naujas</p></div>' }}
+                            <h4>{{ notification[0].title }}</h4>
                         </div>
                         <div class="notification-text notification-text-hide">
                             <div>{{ notification[0].text }}</div>
                             <div>
-                                <a class="btn-match orange" href="{{ notification[0].link }}">
-                                    <i class="fa fa-eye"></i> Peržiūrėti
-                                </a>
-                            </div>
-                            <div>
-                                <a class="btn-match orange notification-delete">
-                                    <i class="fa fa-eye"></i> Pašalinti
-                                </a>
+                                <a class="btn-match orange" href="{{ notification[0].link }}">Peržiūrėti</a>
+                                <a class="btn-match orange notification-delete">Pašalinti</a>
                             </div>
                         </div>
                         <br>
@@ -30,6 +29,7 @@
                     <div class="navigation">
                         {{ knp_pagination_render(notifications) }}
                     </div>
+
                 </div>
             </div>
         {% endblock %}
@@ -48,12 +48,14 @@
             if(seen = 'No'){
                 var id = parent.attr("data-notification-id");
                 var data = 'id=' + id ;
+                var label = $(this).find(".notification-seen");
+
                 $.ajax({
                     type: "POST",
                     url: '{{path('basket_planner_user_notification.update_status')}}',
                     data: data,
                     success: function(msg) {
-                        seen.attr("data-notification-seen", "Yes");
+                        label.fadeOut('slow', function() {$(this).remove();});
                     },
                     error: function(e){
                         console.log('Ops! Something wrong!');
@@ -65,7 +67,7 @@
         $(".notification-delete").click(function(){
             var id = $(this).parent().parent().parent().attr("data-notification-id");
             var data = 'id=' + id ;
-            var parent = $(this).parent().parent();
+            var parent = $(this).parent().parent().parent();
             $.ajax({
                 type: "POST",
                 url: '{{path('basket_planner_user_notification.delete')}}',

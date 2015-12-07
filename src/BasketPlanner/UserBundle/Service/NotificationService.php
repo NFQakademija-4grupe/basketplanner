@@ -93,7 +93,7 @@ class NotificationService {
             'link' => $url,
             'users' => $users
         );
-        $this->notificationsProducer->publish(serialize($msg), 'notifications');
+        //$this->notificationsProducer->publish(serialize($msg), 'notifications');
     }
 
     /**
@@ -110,7 +110,7 @@ class NotificationService {
             'subject' => $subject,
             'message' => $message
         );
-        $this->emailProducer->publish(serialize($msg), 'send_email');
+        //$this->emailProducer->publish(serialize($msg), 'send_email');
     }
 
 

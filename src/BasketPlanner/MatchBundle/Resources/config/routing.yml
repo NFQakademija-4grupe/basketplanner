@@ -42,3 +42,7 @@ basket_planner_match_activity_index:
     path:     /activity
     defaults: { _controller: BasketPlannerMatchBundle:Activity:index }
     methods: [GET]
+
+basket_planner_match_courts:
+    path:     /courts
+    defaults: { _controller: BasketPlannerMatchBundle:Court:index }

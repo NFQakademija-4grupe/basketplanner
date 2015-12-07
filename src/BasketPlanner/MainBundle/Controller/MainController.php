@@ -25,18 +25,43 @@ class MainController extends Controller
 
     public function cronAction()
     {
-        $entity = new CronTask();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity
+        $upcoming = new CronTask();
+        $upcoming
             ->setName('Upcoming matches check')
-            ->setInterval(3600) // Run once every hour
+            ->setInterval(120) // Run once every hour
             ->setCommands(array(
                 'match:check-upcoming'
             ));
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        $em->persist($upcoming);
+
+        $expired = new CronTask();
+        $expired
+            ->setName('Expired matches check')
+            ->setInterval(120) // Run once every hour
+            ->setCommands(array(
+                'match:check-expired'
+            ));
+
+        $em->persist($expired);
+
+        try {
+            $em->flush();
+
+        }
+        catch( \PDOException $e )
+        {
+            if( $e->getCode() === '23000' )
+            {
+                echo $e->getMessage();
+
+                return new Response('Cron already setuped!');
+            }
+
+            else throw $e;
+        }
 
         return new Response('OK!');
     }
