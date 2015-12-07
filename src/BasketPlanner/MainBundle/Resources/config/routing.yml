@@ -1,7 +1,3 @@
 basket_planner_main_homepage:
     path:     /
     defaults: { _controller: BasketPlannerMainBundle:Main:index }
-
-basket_planner_main_cron:
-    path:     /cron-task
-    defaults: { _controller: BasketPlannerMainBundle:Main:cron }

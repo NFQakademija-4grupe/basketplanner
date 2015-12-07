@@ -2,6 +2,7 @@
 namespace BasketPlanner\MatchBundle\Controller;
 
 use BasketPlanner\MatchBundle\Entity\Match;
+use BasketPlanner\MainBundle\Entity\CronTask;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,4 +95,34 @@ class MatchController extends Controller
 
         return $this->redirectToRoute('basket_planner_match_list');
     }
+
+    public function cronAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $upcoming = new CronTask();
+        $upcoming
+            ->setName('Upcoming matches check')
+            ->setInterval(300) // Run once every hour
+            ->setCommands(array(
+                'match:check-upcoming'
+            ));
+
+        $em->persist($upcoming);
+
+        $expired = new CronTask();
+        $expired
+            ->setName('Expired matches check')
+            ->setInterval(600) // Run once every hour
+            ->setCommands(array(
+                'match:check-expired'
+            ));
+
+        $em->persist($expired);
+
+        $em->flush();
+
+        return $this->render('BasketPlannerMatchBundle:Match:cron.html.twig');
+    }
+
 }

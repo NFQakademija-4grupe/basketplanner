@@ -2,7 +2,6 @@
 
 namespace BasketPlanner\MainBundle\Controller;
 
-use BasketPlanner\MainBundle\Entity\CronTask;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,34 +20,5 @@ class MainController extends Controller
         $latestMatches = $matchLoader->getLatest(3);
 
         return $this->render('BasketPlannerMainBundle:Main:index.html.twig', ['matches' => $latestMatches]);
-    }
-
-    public function cronAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $upcoming = new CronTask();
-        $upcoming
-            ->setName('Upcoming matches check')
-            ->setInterval(300) // Run once every hour
-            ->setCommands(array(
-                'match:check-upcoming'
-            ));
-
-        $em->persist($upcoming);
-
-        $expired = new CronTask();
-        $expired
-            ->setName('Expired matches check')
-            ->setInterval(600) // Run once every hour
-            ->setCommands(array(
-                'match:check-expired'
-            ));
-
-        $em->persist($expired);
-
-        $em->flush();
-
-        return $this->render('BasketPlannerMainBundle:Main:cron.html.twig');
     }
 }

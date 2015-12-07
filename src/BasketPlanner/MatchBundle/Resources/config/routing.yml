@@ -50,3 +50,7 @@ basket_planner_match_courts:
 basket_planner_match_courts.update_approved:
     path:     /courts/update-approved
     defaults: { _controller: BasketPlannerMatchBundle:Court:updateApproved }
+
+basket_planner_match_cron:
+    path:     /cron-task
+    defaults: { _controller: BasketPlannerMatchBundle:Match:cron }
