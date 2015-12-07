@@ -57,4 +57,3 @@ custom_login:
 
 logout:
     path: /logout
-

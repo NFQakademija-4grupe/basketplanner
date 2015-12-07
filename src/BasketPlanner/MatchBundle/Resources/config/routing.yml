@@ -46,3 +46,7 @@ basket_planner_match_activity_index:
 basket_planner_match_courts:
     path:     /courts
     defaults: { _controller: BasketPlannerMatchBundle:Court:index }
+
+basket_planner_match_courts.update_approved:
+    path:     /courts/update-approved
+    defaults: { _controller: BasketPlannerMatchBundle:Court:updateApproved }

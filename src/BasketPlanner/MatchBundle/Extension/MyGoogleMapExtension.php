@@ -29,7 +29,6 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                 $("#basket_planner_create_match_court_address").val(this.markerAddress);
                 $("#basket_planner_create_match_court_latitude").val(this.position.lat());
                 $("#basket_planner_create_match_court_longitude").val(this.position.lng());
-                console.log(event);
             }'.PHP_EOL;
     }
 

@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+
 {% block content %}
     {% embed  'partials/panel.html.twig' %}
         {% block panel_content %}
@@ -9,9 +10,34 @@
                         <div id="map">
                             {{ google_map(map) }}
                         </div>
+                        <input id="basket_planner_create_match_court_id" class="form-control" placeholder="Pažymėkite aikštelę žemėlapyje" readonly="true" type="text">
                     {% endif %}
                 </div>
             </div>
         {% endblock %}
     {% endembed %}
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        var oldValue = 0;
+        setInterval(function() { inputValue($('#basket_planner_create_match_court_id').val()); }, 200);
+        function inputValue(value){
+            if (value != oldValue){
+                oldValue = value;
+
+                var data = 'id=' + value;
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{path('basket_planner_match_courts.update_approved')}}',
+                    data: data,
+                    error: function(e){
+                        console.log('Ops! Something wrong!');
+                    }
+                });
+            }
+        }
+    });
+</script>
 {% endblock %}
