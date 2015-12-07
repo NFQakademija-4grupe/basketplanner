@@ -23,7 +23,6 @@ class GoogleMapLoaderService{
     /**
      * load court markers from database
      *
-     * @var Ivory\GoogleMapBundle\Model\Map
      * @var boolean $type   Should contain a boolean value to tell which markers to load
      *
      * @return array
@@ -40,11 +39,12 @@ class GoogleMapLoaderService{
         $courts = $this->entityManager->getRepository('BasketPlannerMatchBundle:Court')->findByApproved($type);
 
         foreach($courts as $court){
-            $marker = new Marker();
-            $marker->setPosition($court->getLatitude(), $court->getLongitude(), true);
-            $marker->setOption('clickable', true);
-            $marker->setOption('markerID', $court->getId());
-            $marker->setOption('markerAddress', $court->getAddress());
+            $options = array(
+                'clickable' => true,
+                'markerID' => $court->getId(),
+                'markerAddress' => $court->getAddress(),
+            );
+            $marker = $this->createMarker($court->getLatitude(), $court->getLongitude(), true, $options);
 
             $infoWindow = new InfoWindow();
             $infoWindow->setContent($court->getAddress());
@@ -67,7 +67,6 @@ class GoogleMapLoaderService{
     /**
      * load court marker by id
      *
-     * @var Ivory\GoogleMapBundle\Model\Map
      * @var boolean $type   Should contain a boolean value to tell which markers to load
      *
      * @return array
@@ -84,11 +83,12 @@ class GoogleMapLoaderService{
         $map->setMapOption('disableDefaultUI', false);
         $map->setMapOption('addMarker', false);
 
-        $marker = new Marker();
-        $marker->setPosition($court->getLatitude(), $court->getLongitude(), true);
-        $marker->setOption('clickable', true);
-        $marker->setOption('markerID', $court->getId());
-        $marker->setOption('markerAddress', $court->getAddress());
+        $options = array(
+            'clickable' => true,
+            'markerID' => $court->getId(),
+            'markerAddress' => $court->getAddress(),
+        );
+        $marker = $this->createMarker($court->getLatitude(), $court->getLongitude(), true, $options);
 
         $infoWindow = new InfoWindow();
         $infoWindow->setContent($court->getAddress());
@@ -98,5 +98,26 @@ class GoogleMapLoaderService{
         $map->addMarker($marker);
 
         return $map;
+    }
+
+    /**
+     * create new marker
+     *
+     * @var float $latitude
+     * @var float $longitude
+     * @var boolean $noWrap
+     * @var array $options
+     *
+     * @return Marker
+     */
+    public function createMarker($latitude, $longitude, $noWrap, $options)
+    {
+        $marker = new Marker();
+        $marker->setPosition($latitude, $longitude, $noWrap);
+        foreach ($options as $key => $value) {
+            $marker->setOption($key, $value);
+        }
+
+        return $marker;
     }
 }

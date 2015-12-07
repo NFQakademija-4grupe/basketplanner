@@ -2,20 +2,20 @@
 
 namespace BasketPlanner\UserBundle\Security\User;
 
+use BasketPlanner\UserBundle\Service\NotificationService;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 
 class OAuthUserProvider extends BaseClass
 {
 
-    protected $container;
+    protected $notificationService;
 
-    public function __construct($userManager, array $properties,Container $container){
+    public function __construct($userManager, array $properties,NotificationService $notificationService){
         parent::__construct($userManager, $properties);
-        $this->container = $container;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -93,7 +93,7 @@ class OAuthUserProvider extends BaseClass
             $message = 'Sveiki '.$user->getFullName().', sveikiname sėkmingai prisijugus prie BasketPlanner bendruomenės.';
             $subject = 'Sveikiname užsiregistravus BasketPlanner svetainėje.';
 
-            $this->container->get('basketplanner_user.notifications_service')->sendNotification($user->getEmail(), $subject, $message);
+            $this->notificationService->sendNotification($user->getEmail(), $subject, $message);
 
             return $user;
         }
