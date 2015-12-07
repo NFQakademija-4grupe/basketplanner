@@ -34,12 +34,6 @@ class CourtController extends Controller
             $court->setApproved(true);
             $em->persist($court);
             $em->flush();
-
-            $response = json_encode(array('approved' => 'yes'));
-
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
         }
     }
 }
