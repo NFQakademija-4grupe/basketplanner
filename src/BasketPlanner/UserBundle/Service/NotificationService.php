@@ -122,12 +122,14 @@ class NotificationService {
      * @return integer
      */
     public function getUnreadNotificationsCount($user){
+
         $query = $this->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(n.user)')
+            ->select('COUNT(n.notification)')
             ->from('BasketPlannerUserBundle:NotificationUser','n')
-            ->where('n.user = '.$user)
-            ->where('n.seen = false');
+            ->where('n.user = ?1')
+            ->andWhere('n.seen = false')
+            ->setParameter(1, $user);
         $count = $query->getQuery()->getSingleScalarResult();
 
         return $count;

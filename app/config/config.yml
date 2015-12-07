@@ -39,7 +39,7 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
             fos_csrf_provider: "@form.csrf_provider"
-
+            userNotifications: "@basketplanner_user.notifications_service"
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"

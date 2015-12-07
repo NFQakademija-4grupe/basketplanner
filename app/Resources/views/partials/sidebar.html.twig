@@ -40,6 +40,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ path('basket_planner_user_notification') }}" title="Pranešimai">
+                        <i class=" fa fa-bell "></i>
+                        <span> Pranešimai ({{ userNotifications.getUnreadNotificationsCount(app.user.id) }})</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ path('logout') }}" title="Atsijungti">
                         <i class=" fa fa-sign-out"></i>
                         <span> Atsijungti</span>

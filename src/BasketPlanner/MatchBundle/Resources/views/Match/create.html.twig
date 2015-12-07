@@ -78,6 +78,7 @@
                                         <div class="col-sm-12">
                                             <div>
                                                 {{ form_errors(form.court) }}
+                                                {{ form_errors(form.court.address) }}
                                                 {{ form_widget(form.court.address, {'attr': {'class': 'form-control', 'placeholder':'Pažymėkite aikštelę žemėlapyje', 'READONLY': 'true'}}) }}
                                                 {{ form_widget(form.court, {'attr': {'style':'display:none'}}) }}
                                             </div>
