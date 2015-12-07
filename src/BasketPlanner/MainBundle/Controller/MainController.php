@@ -30,7 +30,7 @@ class MainController extends Controller
         $upcoming = new CronTask();
         $upcoming
             ->setName('Upcoming matches check')
-            ->setInterval(120) // Run once every hour
+            ->setInterval(300) // Run once every hour
             ->setCommands(array(
                 'match:check-upcoming'
             ));
@@ -40,7 +40,7 @@ class MainController extends Controller
         $expired = new CronTask();
         $expired
             ->setName('Expired matches check')
-            ->setInterval(120) // Run once every hour
+            ->setInterval(600) // Run once every hour
             ->setCommands(array(
                 'match:check-expired'
             ));
