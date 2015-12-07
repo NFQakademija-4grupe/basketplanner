@@ -47,22 +47,8 @@ class MainController extends Controller
 
         $em->persist($expired);
 
-        try {
-            $em->flush();
+        $em->flush();
 
-        }
-        catch( \PDOException $e )
-        {
-            if( $e->getCode() === '23000' )
-            {
-                echo $e->getMessage();
-
-                return new Response('Cron already setuped!');
-            }
-
-            else throw $e;
-        }
-
-        return new Response('OK!');
+        return $this->render('BasketPlannerMainBundle:Main:cron.html.twig');
     }
 }
