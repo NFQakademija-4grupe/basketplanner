@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-
+{% form_theme form '::Form/fields_list.html.twig' %}
     {% block stylesheets %}
     {% endblock %}
 {% block content %}
@@ -11,9 +11,11 @@
                     <div class="panel-body">
 
                         {{ form_start(form) }}
+                            <div class="form-group">
 
                                 {{ form_errors(form.min_date) }}
                                 {{ form_errors(form.max_date) }}
+                            </div>
                             <div class="form-group">
                                 <div class="col-lg-4 col-sm-12">
                                 {{ form_errors(form.search_text) }}
@@ -32,47 +34,47 @@
                                             {{ form_errors(form.type) }}
                                             <div class="del">
                                                 {{ form_widget(form.type, {'attr': {'style':'display:none'}}) }}</div>
-                                            <div id="basket_planner_filter_match_type" style="margin-top: 5px;">
+                                            <div id="type" style="margin-top: 5px;">
 
                                                 <label class="checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_1">
-                                                    <input id="basket_planner_filter_match_type_1"
-                                                           name="basket_planner_filter_match[type][]"
+                                                       for="type_1">
+                                                    <input id="type_1"
+                                                           name="type[]"
                                                            type="checkbox" value="1">
                                                     <span class="fa fa-check"></span>1x1</label>
 
                                                 <label class="checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_2">
-                                                    <input id="basket_planner_filter_match_type_2"
-                                                           name="basket_planner_filter_match[type][]"
+                                                       for="type_2">
+                                                    <input id="type_2"
+                                                           name="type[]"
                                                            type="checkbox" value="2">
                                                     <span class="fa fa-check"></span>2x2</label>
 
                                                 <label class="checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_3">
-                                                    <input id="basket_planner_filter_match_type_3"
-                                                           name="basket_planner_filter_match[type][]"
+                                                       for="type_3">
+                                                    <input id="type_3"
+                                                           name="type[]"
                                                            type="checkbox" value="3">
                                                     <span class="fa fa-check"></span>3x3</label>
 
                                                 <label class="checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_4">
-                                                    <input id="basket_planner_filter_match_type_4"
-                                                           name="basket_planner_filter_match[type][]"
+                                                       for="type_4">
+                                                    <input id="type_4"
+                                                           name="type[]"
                                                            type="checkbox" value="4">
                                                     <span class="fa fa-check"></span>4x4</label>
 
                                                 <label class="checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_5">
-                                                    <input id="basket_planner_filter_match_type_5"
-                                                           name="basket_planner_filter_match[type][]"
+                                                       for="type_5">
+                                                    <input id="type_5"
+                                                           name="type[]"
                                                            type="checkbox" value="5">
                                                     <span class="fa fa-check"></span>5x5</label>
 
                                                 {#<label class="required checkbox-inline c-checkbox"
-                                                       for="basket_planner_filter_match_type_6">
-                                                    <input id="basket_planner_filter_match_type_6"
-                                                           name="basket_planner_filter_match[type]" required="required"
+                                                       for="type_6">
+                                                    <input id="type_6"
+                                                           name="type" required="required"
                                                            type="checkbox" value="Kita">
                                                     <span class="fa fa-check"></span>Kita</label>#}
 

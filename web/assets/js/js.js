@@ -1,53 +1,56 @@
 var isCollapsed = false;
 
-function collapse(){
-	if(isCollapsed){
-		document.getElementById('body').className =
-	    document.getElementById('body').className.replace( /(?:^|\s)aside-collapsed(?!\S)/g , '' );
-		document.getElementById('sidebar_left').style.width = "";
-		document.getElementById('sidebar').style.width = "";
-	}
-	else{
-		document.getElementById('body').className += " aside-collapsed";
-		document.getElementById('sidebar_left').style.width = "70px";
-		document.getElementById('sidebar').style.width = "70px";
-	}
-	isCollapsed = !isCollapsed;
+function collapse() {
+    if (isCollapsed) {
+        document.getElementById('body').className =
+            document.getElementById('body').className.replace(/(?:^|\s)aside-collapsed(?!\S)/g, '');
+        document.getElementById('sidebar_left').style.width = "";
+        document.getElementById('sidebar').style.width = "";
+    }
+    else {
+        document.getElementById('body').className += " aside-collapsed";
+        document.getElementById('sidebar_left').style.width = "70px";
+        document.getElementById('sidebar').style.width = "70px";
+    }
+    isCollapsed = !isCollapsed;
 }
-$('body.aside-toggled').removeClass('aside-toggled');
 
 var $body = $('body');
+var $logo = $('.has-user-block');
 
 $('.toggler')
     .on('click', function (e) {
         e.preventDefault();
         var classname = 'aside-toggled';
 
-        if(classname) {
-            if( $body.hasClass(classname) ) {
+        if (classname) {
+            if ($body.hasClass(classname)) {
                 $body.removeClass(classname);
+                $logo.attr('style', 'display:none');
             }
             else {
                 $body.addClass(classname);
+                $logo.removeAttr('style');
             }
 
         }
 
     });
 (function ($) {
-	"use strict";
+    "use strict";
 
 
-	// upcoming event filter
-	function matchPanelAnimated () {
-		var matchPanelAnimatedContent = $('#match-list .tab-content-wrap');
-		if (matchPanelAnimatedContent) {
-			matchPanelAnimatedContent.mixItUp();
-		};
-	}
+    // upcoming event filter
+    function matchPanelAnimated() {
+        var matchPanelAnimatedContent = $('#match-list .tab-content-wrap');
+        if (matchPanelAnimatedContent) {
+            matchPanelAnimatedContent.mixItUp();
+        }
+        ;
+    }
 
-	// doc ready
-	$(document).on('ready', function () {
-		matchPanelAnimated();
-	});
+    // doc ready
+    $(document).on('ready', function () {
+        matchPanelAnimated();
+    });
 })(jQuery);
