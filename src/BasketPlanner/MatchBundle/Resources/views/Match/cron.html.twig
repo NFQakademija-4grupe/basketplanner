@@ -5,7 +5,14 @@
             <div class="panel-heading"><h1>Cron</h1></div>
             <div class="panel-body">
                 <div class="col-sm-12 col-lg-6">
-                    Cron veiksmai pridėti!
+                    {% if crontasks is empty %}
+                        Cron veiksmai pridėti!
+                    {% endif %}
+                    {% for task in crontasks %}
+                        <div class="row">
+                            <div class="col-lg-4">{{ task.name }}</div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         {% endblock %}

@@ -100,29 +100,33 @@ class MatchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $upcoming = new CronTask();
-        $upcoming
-            ->setName('Upcoming matches check')
-            ->setInterval(300) // Run once every hour
-            ->setCommands(array(
-                'match:check-upcoming'
-            ));
+        $tasks = $em->getRepository('BasketPlannerMainBundle:CronTask')->findAll();
 
-        $em->persist($upcoming);
+        if(count($tasks) == 0) {
+            $upcoming = new CronTask();
+            $upcoming
+                ->setName('Upcoming matches check')
+                ->setInterval(300)// Run once every hour
+                ->setCommands(array(
+                    'match:check-upcoming'
+                ));
 
-        $expired = new CronTask();
-        $expired
-            ->setName('Expired matches check')
-            ->setInterval(600) // Run once every hour
-            ->setCommands(array(
-                'match:check-expired'
-            ));
+            $em->persist($upcoming);
 
-        $em->persist($expired);
+            $expired = new CronTask();
+            $expired
+                ->setName('Expired matches check')
+                ->setInterval(600)// Run once every hour
+                ->setCommands(array(
+                    'match:check-expired'
+                ));
 
-        $em->flush();
+            $em->persist($expired);
 
-        return $this->render('BasketPlannerMatchBundle:Match:cron.html.twig');
+            $em->flush();
+        }
+
+        return $this->render('BasketPlannerMatchBundle:Match:cron.html.twig', ['crontasks' => $tasks]);
     }
 
 }
