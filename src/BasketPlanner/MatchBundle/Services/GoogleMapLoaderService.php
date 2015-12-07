@@ -12,7 +12,7 @@ class GoogleMapLoaderService{
 
     private $map;
     private $mapEvent;
-    private $entityManaget;
+    private $entityManager;
 
     public function __construct($map, $mapEvent, EntityManager $entityManager){
         $this->map = $map;

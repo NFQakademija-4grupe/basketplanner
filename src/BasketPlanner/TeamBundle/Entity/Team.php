@@ -129,7 +129,7 @@ class Team
     /**
      * Set created
      *
-     * @param string $created
+     * @param object $created
      *
      * @return Team
      */
@@ -143,7 +143,7 @@ class Team
     /**
      * Get created
      *
-     * @return string
+     * @return object
      */
     public function getCreated()
     {

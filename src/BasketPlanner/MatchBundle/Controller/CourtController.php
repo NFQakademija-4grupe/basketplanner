@@ -15,7 +15,6 @@ class CourtController extends Controller
      */
     public function indexAction()
     {
-        $userId = $this->getUser()->getId();
         $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkers(true);
 
@@ -24,14 +23,14 @@ class CourtController extends Controller
         ]);
     }
 
-    public function updateStatusAction(Request $request){
+    public function updateApprovedAction(Request $request){
         if($request->isXmlHttpRequest()) {
             $id = $request->get('id');
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             $repository = $em->getRepository('BasketPlannerMatchBundle:Court');
-            $court = $repository->findOneBy(array('notification'=> $id));
+            $court = $repository->findOneBy(array('id'=> $id));
             $court->setApproved(true);
             $em->persist($court);
             $em->flush();

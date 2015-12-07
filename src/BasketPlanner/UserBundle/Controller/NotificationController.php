@@ -21,7 +21,7 @@ class NotificationController extends Controller
     public function showAction(Request $request, $page)
     {
         $em = $this->getDoctrine()
-                   ->getEntityManager()->createQueryBuilder();
+                   ->getManager()->createQueryBuilder();
 
         $query = $em->select('n, u.seen')
                     ->from('BasketPlannerUserBundle:Notification', 'n')
@@ -47,7 +47,7 @@ class NotificationController extends Controller
         if($request->isXmlHttpRequest()) {
             $id = $request->get('id');
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             $repository = $em->getRepository('BasketPlannerUserBundle:NotificationUser');
             $notifiedUser = $repository->findOneBy(array('notification'=> $id, 'user'=> $this->getUser()->getId() ));
@@ -79,7 +79,7 @@ class NotificationController extends Controller
         if($request->isXmlHttpRequest()) {
             $id = $request->get('id');
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             $repository = $em->getRepository('BasketPlannerUserBundle:NotificationUser');
             $notifiedUser = $repository->findOneBy(array('notification'=> $id, 'user'=> $this->getUser()->getId() ));

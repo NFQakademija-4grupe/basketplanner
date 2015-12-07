@@ -23,13 +23,14 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
     public function renderBefore(Map $map)
     {
         // Here, we can render js code just before the generated one.
-        return 'function markerClickEventListener(event) {
-                    $("#basket_planner_create_match_court_id").val(this.markerID);
-                    $("#basket_planner_create_match_court_address").val(this.markerAddress);
-                    $("#basket_planner_create_match_court_latitude").val(this.position.lat());
-                    $("#basket_planner_create_match_court_longitude").val(this.position.lng());
-                    console.log(event);
-                }'.PHP_EOL;
+        return '
+            function markerClickEventListener(event) {
+                $("#basket_planner_create_match_court_id").val(this.markerID);
+                $("#basket_planner_create_match_court_address").val(this.markerAddress);
+                $("#basket_planner_create_match_court_latitude").val(this.position.lat());
+                $("#basket_planner_create_match_court_longitude").val(this.position.lng());
+                console.log(event);
+            }'.PHP_EOL;
     }
 
     /**

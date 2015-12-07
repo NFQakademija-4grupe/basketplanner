@@ -2,11 +2,3 @@ services:
 #    basket_planner_team.example:
 #        class: BasketPlanner\Bundle\TeamBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
-
-    basketplanner.team.event_listener:
-        class: BasketPlanner\TeamBundle\Listeners\TeamEventsListener
-        arguments:
-            templating: "@twig"
-            mailer: "@mailer"
-        tags:
-        - { name: kernel.event_listener, event: invite.event, method: onInviteEvent }

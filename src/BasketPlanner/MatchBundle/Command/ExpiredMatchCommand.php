@@ -30,8 +30,8 @@ class ExpiredMatchCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
+     * @param InputInterface  $inputInterface  An InputInterface instance
+     * @param OutputInterface $outputInterface An OutputInterface instance
      *
      * @return null|int null or 0 if everything went fine, or an error code
      */
