@@ -59,7 +59,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
                 // Persist crontask
                 $em->persist($crontask);
             } else {
-                $output->writeln(sprintf('Skipping Cron Task <info>%s</info>', $crontask));
+                $output->writeln(sprintf('Skipping Cron Task <info>%s</info>', $crontask->getName()));
             }
         }
 
