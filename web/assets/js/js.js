@@ -1,20 +1,5 @@
 var isCollapsed = false;
 
-function collapse() {
-    if (isCollapsed) {
-        document.getElementById('body').className =
-            document.getElementById('body').className.replace(/(?:^|\s)aside-collapsed(?!\S)/g, '');
-        document.getElementById('sidebar_left').style.width = "";
-        document.getElementById('sidebar').style.width = "";
-    }
-    else {
-        document.getElementById('body').className += " aside-collapsed";
-        document.getElementById('sidebar_left').style.width = "70px";
-        document.getElementById('sidebar').style.width = "70px";
-    }
-    isCollapsed = !isCollapsed;
-}
-
 var $body = $('body');
 var $logo = $('.has-user-block');
 
@@ -22,14 +7,16 @@ $('.toggler')
     .on('click', function (e) {
         e.preventDefault();
         var classname = 'aside-toggled';
-
+        var classname2 = 'aside-collapsed';
         if (classname) {
             if ($body.hasClass(classname)) {
                 $body.removeClass(classname);
+                $body.addClass(classname2);
                 $logo.attr('style', 'display:none');
             }
             else {
                 $body.addClass(classname);
+                $body.removeClass(classname2);
                 $logo.removeAttr('style');
             }
 
@@ -38,19 +25,19 @@ $('.toggler')
     });
 (function ($) {
     "use strict";
-
-
-    // upcoming event filter
     function matchPanelAnimated() {
         var matchPanelAnimatedContent = $('#match-list .tab-content-wrap');
         if (matchPanelAnimatedContent) {
             matchPanelAnimatedContent.mixItUp();
-        }
-        ;
+        };
     }
-
-    // doc ready
     $(document).on('ready', function () {
         matchPanelAnimated();
+        if( $('aside').css('display')=='none') {
+            $body.removeClass('aside-toggled');
+            $body.addClass('aside-collapsed');
+            $logo.attr('style', 'display:none');
+        }
+        $('aside').removeClass('mobile');
     });
 })(jQuery);
