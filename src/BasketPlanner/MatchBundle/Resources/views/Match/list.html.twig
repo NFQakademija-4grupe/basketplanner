@@ -11,94 +11,94 @@
                     <div class="panel-body">
 
                         {{ form_start(form) }}
-                            <div class="form-group">
+                        <div class="form-group">
 
-                                {{ form_errors(form.min_date) }}
-                                {{ form_errors(form.max_date) }}
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-4 col-sm-12">
+                            {{ form_errors(form.min_date) }}
+                            {{ form_errors(form.max_date) }}
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-4 col-sm-12">
                                 {{ form_errors(form.search_text) }}
                                 {{ form_widget(form.search_text, {'attr': {'class': 'form-control', 'placeholder': 'Paieška'}}) }}
-                                </div>
                             </div>
+                        </div>
 
 
+                        <div class="form-group">
+                            {{ form_widget(form.min_date, {'attr': {'style':'display:none'}}) }}
+                            {{ form_widget(form.max_date, {'attr': {'style':'display:none'}}) }}
+                        </div>
+                        {% if form.type is defined %}
                             <div class="form-group">
-                                {{ form_widget(form.min_date, {'attr': {'style':'display:none'}}) }}
-                                {{ form_widget(form.max_date, {'attr': {'style':'display:none'}}) }}
-                            </div>
-                            {% if form.type is defined %}
-                                    <div class="form-group">
-                                        <div class="col-sm-12 col-lg-4">
-                                            {{ form_errors(form.type) }}
-                                            <div class="del">
-                                                {{ form_widget(form.type, {'attr': {'style':'display:none'}}) }}</div>
-                                            <div id="type" style="margin-top: 5px;">
+                                <div class="col-sm-12 col-lg-4">
+                                    {{ form_errors(form.type) }}
+                                    <div class="del">
+                                        {{ form_widget(form.type, {'attr': {'style':'display:none'}}) }}</div>
+                                    <div id="type" style="margin-top: 5px;">
 
-                                                <label class="checkbox-inline c-checkbox"
-                                                       for="type_1">
-                                                    <input id="type_1"
-                                                           name="type[]"
-                                                           type="checkbox" value="1">
-                                                    <span class="fa fa-check"></span>1x1</label>
+                                        <label class="checkbox-inline c-checkbox"
+                                               for="type_1">
+                                            <input id="type_1"
+                                                   name="type[]"
+                                                   type="checkbox" value="1">
+                                            <span class="fa fa-check"></span>1x1</label>
 
-                                                <label class="checkbox-inline c-checkbox"
-                                                       for="type_2">
-                                                    <input id="type_2"
-                                                           name="type[]"
-                                                           type="checkbox" value="2">
-                                                    <span class="fa fa-check"></span>2x2</label>
+                                        <label class="checkbox-inline c-checkbox"
+                                               for="type_2">
+                                            <input id="type_2"
+                                                   name="type[]"
+                                                   type="checkbox" value="2">
+                                            <span class="fa fa-check"></span>2x2</label>
 
-                                                <label class="checkbox-inline c-checkbox"
-                                                       for="type_3">
-                                                    <input id="type_3"
-                                                           name="type[]"
-                                                           type="checkbox" value="3">
-                                                    <span class="fa fa-check"></span>3x3</label>
+                                        <label class="checkbox-inline c-checkbox"
+                                               for="type_3">
+                                            <input id="type_3"
+                                                   name="type[]"
+                                                   type="checkbox" value="3">
+                                            <span class="fa fa-check"></span>3x3</label>
 
-                                                <label class="checkbox-inline c-checkbox"
-                                                       for="type_4">
-                                                    <input id="type_4"
-                                                           name="type[]"
-                                                           type="checkbox" value="4">
-                                                    <span class="fa fa-check"></span>4x4</label>
+                                        <label class="checkbox-inline c-checkbox"
+                                               for="type_4">
+                                            <input id="type_4"
+                                                   name="type[]"
+                                                   type="checkbox" value="4">
+                                            <span class="fa fa-check"></span>4x4</label>
 
-                                                <label class="checkbox-inline c-checkbox"
-                                                       for="type_5">
-                                                    <input id="type_5"
-                                                           name="type[]"
-                                                           type="checkbox" value="5">
-                                                    <span class="fa fa-check"></span>5x5</label>
+                                        <label class="checkbox-inline c-checkbox"
+                                               for="type_5">
+                                            <input id="type_5"
+                                                   name="type[]"
+                                                   type="checkbox" value="5">
+                                            <span class="fa fa-check"></span>5x5</label>
 
-                                                {#<label class="required checkbox-inline c-checkbox"
-                                                       for="type_6">
-                                                    <input id="type_6"
-                                                           name="type" required="required"
-                                                           type="checkbox" value="Kita">
-                                                    <span class="fa fa-check"></span>Kita</label>#}
+                                        {#<label class="required checkbox-inline c-checkbox"
+                                               for="type_6">
+                                            <input id="type_6"
+                                                   name="type" required="required"
+                                                   type="checkbox" value="Kita">
+                                            <span class="fa fa-check"></span>Kita</label>#}
 
-                                            </div>
-                                        </div>
                                     </div>
-                            {% endif %}
-                            <div class="form-group center">
-                                {#{{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}#}
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-1">
-                                            <div class="form-group">
-                                                {{ form_widget(form.search, {'attr': {'class':'btn btn-sm btn-default no-border-radius btn-match'}}) }}
-                                            </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="form-group center">
+                            {#{{ form_widget(form.search, {'attr': {'class': 'btn btn-primary btn-block no-border-radius'}}) }}#}
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <div class="form-group">
+                                            {{ form_widget(form.search, {'attr': {'class':'btn btn-sm btn-default no-border-radius btn-match'}}) }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                         {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
         <!-- END row-->
 
@@ -111,59 +111,65 @@
         <div class="row">
             <div class="col-lg-12">
                 <div id="match-list">
-                        <div class="tab-content-wrap row">
+                    <div class="tab-content-wrap row">
 
-                            {% for match in pagination %}
-                                <div class="col-lg-3 col-md-4 col-sm-6 mix hvr-float-shadow wow fadeIn" style="margin-bottom: 25px;">
-                                    <div class="img-holder"><img
-                                                src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=380x200&maptype=roadmap
+                        {% for match in pagination %}
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix hvr-float-shadow wow fadeIn"
+                                 style="margin-bottom: 25px;">
+                                <div class="img-holder"><img
+                                            src="https://maps.googleapis.com/maps/api/staticmap?center={{ match.court.getLatitude() }},{{ match.court.getLongitude() }}&zoom=15&size=380x200&maptype=roadmap
         &markers=color:red%7Clabel:C%7C{{ match.court.getLatitude() }},{{ match.court.getLongitude() }}
         &key=AIzaSyBxbJhm5iH3jEhi3oSFXHdluBAR8v-ZarU"/></div>
 
-                                    <div class="content-wrap">
-                                        <img src="{{ match.owner.profilePicture }}" alt="" class="author-img thumb48">
+                                <div class="content-wrap">
+                                    <img src="{{ match.owner.profilePicture }}" alt="" class="author-img thumb48">
 
-                                        <div class="meta">
-                                            <ul>
-                                                <li>
-                                                    <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
-                                                </li>
-                                                <li>
-                                                    <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
-                                                </li>
-                                                <li>
-                                                    <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
-                                                </li>
-                                                <li>
-                                                    <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        {% if app.user in match.players %}
+                                    <div class="meta">
+                                        <ul>
+                                            <li>
+                                                <span><i class="fa fa-calendar"></i>{{ match.beginsAt.format('M d Y') }}</span>
+                                            </li>
+                                            <li>
+                                                <span><i class="fa fa-clock-o"></i>{{ match.beginsAt.format('H:i') }}</span>
+                                            </li>
+                                            <li>
+                                                <span><i class="fa  fa-trophy"></i>{{ match.type.name }}</span>
+                                            </li>
+                                            <li>
+                                                <span><i class="fa fa-map-marker"></i>{{ match.court.address }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {% if app.user in match.players %}
                                         <a class="btn-match"
                                            href="{{ path('basket_planner_match_leave', {'id': match.id}) }}"><i
                                                     class="fa fa-sign-out"></i> Išeiti</a>
-                                        {% else %}
+                                    {% else %}
                                         <a class="btn-match"
                                            href="{{ path('basket_planner_match_join', {'id': match.id}) }}"><i
                                                     class="fa fa-sign-in"></i> Prisijungti</a>
-                                        {% endif %}
-                                        <a class="btn-match"
-                                           href="{{ path('basket_planner_match_show', {'id': match.id}) }}"><i
-                                                    class="fa fa-eye"></i> Peržiūrėti</a>
+                                    {% endif %}
+                                    <a class="btn-match"
+                                       href="{{ path('basket_planner_match_show', {'id': match.id}) }}"><i
+                                                class="fa fa-eye"></i> Peržiūrėti</a>
 
-                                    </div>
                                 </div>
+                            </div>
 
-                            {% endfor %}
-                        </div>
+                        {% endfor %}
                     </div>
+                </div>
                 <!-- END widget-->
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
 
-    <div class="navigation">
-        {{ knp_pagination_render(pagination) }}
+                <div class="navigation center-block">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
