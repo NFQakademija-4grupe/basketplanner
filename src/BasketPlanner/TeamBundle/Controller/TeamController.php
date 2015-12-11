@@ -15,8 +15,11 @@ class TeamController extends Controller
 
     public function indexAction()
     {
+        $teamService = $this->get('basketplanner_team.team_service');
+        $teams = $teamService->getUserTeams($this->getUser()->getId());
+
         return $this->render('BasketPlannerTeamBundle:Team:index.html.twig', array(
-            'message' => 'Hello',
+            'teams' => $teams,
         ));
     }
 
@@ -26,35 +29,41 @@ class TeamController extends Controller
      */
     public function createAction(Request $request)
     {
-
+        $customErrors = [];
         $team = new Team();
 
         $form = $this->createForm(new TeamType(), $team);
-
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
 
         if ($form->isValid()) {
+            $teamService = $this->get('basketplanner_team.team_service');
+            $limit = $this->container->getParameter('basket_planner_team.created_teams_limit');
 
-            $team->setCreated(new \DateTime('now'));
+            if ($teamService->getUserCreatedTeamsCount($this->getUser()->getId()) <= $limit ){
+                $team->setCreated(new \DateTime('now'));
+                $user = $this->getUser();
+                $teamPlayer = $teamService->createTeamPlayer($user, $team, 'Owner');
 
-            $user = $this->getUser();
+                $em->persist($team);
+                $em->persist($teamPlayer);
+                $em->flush();
 
-            $teamPlayer = new TeamUser();
-            $teamPlayer->setUser($user);
-            $teamPlayer->setTeam($team);
-            $teamPlayer->setRole('Owner');
+                return $this->redirectToRoute('basket_planner_team_show', ['id' => $team->getId()]);
 
-            $em->persist($team);
-            $em->persist($teamPlayer);
-            $em->flush();
-
-            return $this->redirectToRoute('basket_planner_team_show', ['id' => $team->getId()]);
+            }else{
+                $error = array(
+                    "name" => "Komandų limitas",
+                    "message" => "Jūs pasiekėte leidžiamų sukurti komandų limitą."
+                );
+                $customErrors [] = $error;
+            }
         }
 
         return $this->render('BasketPlannerTeamBundle:Team:create.html.twig', [
             'form' => $form->createView(),
+            'customErrors' => $customErrors
         ]);
     }
 

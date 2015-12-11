@@ -9,6 +9,9 @@ imports:
 parameters:
     locale: lt
 
+basket_planner_team:
+    created_teams_limit: 5
+
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
