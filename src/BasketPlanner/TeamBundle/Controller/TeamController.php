@@ -16,7 +16,8 @@ class TeamController extends Controller
     public function indexAction()
     {
         $teamService = $this->get('basketplanner_team.team_service');
-        $teams = $teamService->getUserTeams($this->getUser()->getId());
+        $user = $this->getUser()->getId();
+        $teams = $teamService->getUserTeams($user);
 
         return $this->render('BasketPlannerTeamBundle:Team:index.html.twig', array(
             'teams' => $teams,

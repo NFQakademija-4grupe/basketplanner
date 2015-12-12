@@ -19,27 +19,27 @@
                             <tr>
                                 <th>Pavadinimas</th>
                                 <th>Tipas</th>
+                                <th>Žaidėjų skaičius</th>
                                 <th>Teisės</th>
                                 <th>Sukurta</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for team in teams %}
-                                {{ dump(team) }}
                             <tr>
                                 <td>
-                                    <a href="{{ path('basket_planner_team_show', {'id': team.id}) }}">
-                                        {{ team.name }}
+                                    <a href="{{ path('basket_planner_team_show', {'id': team[0].id}) }}">
+                                        {{ team[0].name }}
                                     </a>
                                 </td>
-                                <td>{{ team.type.name }}</td>
-                                {% if team.teamUser[0].role == "Owner" %}
+                                <td>{{ team[0].type.name }}</td>
+                                <td>{{ team.playersCount }}/{{ team[0].type.players }}</td>
+                                {% if team.role == "Owner" %}
                                     <td>Sąvininkas</td>
                                 {% else %}
                                     <td>Žaidėjas</td>
                                 {% endif %}
-                                <td>{{ team.type.name }}</td>
-                                <td>{{ team.created.format('M d Y H:i') }}</td>
+                                <td>{{ team[0].created.format('M d Y H:i') }}</td>
                             </tr>
                             {% endfor %}
                             </tbody>

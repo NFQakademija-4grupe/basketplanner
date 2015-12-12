@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 class NotificationService {
     private $entityManager;
@@ -93,7 +95,11 @@ class NotificationService {
             'link' => $url,
             'users' => $users
         );
-        $this->notificationsProducer->publish(serialize($msg), 'notifications');
+        try {
+            $this->notificationsProducer->publish(serialize($msg), 'notifications');
+        }catch (\Exception  $e){
+
+        }
     }
 
     /**
@@ -110,7 +116,11 @@ class NotificationService {
             'subject' => $subject,
             'message' => $message
         );
-        $this->emailProducer->publish(serialize($msg), 'send_email');
+        try {
+            $this->emailProducer->publish(serialize($msg), 'send_email');
+        }catch (\Exception  $e){
+
+        }
     }
 
 
