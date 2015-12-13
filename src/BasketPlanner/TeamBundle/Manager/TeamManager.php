@@ -1,13 +1,13 @@
 <?php
 
-namespace BasketPlanner\TeamBundle\Service;
+namespace BasketPlanner\TeamBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\UserBundle\Entity\User;
 
-class TeamService{
+class TeamManager{
 
     private $entityManager;
 
@@ -17,14 +17,15 @@ class TeamService{
     }
 
     /**
-     * get count of teams created by user
+     * get count of teams created or joined by user
      *
      * @var integer $user
+     * @var string $role
      *
      * @return integer
      */
-    public function getUserCreatedTeamsCount($user){
-
+    public function getUserTeamsCount($user, $role)
+    {
         $query = $this->entityManager
             ->createQueryBuilder()
             ->select('COUNT(t.team)')
@@ -32,29 +33,31 @@ class TeamService{
             ->where('t.user = ?1')
             ->andWhere('t.role = ?2')
             ->setParameter(1, $user)
-            ->setParameter(2, 'Owner');
+            ->setParameter(2, $role);
         $count = $query->getQuery()->getSingleScalarResult();
 
         return $count;
     }
 
     /**
-     * get teams created by user
+     * get teams created and joined by user
      *
      * @var integer $user
      * @var string $role
      *
      * @return array
      */
-    public function getUserTeams($user){
-
+    public function getUserTeams($user)
+    {
         $query = $this->entityManager
             ->createQuery('
-                SELECT team, IDENTITY(tu.user), tu.role, COUNT(tu.team) as playersCount, t FROM BasketPlanner\TeamBundle\Entity\Team team
-                LEFT JOIN team.teamUser tu
+                SELECT team, IDENTITY(tu.user), tu.role, t FROM BasketPlanner\TeamBundle\Entity\Team team
                 LEFT JOIN team.type t
+                INNER JOIN BasketPlanner\TeamBundle\Entity\TeamUser tu
+                WITH team.id=tu.team
+                WHERE tu.user = :userId
                 GROUP BY tu.team
-                HAVING tu.user = :userId')
+                ')
             ->setParameter('userId', $user);
         $teams = $query->getArrayResult();
 
@@ -62,24 +65,44 @@ class TeamService{
     }
 
     /**
-     * get count of teams members
+     * get count of teams players
      *
      * @var integer $team Team id
      *
      * @return integer
      */
-    public function getTeamMembersCount($user){
-
+    public function getTeamPlayersCount($team)
+    {
         $query = $this->entityManager
             ->createQueryBuilder()
-            ->select('IDENTITY(t.user) as user,IDENTITY(t.team) as team, COUNT(t.team) as playersCount')
+            ->select('COUNT(t.user)')
             ->from('BasketPlannerTeamBundle:TeamUser','t')
-            ->groupby('t.team')
-            ->having('t.user = ?1')
-            ->setParameter(1, $user);
-        $count = $query->getQuery()->getArrayResult();
+            ->where('t.team = ?1')
+            ->setParameter(1, $team);
+        $count = $query->getQuery()->getSingleScalarResult();
 
         return $count;
+    }
+
+    /**
+     * get list of teams players
+     *
+     * @var integer $team Team id
+     *
+     * @return array
+     */
+    public function getTeamPlayers($team)
+    {
+        $query = $this->entityManager->createQuery("
+            SELECT u.id, u.firstName, u.lastName, u.profilePicture, tp.role
+                FROM BasketPlannerTeamBundle:TeamUser tp
+                JOIN BasketPlannerUserBundle:User u
+                WITH tp.user = u.id
+                WHERE tp.team = :team")
+            ->setParameter('team', $team);
+        $teams = $query->getArrayResult();
+
+        return $teams;
     }
 
     /**
@@ -91,14 +114,14 @@ class TeamService{
      *
      * @return TeamUser
      */
-    public function createTeamPlayer(User $user, Team $team, $role){
+    public function createTeamPlayer(User $user, Team $team, $role)
+    {
         $teamPlayer = new TeamUser();
         $teamPlayer->setUser($user);
         $teamPlayer->setTeam($team);
         $teamPlayer->setRole($role);
 
         return $teamPlayer;
-
     }
 
     /**
@@ -106,7 +129,8 @@ class TeamService{
      *
      * @return array
      */
-    public function getPossibleRoles(){
+    public function getPossibleRoles()
+    {
         return array(
             'Owner' => 'Sąvininkas',
             'Assistant' => 'Padėjėjas',

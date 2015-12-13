@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
  * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="BasketPlanner\UserBundle\Repository\UserRepository")
  */
 class User extends BaseUser
 {
@@ -75,7 +75,7 @@ class User extends BaseUser
     /**
      * @var int
      *
-     * @ORM\Column(name="age", type="integer", length=2, nullable=true)
+     * @ORM\Column(name="age", type="integer", length=2, options={"default" : 0}, nullable=true)
      */
     protected $age;
 

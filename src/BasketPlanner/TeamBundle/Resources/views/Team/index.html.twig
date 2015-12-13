@@ -33,7 +33,7 @@
                                     </a>
                                 </td>
                                 <td>{{ team[0].type.name }}</td>
-                                <td>{{ team.playersCount }}/{{ team[0].type.players }}</td>
+                                <td>{{ teamService.getTeamPlayersCount(team[0].id) }}{# {{ team.playersCount }}#}/{{ team[0].type.players }}</td>
                                 {% if team.role == "Owner" %}
                                     <td>Sąvininkas</td>
                                 {% else %}

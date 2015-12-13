@@ -4,8 +4,7 @@ namespace BasketPlanner\TeamBundle\Controller;
 
 use BasketPlanner\TeamBundle\Form\TeamType;
 use BasketPlanner\TeamBundle\Entity\Team;
-use BasketPlanner\TeamBundle\Entity\TeamUser;
-use BasketPlanner\MatchBundle\Entity\Type;
+use BasketPlanner\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +14,26 @@ class TeamController extends Controller
 
     public function indexAction()
     {
-        $teamService = $this->get('basketplanner_team.team_service');
+        $teamManager = $this->get('basketplanner_team.team_manager');
         $user = $this->getUser()->getId();
-        $teams = $teamService->getUserTeams($user);
+        $teams = $teamManager->getUserTeams($user);
 
         return $this->render('BasketPlannerTeamBundle:Team:index.html.twig', array(
             'teams' => $teams,
+        ));
+    }
+
+    public function searchAction(Request $request)
+    {
+        $string = $request->get('searchText');
+        $users = $this->getDoctrine()
+            ->getRepository('BasketPlannerUserBundle:User')
+            ->findByLetters($string);
+
+        $response = json_encode($users);
+
+        return new Response($response, 200, array(
+            'Content-Type' => 'application/json'
         ));
     }
 
@@ -39,13 +52,13 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($form->isValid()) {
-            $teamService = $this->get('basketplanner_team.team_service');
+            $teamManager = $this->get('basketplanner_team.team_manager');
             $limit = $this->container->getParameter('basket_planner_team.created_teams_limit');
 
-            if ($teamService->getUserCreatedTeamsCount($this->getUser()->getId()) <= $limit ){
+            if ($teamManager->getUserTeamsCount($this->getUser()->getId(), 'Owner') <= $limit ){
                 $team->setCreated(new \DateTime('now'));
                 $user = $this->getUser();
-                $teamPlayer = $teamService->createTeamPlayer($user, $team, 'Owner');
+                $teamPlayer = $teamManager->createTeamPlayer($user, $team, 'Owner');
 
                 $em->persist($team);
                 $em->persist($teamPlayer);
@@ -70,13 +83,8 @@ class TeamController extends Controller
 
     public function showAction(Team $team)
     {
-        $em = $this->getDoctrine()->getManager();
-        $players = $em->createQuery("
-            SELECT u.id, u.firstName, u.lastName, u.profilePicture, tp.role
-                FROM BasketPlannerTeamBundle:TeamUser tp
-                JOIN BasketPlannerUserBundle:User u
-                WITH tp.user = u.id
-                WHERE tp.team = ".$team->getId())->getArrayResult();
+        $teamManager = $this->get('basketplanner_team.team_manager');
+        $players = $teamManager->getTeamPlayers($team->getId());
         return $this->render('BasketPlannerTeamBundle:Team:show.html.twig', [
                 'team' => $team,
                 'players' => $players,

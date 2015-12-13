@@ -40,6 +40,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ path('basket_planner_team_homepage') }}" title="Komandos">
+                        <i class=" fa fa-users  "></i>
+                        <span> Komandos</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ path('basket_planner_user_notification') }}" title="Pranešimai">
                         <i class=" fa fa-bell "></i>
                         <span> Pranešimai ({{ userNotifications.getUnreadNotificationsCount(app.user.id) }})</span>

@@ -19,9 +19,15 @@ class ProfileController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
         $userProfile = $em->getRepository('BasketPlannerUserBundle:User')->findOneBy(array('id' => $id));
+        $teamService = $this->get('basketplanner_team.team_service');
+        $teamStatistics = array(
+            'created' => $teamService->getUserTeamsCount($id, 'Owner'),
+            'joined' => $teamService->getUserTeamsCount($id, 'Player')
+        );
 
         return $this->render('BasketPlannerUserBundle:Profile:show.html.twig', [
             'user' => $userProfile,
+            'teamStatistics' => $teamStatistics
         ]);
     }
 

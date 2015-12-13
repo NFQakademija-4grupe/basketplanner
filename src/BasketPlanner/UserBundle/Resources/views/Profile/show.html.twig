@@ -5,20 +5,28 @@
         <div class="col-sm-12">
             <!-- START panel-->
             <div class="panel panel-default">
-                <div class="panel-heading"><h1>Vartotojas : {{ user.getFullName() }} </h1></div>
+                <div class="panel-heading">
+                    <h1>
+                        <img role="button" alt="Image"
+                             class='img-thumbnail img-circle thumb48'
+                             src='{{ user.profilePicture }}'
+                             data-content="{{ user.fullName }}"
+                             data-container="body" data-toggle="popover"
+                             data-placement="top"
+                             data-trigger="focus">
+                        {{ user.getFullName() }}
+                    </h1>
+                </div>
                 <div class="panel-body">
-                    <img role="button" alt="Image"
-                         class='img-thumbnail img-circle thumb48'
-                         src='{{ user.profilePicture }}'
-                         data-content="{{ user.fullName }}"
-                         data-container="body" data-toggle="popover"
-                         data-placement="top"
-                         data-trigger="focus">
+
                     <div><h3>El. paštas:</h3> {{ user.email }}</div>
                     <div><h3>Vardas:</h3> {{ user.firstName }}</div>
                     <div><h3>Pavardė:</h3> {{ user.lastName }}</div>
                     <div><h3>Lytis:</h3> {{ user.gender }}</div>
                     <div><h3>Amžius:</h3> {{ user.age }}</div>
+                    <div><h3>Sukurta komandų:</h3> {{ teamStatistics.created }}</div>
+                    <div><h3>Prisijungta prie komandų:</h3> {{ teamStatistics.joined }}</div>
+
                 </div>
             </div>
         </div>

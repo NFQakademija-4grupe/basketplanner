@@ -13,3 +13,7 @@ basket_planner_team_show:
     methods: [GET]
     requirements:
         id: \d+
+
+basket_planner_team.search:
+   path: /search-user
+   defaults: { _controller: BasketPlannerTeamBundle:Team:search }

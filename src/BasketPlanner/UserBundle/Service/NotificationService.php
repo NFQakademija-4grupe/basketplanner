@@ -98,7 +98,7 @@ class NotificationService {
         try {
             $this->notificationsProducer->publish(serialize($msg), 'notifications');
         }catch (\Exception  $e){
-
+            // if rabbitmq server is down ignore messanger
         }
     }
 
@@ -119,7 +119,7 @@ class NotificationService {
         try {
             $this->emailProducer->publish(serialize($msg), 'send_email');
         }catch (\Exception  $e){
-
+            // if rabbitmq server is down ignore messanger
         }
     }
 

@@ -3,7 +3,7 @@ services:
 #        class: BasketPlanner\Bundle\TeamBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
 
-    basketplanner_team.team_service:
-        class: BasketPlanner\TeamBundle\Service\TeamService
+    basketplanner_team.team_manager:
+        class: BasketPlanner\TeamBundle\Manager\TeamManager
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
