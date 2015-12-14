@@ -19,7 +19,6 @@ class UserRepository extends EntityRepository
             ->setParameter('string','%'.$string.'%')
             ->setParameter('space',' ');
         $results = $users->getResult();
-        die(var_dump($users->getSQL()));
 
         return $results;
     }
