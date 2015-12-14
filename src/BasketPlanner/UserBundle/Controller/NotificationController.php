@@ -43,8 +43,9 @@ class NotificationController extends Controller
       ]);
     }
 
-    public function deleteAction(Request $request){
-        if($request->isXmlHttpRequest()) {
+    public function deleteAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
             $id = $request->get('id');
 
             $em = $this->getDoctrine()->getManager();
@@ -67,16 +68,23 @@ class NotificationController extends Controller
                 $em->flush();
             }
 
-            $response = json_encode(array('delete' => 'yes'));
+            $response = json_encode(array('message' => 'Pranešimas ištrintas'));
 
             return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!'));
+
+            return new Response($response, 400, array(
                 'Content-Type' => 'application/json'
             ));
         }
     }
 
-    public function updateStatusAction(Request $request){
-        if($request->isXmlHttpRequest()) {
+    public function updateStatusAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
             $id = $request->get('id');
 
             $em = $this->getDoctrine()->getManager();
@@ -87,9 +95,15 @@ class NotificationController extends Controller
             $em->persist($notifiedUser);
             $em->flush();
 
-            $response = json_encode(array('seen' => 'yes'));
+            $response = json_encode(array('message' => 'Pranešimo statusas pakeistas!'));
 
             return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        }else{
+            $response = json_encode(array('message' => 'Jūs neturite priegos!'));
+
+            return new Response($response, 400, array(
                 'Content-Type' => 'application/json'
             ));
         }

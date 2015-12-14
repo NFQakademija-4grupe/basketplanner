@@ -8,6 +8,7 @@ use BasketPlanner\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TeamController extends Controller
 {
@@ -25,16 +26,20 @@ class TeamController extends Controller
 
     public function searchAction(Request $request)
     {
-        $string = $request->get('searchText');
-        $users = $this->getDoctrine()
-            ->getRepository('BasketPlannerUserBundle:User')
-            ->findByLetters($string);
+        if ($request->isXmlHttpRequest()) {
+            $string = $request->get('searchText');
+            $users = $this->getDoctrine()
+                ->getRepository('BasketPlannerUserBundle:User')
+                ->findByLetters($string);
 
-        $response = json_encode($users);
+            return new JsonResponse($users);
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!'));
 
-        return new Response($response, 200, array(
-            'Content-Type' => 'application/json'
-        ));
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
     }
 
     /**

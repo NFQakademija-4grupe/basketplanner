@@ -10,11 +10,14 @@ class UserRepository extends EntityRepository
 
     public function findByLetters($string)
     {
-
-        return $this->getEntityManager()->createQuery('SELECT u FROM BasketPlannerUserBundle:User u
-                WHERE u.firstname LIKE :string OR u.lastname LIKE :string OR u.email LIKE :string')
+        $users = $this->getEntityManager()
+            ->createQuery('
+                SELECT u.id, u.profilePicture, u.firstName, u.lastName, u.email  FROM BasketPlannerUserBundle:User u
+                WHERE CONCAT(u.firstName, u.lastName) LIKE :string
+                OR u.email LIKE :string')
             ->setParameter('string','%'.$string.'%')
             ->getResult();
 
+        return $users;
     }
 }
