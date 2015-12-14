@@ -105,21 +105,25 @@
 
             var engine = new Bloodhound({
                 datumTokenizer: function (datum) {
-                    return Bloodhound.tokenizers.whitespace(datum.firstName);
+                    return Bloodhound.tokenizers.whitespace(datum.fullName);
                 },
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: {
+                remote: {
                     url: '{{ url('basket_planner_team.search')}}',
-                    filter: function (data) {
-                        console.log("data", data)
-                        return $.map(data, function (user) {
+                    prepare: function (query, settings) {
+                        settings.type = "POST";
+                        settings.contentType = "application/json; charset=UTF-8";
+                        settings.data = query;
+                        return settings;
+                    },
+                    filter: function(data) {
+                        return $.map(data, function(user) {
                             return {
                                 id: user.id,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
+                                fullName: user.fullName,
                                 email: user.email,
                                 profilePicture: user.profilePicture
-                            };
+                            }
                         });
                     }
                 }
@@ -143,7 +147,7 @@
             },
             {
                 name: 'engine',
-                displayKey: 'firstName',
+                displayKey: 'fullName',
                 source: engine.ttAdapter(),
                 templates: {
                     empty: [
@@ -155,7 +159,7 @@
                     suggestion: Handlebars.compile('<div class="hint-large">' +
                      '<a class="pull-left" href="#">' +
                         '<img role="button" alt="Image" class="media-object img-rounded author-img thumb16" src= "{{profilePicture}}">' +
-                     '</a><div class="media-body tt-hint-body">{{firstName}} {{lastName}} <small> {{email}} </small> </div>' +
+                     '</a><div class="media-body tt-hint-body">{{fullName}} <small> {{email}} </small> </div>' +
                      '</div>')
                     {% endverbatim %}
                 }

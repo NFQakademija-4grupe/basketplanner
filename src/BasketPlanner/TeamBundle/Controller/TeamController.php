@@ -26,9 +26,8 @@ class TeamController extends Controller
 
     public function searchAction(Request $request)
     {
-        die(var_dump('asd'));
         if ($request->isXmlHttpRequest()) {
-            $string = $request->get('searchText');
+            $string = $request->getContent(false);
             $users = $this->getDoctrine()
                 ->getRepository('BasketPlannerUserBundle:User')
                 ->findByLetters($string);
