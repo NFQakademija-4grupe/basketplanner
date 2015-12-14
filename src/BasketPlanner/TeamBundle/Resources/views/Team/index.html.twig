@@ -12,7 +12,7 @@
             <div class="panel panel-default panel-warning">
                 <div class="panel-body">
                     <div class="form-group">
-                        <div class="col-lg-12 col-sm-12">
+                        <div class="col-lg-12 col-sm-12" id="userSearch">
                             <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
                         </div>
                     </div>
@@ -127,7 +127,7 @@
 
             engine.initialize();
 
-            $('.typeahead').typeahead(
+            $('#userSearch .typeahead').typeahead(
             {
                 hint: true,
                 highlight: true,
@@ -147,12 +147,16 @@
                 source: engine.ttAdapter(),
                 templates: {
                     empty: [
-                        '<div class="empty-message">',
+                        '<div class="empty-message hint-large">',
                         'Pagal šią užklausą vartotojų rasti nepavyko.',
                         '</div>'
                     ].join('\n'),
                     {% verbatim %}
-                    suggestion: Handlebars.compile(' <div class="twitter-typeahead hint-large">{{firstName}} {{lastName}}</strong> {{email}}</div>')
+                    suggestion: Handlebars.compile('<div class="hint-large">' +
+                     '<a class="pull-left" href="#">' +
+                        '<img role="button" alt="Image" class="media-object img-rounded author-img thumb16" src= "{{profilePicture}}">' +
+                     '</a><div class="media-body tt-hint-body">{{firstName}} {{lastName}} <small> {{email}} </small> </div>' +
+                     '</div>')
                     {% endverbatim %}
                 }
             });

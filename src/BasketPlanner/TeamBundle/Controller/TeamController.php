@@ -26,6 +26,7 @@ class TeamController extends Controller
 
     public function searchAction(Request $request)
     {
+        die(var_dump('asd'));
         if ($request->isXmlHttpRequest()) {
             $string = $request->get('searchText');
             $users = $this->getDoctrine()
