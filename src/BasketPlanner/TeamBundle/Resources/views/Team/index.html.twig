@@ -12,20 +12,26 @@
             <div class="panel panel-default panel-warning">
                 <div class="panel-body">
                     <div class="form-group">
-                        <div class="col-lg-5 col-sm-6" id="userSearch">
-                            <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
+                        <div class="row">
+                            <div class="col-lg-5 col-sm-6" id="userSearch">
+                                <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
+                            </div>
+                            {{ form_start(invite, {'attr':{'id': 'team-invite-form'}}) }}
+                            <div class="col-lg-5 col-sm-6" id="teamSelect">
+                                {{ form_errors(invite.user) }}
+                                {# , {'attr': {'style':'display:none'}} #}
+                                {{ form_widget(invite.user, {'attr': {'style':'display:none'}})}}
+                                {{ form_widget(invite.team, {'attr': {'class':'input-lg form-control'}}) }}
+                            </div>
+                            <div class="col-lg-2 col-sm-6">
+                                {{ form_widget(invite.save, {'attr': {'class':'btn-match', 'style':'margin-top:0px'}}) }}
+                            </div>
+                            {{ form_end(invite) }}
                         </div>
-                        {{ form_start(invite, {'attr':{'id': 'team-invite-form'}}) }}
-                        <div class="col-lg-5 col-sm-6" id="teamSelect">
-                            {{ form_errors(invite.user) }}
-                            {# , {'attr': {'style':'display:none'}} #}
-                            {{ form_widget(invite.user)}}
-                            {{ form_widget(invite.team, {'attr': {'class':'input-lg form-control'}}) }}
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-6" id="invite-messages">
+                            </div>
                         </div>
-                        <div class="col-lg-2 col-sm-6" id="teamSelect">
-                            {{ form_widget(invite.save, {'attr': {'class':'btn-match', 'style':'margin-top:0px'}}) }}
-                        </div>
-                        {{ form_end(invite) }}
                     </div>
                 </div>
             </div>
@@ -191,7 +197,11 @@
                     url: "{{ url('basket_planner_team.invite.create') }}",
                     data: obj,
                     success: function(data) {
-                        alert(data['message']);
+                        $('.typeahead').typeahead('val','');
+                        $('#basketplanner_teambundle_invite_user option:selected').val(0);
+                        $('#basketplanner_teambundle_invite_user option:selected').text('');
+                        $('#basketplanner_teambundle_invite_team').prop('selectedIndex',0);
+                        $('#invite-messages').text(data['message']);
                     }
                 });
 

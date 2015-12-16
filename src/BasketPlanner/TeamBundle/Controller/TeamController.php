@@ -114,10 +114,10 @@ class TeamController extends Controller
 
             $em = $this->getDoctrine()->getEntityManager();
             $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
-                'team' => $userId,
-                'user' => $teamId
+                'team' => $teamId,
+                'user' => $userId
             ));
-            if ($inviteExists == null) {
+            if ($inviteExists === null) {
                 $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
                 $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
