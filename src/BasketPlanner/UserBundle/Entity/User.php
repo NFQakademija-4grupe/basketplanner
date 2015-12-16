@@ -4,6 +4,7 @@ namespace BasketPlanner\UserBundle\Entity;
 
 use BasketPlanner\MatchBundle\Entity\Match;
 use BasketPlanner\TeamBundle\Entity\TeamUser;
+use BasketPlanner\TeamBundle\Entity\Invite;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -140,11 +141,17 @@ class User extends BaseUser
      */
     protected $teamUser;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\Invite", mappedBy="user")
+     */
+    protected $teamInvite;
+
     public function __construct()
     {
         parent::__construct();
         $this->notificationUser = new ArrayCollection();
         $this->teamUser = new ArrayCollection();
+        $this->teamInvite = new ArrayCollection();
         $this->createdMatches = new ArrayCollection();
         $this->joinedMatches = new ArrayCollection();
     }
@@ -536,6 +543,39 @@ class User extends BaseUser
     public function getTeamUser()
     {
         return $this->teamUser;
+    }
+
+    /**
+     * Add invite
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\Invite $teamInvite
+     * @return User
+     */
+    public function addTeamInvite(Invite $teamInvite)
+    {
+        $this->teamInvite[] = $teamInvite;
+
+        return $this;
+    }
+
+    /**
+     * Remove team invite
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\Invite $teamInvite
+     */
+    public function removeTeamInvite(Invite $teamInvite)
+    {
+        $this->teamInvite->removeElement($teamInvite);
+    }
+
+    /**
+     * Get team invites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamInvite()
+    {
+        return $this->teamInvite;
     }
 
 }

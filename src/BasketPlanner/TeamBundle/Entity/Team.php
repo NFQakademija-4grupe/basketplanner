@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Team
  *
  * @ORM\Table(name="team")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Team
 {
@@ -63,9 +63,17 @@ class Team
      */
     protected $teamUser;
 
+    /**
+     * team invite association
+     *
+     * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\Invite", mappedBy="team")
+     */
+    protected $teamInvite;
+
     public function __construct()
     {
         $this->teamUser = new ArrayCollection();
+        $this->teamInvite = new ArrayCollection();
     }
 
     /**
@@ -205,5 +213,38 @@ class Team
     public function getTeamUser()
     {
         return $this->teamUser;
+    }
+
+    /**
+     * Add team invite
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\Invite $invite
+     * @return Team
+     */
+    public function addTeamInvite($teamInvite)
+    {
+        $this->teamInvite[] = $teamInvite;
+
+        return $this;
+    }
+
+    /**
+     * Remove team invite
+     *
+     * @param \BasketPlanner\TeamBundle\Entity\Invite $teamInvite
+     */
+    public function removeTeamInvite($teamInvite)
+    {
+        $this->teamInvite->removeElement($teamInvite);
+    }
+
+    /**
+     * Get team invites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamInvite()
+    {
+        return $this->teamInvite;
     }
 }

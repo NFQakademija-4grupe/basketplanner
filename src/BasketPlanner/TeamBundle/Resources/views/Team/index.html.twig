@@ -12,9 +12,20 @@
             <div class="panel panel-default panel-warning">
                 <div class="panel-body">
                     <div class="form-group">
-                        <div class="col-lg-12 col-sm-12" id="userSearch">
+                        <div class="col-lg-5 col-sm-6" id="userSearch">
                             <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
                         </div>
+                        {{ form_start(invite, {'attr':{'id': 'team-invite-form'}}) }}
+                        <div class="col-lg-5 col-sm-6" id="teamSelect">
+                            {{ form_errors(invite.user) }}
+                            {# , {'attr': {'style':'display:none'}} #}
+                            {{ form_widget(invite.user)}}
+                            {{ form_widget(invite.team, {'attr': {'class':'input-lg form-control'}}) }}
+                        </div>
+                        <div class="col-lg-2 col-sm-6" id="teamSelect">
+                            {{ form_widget(invite.save, {'attr': {'class':'btn-match', 'style':'margin-top:0px'}}) }}
+                        </div>
+                        {{ form_end(invite) }}
                     </div>
                 </div>
             </div>
@@ -42,7 +53,7 @@
                                         </a>
                                     </td>
                                     <td>{{ team[0].type.name }}</td>
-                                    <td>{{ teamService.getTeamPlayersCount(team[0].id) }}{# {{ team.playersCount }}#}/{{ team[0].type.players }}</td>
+                                    <td>{{ teamService.getTeamPlayersCount(team[0].id) }}/{{ team[0].type.players }}</td>
                                     {% if team.role == "Owner" %}
                                         <td>Sąvininkas</td>
                                     {% else %}
@@ -166,6 +177,26 @@
             });
             $('.typeahead.input-sm').siblings('input.tt-hint').addClass('hint-small');
             $('.typeahead.input-lg').siblings('input.tt-hint').addClass('hint-large');
+            $('#userSearch').bind('typeahead:selected', function(obj, datum, name) {
+                $('#basketplanner_teambundle_invite_user option:selected').val(datum.id);
+                $('#basketplanner_teambundle_invite_user option:selected').text(datum.fullName);
+            });
+
+            $('#team-invite-form').submit( function() {
+                obj = new Object();
+                obj["user"] = $('#basketplanner_teambundle_invite_user option:selected').val();
+                obj["team"] = $('#basketplanner_teambundle_invite_team option:selected').val();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('basket_planner_team.invite.create') }}",
+                    data: obj,
+                    success: function(data) {
+                        alert(data['message']);
+                    }
+                });
+
+                return false;
+            });
         });
     </script>
 {% endblock %}

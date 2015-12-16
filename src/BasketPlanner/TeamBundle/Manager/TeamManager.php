@@ -65,6 +65,33 @@ class TeamManager{
     }
 
     /**
+     * get teams created and joined by user
+     *
+     * @var integer $user
+     * @var string $role
+     *
+     * @return array
+     */
+    public function getUserTeamsByRole($user, $role)
+    {
+        $query = $this->entityManager
+            ->createQuery('
+                SELECT team, IDENTITY(tu.user), tu.role, t FROM BasketPlanner\TeamBundle\Entity\Team team
+                LEFT JOIN team.type t
+                INNER JOIN BasketPlanner\TeamBundle\Entity\TeamUser tu
+                WITH team.id=tu.team
+                WHERE tu.user = :userId
+                AND tu.role = :role
+                GROUP BY tu.team
+                ')
+            ->setParameter('userId', $user)
+            ->setParameter('role', $role);
+        $teams = $query->getArrayResult();
+
+        return $teams;
+    }
+
+    /**
      * get count of teams players
      *
      * @var integer $team Team id
