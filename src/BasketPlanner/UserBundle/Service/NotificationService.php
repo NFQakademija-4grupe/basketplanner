@@ -58,7 +58,7 @@ class NotificationService {
                      kuriame Jūs dalyvaujate, buvo surinktas.
                      Norėdami peržiūrėti prisijungusius žaidėjus ar kitą informaciją spauskite ant nuorodos:
                      <a href="'.$url.'">Mačo peržiūra</a>';
-                $this->sendNotification($result['email'], $subject, $message);
+                $this->sendNotificationMQ($result['email'], $subject, $message);
             }
         }else{
             $query = $this->entityManager
@@ -75,7 +75,7 @@ class NotificationService {
             $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($userId);
             $text = 'Naujas žaidėjas prisijungė prie mačo. Norėdami sužinoti detalesnę informaciją peržiūrėkite mačą.';
             $title = $user->getFirstName().' prisijungė prie mačo!';
-            $this->createNotification($title, $text, $url, $users);
+            $this->createNotificationMQ($title, $text, $url, $users);
         }
     }
 
@@ -89,6 +89,35 @@ class NotificationService {
      *
      */
     public function createNotification($title, $text, $url, $users){
+        $notification = new Notification();
+        $notification->setTitle($title);
+        $notification->setText($text);
+        $notification->setLink($url);
+        $notification->setDate(new \DateTime('now'));
+        $this->entityManager->persist($notification);
+
+        foreach($users as $user) {
+            $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($user['id']);
+            $notificationUser = new NotificationUser();
+            $notificationUser->setUser($user);
+            $notificationUser->setNotification($notification);
+            $notificationUser->setSeen(false);
+            $this->entityManager->persist($user);
+            $this->entityManager->persist($notificationUser);
+        }
+        $this->entityManager->flush();
+    }
+
+    /**
+     * create notification with message queue
+     *
+     * @var string $title
+     * @var string $text
+     * @var string $url
+     * @var array $users
+     *
+     */
+    public function createNotificationMQ($title, $text, $url, $users){
         $msg = array(
             'title' => $title,
             'text' => $text,
@@ -103,14 +132,14 @@ class NotificationService {
     }
 
     /**
-     * send notification
+     * send notification with message queue
      *
      * @var string $email
      * @var string $subject
      * @var string $message
      *
      */
-    public function sendNotification($email, $subject, $message){
+    public function sendNotificationMQ($email, $subject, $message){
         $msg = array(
             'email' => $email,
             'subject' => $subject,

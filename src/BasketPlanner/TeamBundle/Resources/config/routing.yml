@@ -2,7 +2,7 @@ basket_planner_team_homepage:
     path:     /
     defaults: { _controller: BasketPlannerTeamBundle:Team:index }
 
-basket_planner_team_create:
+basket_planner_team.create:
     path:     /create
     defaults: { _controller: BasketPlannerTeamBundle:Team:create }
     methods: [GET, POST]

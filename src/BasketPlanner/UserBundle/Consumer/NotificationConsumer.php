@@ -37,7 +37,6 @@ class NotificationConsumer implements ConsumerInterface
             $this->entityManager->persist($notification);
 
             foreach($users as $user) {
-                $this->logger->info('Got userID: '.$user['id']);
                 $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($user['id']);
                 $notificationUser = new NotificationUser();
                 $notificationUser->setUser($user);

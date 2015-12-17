@@ -19,7 +19,7 @@ class ProfileController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
         $userProfile = $em->getRepository('BasketPlannerUserBundle:User')->findOneBy(array('id' => $id));
-        $teamService = $this->get('basketplanner_team.team_service');
+        $teamService = $this->get('basketplanner_team.team_manager');
         $teamStatistics = array(
             'created' => $teamService->getUserTeamsCount($id, 'Owner'),
             'joined' => $teamService->getUserTeamsCount($id, 'Player')

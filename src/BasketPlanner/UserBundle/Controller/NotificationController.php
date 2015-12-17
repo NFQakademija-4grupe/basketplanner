@@ -20,8 +20,7 @@ class NotificationController extends Controller
      */
     public function showAction(Request $request, $page)
     {
-        $em = $this->getDoctrine()
-                   ->getManager()->createQueryBuilder();
+        $em = $this->getDoctrine()->getManager()->createQueryBuilder();
 
         $query = $em->select('n, u.seen')
                     ->from('BasketPlannerUserBundle:Notification', 'n')
@@ -53,7 +52,9 @@ class NotificationController extends Controller
             $repository = $em->getRepository('BasketPlannerUserBundle:NotificationUser');
             $notifiedUser = $repository->findOneBy(array('notification'=> $id, 'user'=> $this->getUser()->getId() ));
 
-            $query = $em->createQuery('SELECT COUNT(n.id) FROM BasketPlanner\UserBundle\Entity\NotificationUser n WHERE n.notification ='.$id);
+            $query = $em->createQuery('SELECT COUNT(n.id)
+                                       FROM BasketPlanner\UserBundle\Entity\NotificationUser n
+                                       WHERE n.notification ='.$id);
             $count = $query->getSingleScalarResult();
 
             if($count == 1 ){

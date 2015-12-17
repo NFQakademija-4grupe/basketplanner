@@ -29,50 +29,91 @@
                             {{ form_end(invite) }}
                         </div>
                         <div class="row">
-                            <div class="col-lg-2 col-sm-6" id="invite-messages">
+                            <div class="col-lg-12 col-sm-12" id="invite-messages">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {# team invites table #}
+            <div class="panel panel-default panel-warning">
+                <div class="panel-heading panel-warning">Pakvietimai</div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="team-invites" class="table table-striped table-hover datatable">
+                            <thead>
+                            <tr>
+                                <th>Vartotojas</th>
+                                <th>Komanda</th>
+                                <th>Statusas</th>
+                                <th>Sukurta</th>
+                                <th>Veiksmai</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for invite in invites %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('basket_planner_user_profile', {'id': invite.id}) }}">
+                                            {{ invite.firstName }} {{ invite.lastName }}
+                                        </a>
+                                    </td>
+                                    <td>{{ invite.name }}</td>
+                                    {% if invite.status == "New" %}
+                                        <td>Neperžiūrėtas</td>
+                                    {% elseif invite.status == "Seen" %}
+                                        <td>Peržiūrėtas</td>
+                                    {% else%}
+                                        <td>Atmestas</td>
+                                    {% endif %}
+                                    <td>{{ invite.created.format('M d Y H:i') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {# team table #}
             <div class="panel panel-default panel-warning">
                 <div class="panel-heading panel-warning">Komandos</div>
                 <div class="panel-body">
-                    <div class="col-lg-12">
-                        <div class="table-responsive">
-                            <table id="datatable1" class="table table-striped table-hover datatable">
-                                <thead>
-                                <tr>
-                                    <th>Pavadinimas</th>
-                                    <th>Tipas</th>
-                                    <th>Žaidėjų skaičius</th>
-                                    <th>Teisės</th>
-                                    <th>Sukurta</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for team in teams %}
-                                <tr>
-                                    <td>
-                                        <a href="{{ path('basket_planner_team_show', {'id': team[0].id}) }}">
-                                            {{ team[0].name }}
-                                        </a>
-                                    </td>
-                                    <td>{{ team[0].type.name }}</td>
-                                    <td>{{ teamService.getTeamPlayersCount(team[0].id) }}/{{ team[0].type.players }}</td>
-                                    {% if team.role == "Owner" %}
-                                        <td>Sąvininkas</td>
-                                    {% else %}
-                                        <td>Žaidėjas</td>
-                                    {% endif %}
-                                    <td>{{ team[0].created.format('M d Y H:i') }}</td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table id="teams" class="table table-striped table-hover datatable">
+                            <thead>
+                            <tr>
+                                <th>Pavadinimas</th>
+                                <th>Tipas</th>
+                                <th>Žaidėjų skaičius</th>
+                                <th>Teisės</th>
+                                <th>Sukurta</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for team in teams %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('basket_planner_team_show', {'id': team[0].id}) }}">
+                                        {{ team[0].name }}
+                                    </a>
+                                </td>
+                                <td>{{ team[0].type.name }}</td>
+                                <td>{{ teamService.getTeamPlayersCount(team[0].id) }}/{{ team[0].type.players }}</td>
+                                {% if team.role == "Owner" %}
+                                    <td>Sąvininkas</td>
+                                {% else %}
+                                    <td>Žaidėjas</td>
+                                {% endif %}
+                                <td>{{ team[0].created.format('M d Y H:i') }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -97,7 +138,7 @@
             });
         });
         $(document).ready(function () {
-            $('#datatable1').DataTable({
+            $('#teams').DataTable({
                 'paging': true,  // Table pagination
                 'ordering': true,  // Column ordering
                 'info': false,  // Bottom left status text

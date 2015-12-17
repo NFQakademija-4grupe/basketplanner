@@ -20,14 +20,15 @@ class TeamController extends Controller
     {
         $invite = new Invite();
         $form = $this->createForm(new InviteType($this->getUser()->getId()), $invite);
-        $form->handleRequest($request);
 
         $teamManager = $this->get('basketplanner_team.team_manager');
         $user = $this->getUser()->getId();
         $teams = $teamManager->getUserTeams($user);
+        $invites = $teamManager->getUserCreatedInvites($user);
 
         return $this->render('BasketPlannerTeamBundle:Team:index.html.twig', array(
             'teams' => $teams,
+            'invites' => $invites,
             'invite' => $form->createView()
         ));
     }
@@ -99,6 +100,7 @@ class TeamController extends Controller
     {
         $teamManager = $this->get('basketplanner_team.team_manager');
         $players = $teamManager->getTeamPlayers($team->getId());
+
         return $this->render('BasketPlannerTeamBundle:Team:show.html.twig', [
                 'team' => $team,
                 'players' => $players,
@@ -110,32 +112,48 @@ class TeamController extends Controller
         if ($request->isXmlHttpRequest()) {
             $userId = $request->get('user');
             $teamId = $request->get('team');
+            $teamManager = $this->get('basketplanner_team.team_manager');
+            $em = $this->getDoctrine()->getEntityManager();
+
             $message = '';
 
-            $em = $this->getDoctrine()->getEntityManager();
-            $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
-                'team' => $teamId,
-                'user' => $userId
-            ));
-            if ($inviteExists === null) {
-                $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
-                $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+            $teamPlayers = $teamManager->getTeamPlayersCount($teamId);
+            $teamPlayersLimit = $teamManager->getTeamPlayersLimit($teamId);
 
-                $invite = new Invite();
-                $invite->setStatus('New');
-                $invite->setUser($user);
-                $invite->setTeam($team);
-                $invite->setCreated(new \DateTime('now'));
+            if ($teamPlayers < $teamPlayersLimit)
+            {
+                $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
+                    'team' => $teamId,
+                    'user' => $userId
+                ));
 
-                $em->persist($user);
-                $em->persist($team);
-                $em->persist($invite);
+                if ($inviteExists === null)
+                {
+                    $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
+                    $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
-                $em->flush();
+                    if ($user != null && $team != null)
+                    {
+                        $invite = new Invite();
+                        $invite->setStatus('New');
+                        $invite->setUser($user);
+                        $invite->setTeam($team);
+                        $invite->setCreated(new \DateTime('now'));
 
-                $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
-            }else{
-                $message = 'Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!';
+                        $em->persist($user);
+                        $em->persist($team);
+                        $em->persist($invite);
+                        $em->flush();
+
+                        $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
+                    } else {
+                        $message = 'Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!';
+                    }
+                } else {
+                    $message = 'Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!';
+                }
+            } else {
+                $message = 'Įvyko klaida! Komanda jau pilna!';
             }
 
             $response = json_encode(array('message' => $message ));

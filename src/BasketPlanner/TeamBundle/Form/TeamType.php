@@ -30,8 +30,9 @@ class TeamType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'query_builder' => function (EntityRepository $er) {
-                    return $er
-                        ->createQueryBuilder('c');
+                    return $er->createQueryBuilder('t')
+                              ->select('t')
+                              ->where('t.players <> 2');
                 }
             ]);
     }

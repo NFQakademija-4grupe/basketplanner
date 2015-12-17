@@ -112,6 +112,31 @@ class TeamManager{
     }
 
     /**
+     * get invites
+     *
+     * @var integer $user user id
+     *
+     * @return array
+     */
+    public function getUserCreatedInvites($user)
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('inv.status, inv.created, t.name, u.id, u.firstName, u.lastName')
+            ->from('BasketPlannerTeamBundle:Invite','inv')
+            ->leftJoin('inv.team','t')
+            ->leftJoin('inv.user','u')
+            ->leftJoin('t.teamUser','tu')
+            ->where('tu.user = ?1')
+            ->andWhere('tu.role = ?2')
+            ->setParameter(1, $user)
+            ->setParameter(2, 'Owner');
+        $results = $query->getQuery()->getArrayResult();
+
+        return $results;
+    }
+
+    /**
      * get list of teams players
      *
      * @var integer $team Team id
@@ -130,6 +155,28 @@ class TeamManager{
         $teams = $query->getArrayResult();
 
         return $teams;
+    }
+
+    /**
+     * get max team players
+     *
+     * @var integer $team Team id
+     *
+     * @return integer
+     */
+    public function getTeamPlayersLimit($team)
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('t.players')
+            ->from('BasketPlannerTeamBundle:Team','team')
+            ->leftJoin('team.type','t')
+            ->where('team.id = ?1')
+            ->setParameter(1, $team);
+
+        $limit = $query->getFirstResult();
+
+        return $limit;
     }
 
     /**
