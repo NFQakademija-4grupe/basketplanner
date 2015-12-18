@@ -131,8 +131,12 @@ class TeamManager{
             ->setParameter(1, $team)
             ->setParameter(2, $user);
         $results = $query->getQuery()->getArrayResult();
-        $object = $results[0];
-        $role = $object['role'];
+        if ($results !== null) {
+            $object = $results[0];
+            $role = $object['role'];
+        }else{
+            return null;
+        }
 
         return $role;
     }

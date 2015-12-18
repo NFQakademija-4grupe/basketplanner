@@ -2,6 +2,7 @@
 
 namespace BasketPlanner\TeamBundle\Controller;
 
+use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\TeamBundle\Form\TeamType;
 use BasketPlanner\TeamBundle\Form\InviteType;
 use BasketPlanner\TeamBundle\Entity\Team;
@@ -117,45 +118,47 @@ class TeamController extends Controller
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
-            $teamPlayers = $teamManager->getTeamPlayersCount($teamId);
-            $teamPlayersLimit = $teamManager->getTeamPlayersLimit($teamId);
+            //check if user is not a member of team
+            if ($teamManager->getUserRoleInTeam($userId, $teamId) === null) {
+                //check if team is not full
+                if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId)) {
+                    $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
+                        'team' => $teamId,
+                        'user' => $userId
+                    ));
 
-            if ($teamPlayers < $teamPlayersLimit)
-            {
-                $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
-                    'team' => $teamId,
-                    'user' => $userId
-                ));
+                    //check if invite to same user and team already exists
+                    if ($inviteExists === null) {
+                        $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
+                        $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
-                if ($inviteExists === null)
-                {
-                    $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
-                    $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+                        if ($user != null && $team != null) {
+                            $invite = new Invite();
+                            $invite->setStatus('New');
+                            $invite->setUser($user);
+                            $invite->setTeam($team);
+                            $invite->setCreated(new \DateTime('now'));
 
-                    if ($user != null && $team != null)
-                    {
-                        $invite = new Invite();
-                        $invite->setStatus('New');
-                        $invite->setUser($user);
-                        $invite->setTeam($team);
-                        $invite->setCreated(new \DateTime('now'));
+                            $em->persist($user);
+                            $em->persist($team);
+                            $em->persist($invite);
+                            $em->flush();
 
-                        $em->persist($user);
-                        $em->persist($team);
-                        $em->persist($invite);
-                        $em->flush();
-
-                        $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
-                        $status = 'ok';
+                            $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
+                            $status = 'ok';
+                        } else {
+                            $message = 'Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!';
+                        }
                     } else {
-                        $message = 'Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!';
+                        $message = 'Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!';
                     }
                 } else {
-                    $message = 'Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!';
+                    $message = 'Įvyko klaida! Komanda jau pilna!';
                 }
             } else {
-                $message = 'Įvyko klaida! Komanda jau pilna!';
+                $message = 'Įvyko klaida! Šis žaidėjas jau yra šioje komandoje!';
             }
+
 
             $response = json_encode(array('message' => $message, 'status' => $status));
 
@@ -211,4 +214,98 @@ class TeamController extends Controller
         }
     }
 
+    public function inviteAcceptAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest())
+        {
+            $message = '';
+            $status = 'failed';
+            $userId = $this->getUser()->getId();
+            $inviteId = $request->get('inviteId');
+            $teamManager = $this->get('basketplanner_team.team_manager');
+            $em = $this->getDoctrine()->getEntityManager();
+
+            $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+
+            if($invite !== null)
+            {
+                if ($invite->getUser()->getId() === $userId) {
+                    $teamId = $invite->getTeam()->getId();
+                    if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId)) {
+                        $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
+                        $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+
+                        $teamUser = new TeamUser();
+                        $teamUser->setUser($user);
+                        $teamUser->setTeam($team);
+                        $teamUser->setRole('Player');
+
+                        //TO DO: notificate team players about new user
+                        $em->persist($teamUser);
+                        $em->remove($invite);
+                        $em->flush();
+
+                        $message = 'Jūs sėkmingai prisijungėte prie komandos!';
+                        $status = 'ok';
+                    } else {
+                        $message = 'Pasiektas komandos žaidėjų limitas!';
+                    }
+                }else{
+                    $message = 'Pasiektas komandos žaidėjų limitas!';
+                }
+            }else{
+                $message = 'Jūs neturite priegos!';
+            }
+            $response = json_encode(array('message' => $message, 'status' => $status ));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
+
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
+
+    public function inviteChangeStatusAction(Request $request){
+        if ($request->isXmlHttpRequest()) {
+            $message = '';
+            $status = 'failed';
+            $inviteId = $request->get('inviteId');
+            $inviteStatus = $request->get('status');
+            $em = $this->getDoctrine()->getEntityManager();
+            $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+
+            if($invite->getUser()->getId() == $this->getUser()->getId()){
+
+                if($inviteStatus == 'Seen'){
+                    $invite->setStatus('Seen');
+                }else if ($inviteStatus == 'Rejected'){
+                    $invite->setStatus('Rejected');
+                }
+
+                //TO DO: notificate user about status change
+                $invite->setStatus('Rejected');
+                $em->persist($invite);
+                $em->flush();
+            }else{
+                $message = 'Jūs neturite priegos!';
+            }
+
+            $response = json_encode(array('message' => $message, 'status' => $status ));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
+
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
 }

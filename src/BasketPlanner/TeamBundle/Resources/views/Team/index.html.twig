@@ -44,10 +44,10 @@
                 </div>
             </div>
             <div class="panel panel-default panel-warning">
-                <div class="panel-heading panel-warning">Pakvietimai</div>
+                <div class="panel-heading panel-warning">Sukurti pakvietimai</div>
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table id="team-invites" class="table table-striped table-hover datatable">
+                        <table id="team-created-invites" class="table table-striped table-hover datatable">
                             <thead>
                             <tr>
                                 <th>Vartotojas</th>
@@ -137,7 +137,7 @@
             src="{{ asset('assets/js/dataTables.bootstrapPagination.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#teams,#team-invites").each(function() {
+            $("#teams,#team-created-invites").each(function() {
                 $(this).DataTable({
                     'paging': true,  // Table pagination
                     'ordering': true,  // Column ordering
@@ -231,7 +231,7 @@
             });
 
             $('#team-invite-form').submit( function() {
-                obj = new Object();
+                var obj = new Object();
                 obj["user"] = $('#basketplanner_teambundle_invite_user option:selected').val();
                 obj["team"] = $('#basketplanner_teambundle_invite_team option:selected').val();
                 var messageBox = $('#invite-messages');
