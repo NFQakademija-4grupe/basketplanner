@@ -112,28 +112,29 @@ class TeamManager{
     }
 
     /**
-     * get invites
+     * get user role in team
      *
      * @var integer $user user id
+     * @var integer $team team id
      *
-     * @return array
+     * @return string
      */
-    public function getUserCreatedInvites($user)
+    public function getUserRoleInTeam($user, $team)
     {
         $query = $this->entityManager
             ->createQueryBuilder()
-            ->select('inv.status, inv.created, t.name, u.id, u.firstName, u.lastName')
-            ->from('BasketPlannerTeamBundle:Invite','inv')
-            ->leftJoin('inv.team','t')
-            ->leftJoin('inv.user','u')
+            ->select('tu.role')
+            ->from('BasketPlannerTeamBundle:Team','t')
             ->leftJoin('t.teamUser','tu')
-            ->where('tu.user = ?1')
-            ->andWhere('tu.role = ?2')
-            ->setParameter(1, $user)
-            ->setParameter(2, 'Owner');
+            ->where('t.id = ?1')
+            ->andWhere('tu.user = ?2')
+            ->setParameter(1, $team)
+            ->setParameter(2, $user);
         $results = $query->getQuery()->getArrayResult();
+        $object = $results[0];
+        $role = $object['role'];
 
-        return $results;
+        return $role;
     }
 
     /**
@@ -196,6 +197,31 @@ class TeamManager{
         $teamPlayer->setRole($role);
 
         return $teamPlayer;
+    }
+
+    /**
+     * get invites
+     *
+     * @var integer $user user id
+     *
+     * @return array
+     */
+    public function getUserCreatedInvites($user)
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('inv.id as inviteId, inv.status, inv.created, t.name, u.id as userId, u.firstName, u.lastName')
+            ->from('BasketPlannerTeamBundle:Invite','inv')
+            ->leftJoin('inv.team','t')
+            ->leftJoin('inv.user','u')
+            ->leftJoin('t.teamUser','tu')
+            ->where('tu.user = ?1')
+            ->andWhere('tu.role = ?2')
+            ->setParameter(1, $user)
+            ->setParameter(2, 'Owner');
+        $results = $query->getQuery()->getArrayResult();
+
+        return $results;
     }
 
     /**

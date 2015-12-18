@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default panel-warning">
                 <div class="panel-body">
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0px">
                         <div class="row">
                             <div class="col-lg-5 col-sm-6" id="userSearch">
                                 <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
@@ -29,7 +29,8 @@
                             {{ form_end(invite) }}
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 col-sm-12" id="invite-messages">
+                            <div class="col-lg-12 col-sm-12">
+                                <div id="invite-messages" style="margin-bottom: 0px"></div>
                             </div>
                         </div>
                     </div>
@@ -37,6 +38,11 @@
             </div>
 
             {# team invites table #}
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div id="invite-remove-messages" style="margin-bottom: 0px"></div>
+                </div>
+            </div>
             <div class="panel panel-default panel-warning">
                 <div class="panel-heading panel-warning">Pakvietimai</div>
                 <div class="panel-body">
@@ -53,9 +59,9 @@
                             </thead>
                             <tbody>
                             {% for invite in invites %}
-                                <tr>
+                                <tr data-id="{{ invite.inviteId }}">
                                     <td>
-                                        <a href="{{ path('basket_planner_user_profile', {'id': invite.id}) }}">
+                                        <a href="{{ path('basket_planner_user_profile', {'id': invite.userId}) }}">
                                             {{ invite.firstName }} {{ invite.lastName }}
                                         </a>
                                     </td>
@@ -68,6 +74,11 @@
                                         <td>Atmestas</td>
                                     {% endif %}
                                     <td>{{ invite.created.format('M d Y H:i') }}</td>
+                                    <td>
+                                        <a href="#" class="invite-remove" title="Ištrinti">
+                                            <i class=" fa fa-times"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -125,40 +136,30 @@
     <script type="text/javascript" charset="utf8"
             src="{{ asset('assets/js/dataTables.bootstrapPagination.js') }}"></script>
     <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker({
-                format: 'L',
-                pickTime: false
-            });
-            $('#datetimepicker2').datetimepicker({
-                format: 'HH:mm',
-                pickDate: false,
-                pickSeconds: false,
-                pick12HourFormat: false
-            });
-        });
         $(document).ready(function () {
-            $('#teams').DataTable({
-                'paging': true,  // Table pagination
-                'ordering': true,  // Column ordering
-                'info': false,  // Bottom left status text
-                'autoWidth': true,
-                oLanguage: {
-                    empty: 'Susijusių įrašų nerasta',
-                    sSearch: 'Paieška:',
-                    sLengthMenu: '_MENU_ įrašų puslapyje',
-                    info: 'Rodomas _PAGE_ puslapis iš _PAGES_',
-                    zeroRecords: 'Matchų nerasta.',
-                    infoEmpty: 'Nėra įrašų',
-                    infoFiltered: '(surasta iš _MAX_ visų įrašų)',
-                    sEmptyTable: 'Nėra įrašų',
-                    "oPaginate": {
-                        "sFirst": "Pirmas",
-                        "sNext": "Paskutinis",
-                        "sLast": "Kitas",
-                        "sPrevious": "Ankstesnis"
+            $("#teams,#team-invites").each(function() {
+                $(this).DataTable({
+                    'paging': true,  // Table pagination
+                    'ordering': true,  // Column ordering
+                    'info': false,  // Bottom left status text
+                    'autoWidth': true,
+                    oLanguage: {
+                        empty: 'Susijusių įrašų nerasta',
+                        sSearch: 'Paieška:',
+                        sLengthMenu: '_MENU_ įrašų puslapyje',
+                        info: 'Rodomas _PAGE_ puslapis iš _PAGES_',
+                        zeroRecords: 'Matchų nerasta.',
+                        infoEmpty: 'Nėra įrašų',
+                        infoFiltered: '(surasta iš _MAX_ visų įrašų)',
+                        sEmptyTable: 'Nėra įrašų',
+                        "oPaginate": {
+                            "sFirst": "Pirmas",
+                            "sNext": "Paskutinis",
+                            "sLast": "Kitas",
+                            "sPrevious": "Ankstesnis"
+                        }
                     }
-                }
+                })
             });
 
             var engine = new Bloodhound({
@@ -233,20 +234,61 @@
                 obj = new Object();
                 obj["user"] = $('#basketplanner_teambundle_invite_user option:selected').val();
                 obj["team"] = $('#basketplanner_teambundle_invite_team option:selected').val();
+                var messageBox = $('#invite-messages');
                 $.ajax({
                     type: "POST",
                     url: "{{ url('basket_planner_team.invite.create') }}",
                     data: obj,
                     success: function(data) {
-                        $('.typeahead').typeahead('val','');
-                        $('#basketplanner_teambundle_invite_user option:selected').val(0);
-                        $('#basketplanner_teambundle_invite_user option:selected').text('');
-                        $('#basketplanner_teambundle_invite_team').prop('selectedIndex',0);
-                        $('#invite-messages').text(data['message']);
+                        if (data['status'] == 'ok') {
+                            $('.typeahead').typeahead('val', '');
+                            $('#basketplanner_teambundle_invite_user option:selected').val(0);
+                            $('#basketplanner_teambundle_invite_user option:selected').text('');
+                            $('#basketplanner_teambundle_invite_team').prop('selectedIndex', 0);
+                            messageBox.attr('class', 'alert alert-success');
+                        } else {
+                            messageBox.attr('class', 'alert alert-danger');
+                        }
+                        messageBox.text(data['message']);
                     }
                 });
 
                 return false;
+            });
+
+            $('.invite-remove').on('click', function () {
+                var inviteRow = $(this).parent().parent();
+                var messageBox = $('#invite-remove-messages');
+                $.confirm({
+                    title: 'Dėmesio!',
+                    content: 'Ar tikrai norite pašalinti šį pakvietimą?',
+                    confirmButton: 'Taip',
+                    cancelButton: 'Ne',
+                    confirm: function(){
+                        var id = inviteRow.attr("data-id");
+                        var data = 'inviteId=' + id;
+                        $.ajax({
+                            type: "POST",
+                            url: '{{path('basket_planner_team.invite.delete')}}',
+                            data: data,
+                            success: function(data) {
+                                var className = '';
+                                if (data['status'] == 'ok') {
+                                    inviteRow.fadeOut('slow', function () {
+                                        $(this).remove();
+                                    });
+                                    className = 'alert alert-success';
+                                } else {
+                                    className = 'alert alert-danger';
+                                }
+                                messageBox.fadeIn('slow', function () {
+                                    messageBox.text(data['message']);
+                                    messageBox.attr('class', className);
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>

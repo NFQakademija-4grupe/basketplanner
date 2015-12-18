@@ -19,5 +19,9 @@ basket_planner_team.search:
    defaults: { _controller: BasketPlannerTeamBundle:Team:search }
 
 basket_planner_team.invite.create:
-   path: /create-invite
+   path: /invite-create
    defaults: { _controller: BasketPlannerTeamBundle:Team:invite }
+
+basket_planner_team.invite.delete:
+   path: /invite-delete
+   defaults: { _controller: BasketPlannerTeamBundle:Team:inviteDelete }

@@ -116,6 +116,7 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
 
             $message = '';
+            $status = 'failed';
 
             $teamPlayers = $teamManager->getTeamPlayersCount($teamId);
             $teamPlayersLimit = $teamManager->getTeamPlayersLimit($teamId);
@@ -146,6 +147,7 @@ class TeamController extends Controller
                         $em->flush();
 
                         $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
+                        $status = 'ok';
                     } else {
                         $message = 'Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!';
                     }
@@ -156,13 +158,49 @@ class TeamController extends Controller
                 $message = 'Įvyko klaida! Komanda jau pilna!';
             }
 
-            $response = json_encode(array('message' => $message ));
+            $response = json_encode(array('message' => $message, 'status' => $status));
 
             return new Response($response, 200, array(
                 'Content-Type' => 'application/json'
             ));
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!'));
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
+
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
+
+    public function inviteDeleteAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $userId = $this->getUser()->getId();
+            $inviteId = $request->get('inviteId');
+            $teamManager = $this->get('basketplanner_team.team_manager');
+            $em = $this->getDoctrine()->getEntityManager();
+
+            $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+            $userRole = $teamManager->getUserRoleInTeam($userId, $invite->getTeam()->getId());
+
+            $message = '';
+            $status = 'failed';
+
+            if ($userRole == 'Owner'){
+
+                $message = 'Pakvietimas pašalintas!';
+                $status = 'ok';
+            }else {
+                $message = 'Pakvietimo pašalinti nepavyko!';
+            }
+
+            $response = json_encode(array('message' => $message, 'status' => $status ));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
             return new Response($response, 400, array(
                 'Content-Type' => 'application/json'
