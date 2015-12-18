@@ -79,7 +79,7 @@ class TeamController extends Controller
                 $em->persist($teamPlayer);
                 $em->flush();
 
-                return $this->redirectToRoute('basket_planner_team_show', ['id' => $team->getId()]);
+                return $this->redirectToRoute('basket_planner_team.show', ['id' => $team->getId()]);
 
             }else{
                 $error = array(
@@ -110,13 +110,12 @@ class TeamController extends Controller
     public function inviteAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
+            $message = '';
+            $status = 'failed';
             $userId = $request->get('user');
             $teamId = $request->get('team');
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
-
-            $message = '';
-            $status = 'failed';
 
             $teamPlayers = $teamManager->getTeamPlayersCount($teamId);
             $teamPlayersLimit = $teamManager->getTeamPlayersLimit($teamId);
@@ -175,6 +174,8 @@ class TeamController extends Controller
     public function inviteDeleteAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
+            $message = '';
+            $status = 'failed';
             $userId = $this->getUser()->getId();
             $inviteId = $request->get('inviteId');
             $teamManager = $this->get('basketplanner_team.team_manager');
@@ -183,15 +184,17 @@ class TeamController extends Controller
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
             $userRole = $teamManager->getUserRoleInTeam($userId, $invite->getTeam()->getId());
 
-            $message = '';
-            $status = 'failed';
-
-            if ($userRole == 'Owner'){
-
-                $message = 'Pakvietimas pašalintas!';
-                $status = 'ok';
-            }else {
-                $message = 'Pakvietimo pašalinti nepavyko!';
+            if ($invite !== null) {
+                if ($userRole == 'Owner') {
+                    $em->remove($invite);
+                    $em->flush();
+                    $message = 'Pakvietimas pašalintas!';
+                    $status = 'ok';
+                } else {
+                    $message = 'Pakvietimo pašalinti nepavyko!';
+                }
+            } else {
+                $message = 'Pakvietimo rasti nepavyko!';
             }
 
             $response = json_encode(array('message' => $message, 'status' => $status ));

@@ -106,7 +106,7 @@
                             {% for team in teams %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('basket_planner_team_show', {'id': team[0].id}) }}">
+                                    <a href="{{ path('basket_planner_team.show', {'id': team[0].id}) }}">
                                         {{ team[0].name }}
                                     </a>
                                 </td>
@@ -235,6 +235,7 @@
                 obj["user"] = $('#basketplanner_teambundle_invite_user option:selected').val();
                 obj["team"] = $('#basketplanner_teambundle_invite_team option:selected').val();
                 var messageBox = $('#invite-messages');
+                var className = '';
                 $.ajax({
                     type: "POST",
                     url: "{{ url('basket_planner_team.invite.create') }}",
@@ -245,11 +246,14 @@
                             $('#basketplanner_teambundle_invite_user option:selected').val(0);
                             $('#basketplanner_teambundle_invite_user option:selected').text('');
                             $('#basketplanner_teambundle_invite_team').prop('selectedIndex', 0);
-                            messageBox.attr('class', 'alert alert-success');
+                            className = 'alert alert-success';
                         } else {
-                            messageBox.attr('class', 'alert alert-danger');
+                            className = 'alert alert-danger';
                         }
-                        messageBox.text(data['message']);
+
+                        var content = '<div class="' + className + '">' + data["message"]
+                                + '<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>';
+                        $(content).hide().appendTo(messageBox).fadeIn(1000);
                     }
                 });
 
@@ -281,10 +285,10 @@
                                 } else {
                                     className = 'alert alert-danger';
                                 }
-                                messageBox.fadeIn('slow', function () {
-                                    messageBox.text(data['message']);
-                                    messageBox.attr('class', className);
-                                });
+
+                                var content = '<div class="' + className + '">' + data["message"]
+                                + '<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>';
+                                $(content).hide().appendTo(messageBox).fadeIn(1000);
                             }
                         });
                     }

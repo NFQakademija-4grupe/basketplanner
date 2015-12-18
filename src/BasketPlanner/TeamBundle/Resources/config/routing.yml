@@ -7,7 +7,7 @@ basket_planner_team.create:
     defaults: { _controller: BasketPlannerTeamBundle:Team:create }
     methods: [GET, POST]
 
-basket_planner_team_show:
+basket_planner_team.show:
     path:     /show/{id}
     defaults: { _controller: BasketPlannerTeamBundle:Team:show }
     methods: [GET]
