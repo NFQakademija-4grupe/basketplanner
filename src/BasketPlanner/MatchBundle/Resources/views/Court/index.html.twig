@@ -22,18 +22,27 @@
     $(document).ready(function() {
         var oldValue = 0;
         setInterval(function() { inputValue($('#basket_planner_create_match_court_id').val()); }, 200);
+
         function inputValue(value){
             if (value != oldValue){
                 oldValue = value;
 
-                var data = 'id=' + value;
+                $.confirm({
+                    title: 'Dėmesio!',
+                    content: 'Ar tikrai norite patvirtinti šią aikštelę?',
+                    confirmButton: 'Taip',
+                    cancelButton: 'Ne',
+                    confirm: function(){
+                        var data = 'id=' + value;
 
-                $.ajax({
-                    type: "POST",
-                    url: '{{path('basket_planner_match_courts.update_approved')}}',
-                    data: data,
-                    error: function(e){
-                        console.log('Ops! Something wrong!');
+                        $.ajax({
+                            type: "POST",
+                            url: '{{path('basket_planner_match_courts.update_approved')}}',
+                            data: data,
+                            error: function(e){
+                                console.log('Ops! Something wrong!');
+                            }
+                        });
                     }
                 });
             }

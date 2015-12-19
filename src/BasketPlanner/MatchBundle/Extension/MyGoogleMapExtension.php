@@ -85,6 +85,7 @@ class MyGoogleMapExtension implements ExtensionHelperInterface
                             }
                         });
                     }
+
                     function updateMarkerAddress(str) {
                         var contentText = str + "<br>";
                         marker.markerAddress = str;
