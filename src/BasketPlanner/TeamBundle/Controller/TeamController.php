@@ -25,11 +25,13 @@ class TeamController extends Controller
         $teamManager = $this->get('basketplanner_team.team_manager');
         $user = $this->getUser()->getId();
         $teams = $teamManager->getUserTeams($user);
-        $invites = $teamManager->getUserCreatedInvites($user);
+        $createdInvites = $teamManager->getUserCreatedInvites($user);
+        $receivedInvites = $teamManager->getUserReceivedInvites($user);
 
         return $this->render('BasketPlannerTeamBundle:Team:index.html.twig', array(
             'teams' => $teams,
-            'invites' => $invites,
+            'createdInvites' => $createdInvites,
+            'receivedInvites' => $receivedInvites,
             'invite' => $form->createView()
         ));
     }
@@ -119,20 +121,24 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
 
             //check if user is not a member of team
-            if ($teamManager->getUserRoleInTeam($userId, $teamId) === null) {
+            if ($teamManager->getUserRoleInTeam($userId, $teamId) === null)
+            {
                 //check if team is not full
-                if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId)) {
+                if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId))
+                {
                     $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
                         'team' => $teamId,
                         'user' => $userId
                     ));
 
                     //check if invite to same user and team already exists
-                    if ($inviteExists === null) {
+                    if ($inviteExists === null)
+                    {
                         $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
                         $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
-                        if ($user != null && $team != null) {
+                        if ($user != null && $team != null)
+                        {
                             $invite = new Invite();
                             $invite->setStatus('New');
                             $invite->setUser($user);
@@ -229,9 +235,11 @@ class TeamController extends Controller
 
             if($invite !== null)
             {
-                if ($invite->getUser()->getId() === $userId) {
+                if ($invite->getUser()->getId() === $userId)
+                {
                     $teamId = $invite->getTeam()->getId();
-                    if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId)) {
+                    if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId))
+                    {
                         $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
                         $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
@@ -241,9 +249,9 @@ class TeamController extends Controller
                         $teamUser->setRole('Player');
 
                         //TO DO: notificate team players about new user
-                        $em->persist($teamUser);
-                        $em->remove($invite);
-                        $em->flush();
+                        //$em->persist($teamUser);
+                        //$em->remove($invite);
+                        //$em->flush();
 
                         $message = 'Jūs sėkmingai prisijungėte prie komandos!';
                         $status = 'ok';
@@ -251,7 +259,7 @@ class TeamController extends Controller
                         $message = 'Pasiektas komandos žaidėjų limitas!';
                     }
                 }else{
-                    $message = 'Pasiektas komandos žaidėjų limitas!';
+                    $message = 'Jūs neturite priegos!';
                 }
             }else{
                 $message = 'Jūs neturite priegos!';
@@ -288,9 +296,10 @@ class TeamController extends Controller
                 }
 
                 //TO DO: notificate user about status change
-                $invite->setStatus('Rejected');
                 $em->persist($invite);
                 $em->flush();
+                $message = 'Pakvietimas atmestas!';
+                $status = 'ok';
             }else{
                 $message = 'Jūs neturite priegos!';
             }

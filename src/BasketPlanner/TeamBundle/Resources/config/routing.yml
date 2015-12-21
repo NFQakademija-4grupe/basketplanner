@@ -25,3 +25,11 @@ basket_planner_team.invite.create:
 basket_planner_team.invite.delete:
    path: /invite-delete
    defaults: { _controller: BasketPlannerTeamBundle:Team:inviteDelete }
+
+basket_planner_team.invite.accept:
+   path: /invite-accept
+   defaults: { _controller: BasketPlannerTeamBundle:Team:inviteAccept }
+
+basket_planner_team.invite.changeStatus:
+   path: /invite-change-status
+   defaults: { _controller: BasketPlannerTeamBundle:Team:inviteChangeStatus }

@@ -131,7 +131,7 @@ class TeamManager{
             ->setParameter(1, $team)
             ->setParameter(2, $user);
         $results = $query->getQuery()->getArrayResult();
-        if ($results !== null) {
+        if (count($results) > 0) {
             $object = $results[0];
             $role = $object['role'];
         }else{
@@ -165,21 +165,15 @@ class TeamManager{
     /**
      * get max team players
      *
-     * @var integer $team Team id
+     * @var integer $teamId Team id
      *
      * @return integer
      */
-    public function getTeamPlayersLimit($team)
+    public function getTeamPlayersLimit($teamId)
     {
-        $query = $this->entityManager
-            ->createQueryBuilder()
-            ->select('t.players')
-            ->from('BasketPlannerTeamBundle:Team','team')
-            ->leftJoin('team.type','t')
-            ->where('team.id = ?1')
-            ->setParameter(1, $team);
-
-        $limit = $query->getFirstResult();
+        $team = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+        $type = $team->getType();
+        $limit = $type->getPlayers()/ 2;
 
         return $limit;
     }
@@ -204,7 +198,7 @@ class TeamManager{
     }
 
     /**
-     * get invites
+     * get created invites
      *
      * @var integer $user user id
      *
@@ -223,6 +217,33 @@ class TeamManager{
             ->andWhere('tu.role = ?2')
             ->setParameter(1, $user)
             ->setParameter(2, 'Owner');
+        $results = $query->getQuery()->getArrayResult();
+
+        return $results;
+    }
+
+    /**
+     * get received invites
+     *
+     * @var integer $user user id
+     *
+     * @return array
+     */
+    public function getUserReceivedInvites($user)
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('inv.id as inviteId, inv.status, inv.created, t.id as teamId, t.name, u.id as userId, u.firstName, u.lastName')
+            ->from('BasketPlannerTeamBundle:Invite','inv')
+            ->leftJoin('inv.team','t')
+            ->leftJoin('t.teamUser','tu')
+            ->leftJoin('tu.user','u')
+            ->where('inv.user = ?1')
+            ->andWhere('tu.role = ?2')
+            ->andWhere('inv.status <> ?3')
+            ->setParameter(1, $user)
+            ->setParameter(2, 'Owner')
+            ->setParameter(3, 'Rejected');
         $results = $query->getQuery()->getArrayResult();
 
         return $results;

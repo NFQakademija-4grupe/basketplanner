@@ -37,6 +37,66 @@
                 </div>
             </div>
 
+            {# received invites #}
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div id="invite-status-messages" style="margin-bottom: 0px"></div>
+                </div>
+            </div>
+            <div class="panel panel-default panel-warning">
+                <div class="panel-heading panel-warning">
+                    Gauti pakvietimai
+                    <span class="pull-right clickable panel-collapsed">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="panel-body" style="display: none;" >
+                    <div class="table-responsive">
+                        <table id="team-received-invites" class="table table-striped table-hover datatable">
+                            <thead>
+                            <tr>
+                                <th>Pakvietė</th>
+                                <th>Komanda</th>
+                                <th>Statusas</th>
+                                <th>Sukurta</th>
+                                <th>Veiksmai</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for invite in receivedInvites %}
+                                <tr data-id="{{ invite.inviteId }}">
+                                    <td>
+                                        <a href="{{ path('basket_planner_user_profile', {'id': invite.userId}) }}">
+                                            {{ invite.firstName }} {{ invite.lastName }}
+                                        </a>
+                                    </td>
+                                    <td><a href="{{ path('basket_planner_team.show', {'id': invite.teamId}) }}">
+                                            {{ invite.name }}
+                                        </a>
+                                    </td>
+                                    {% if invite.status == "New" %}
+                                        <td>Neperžiūrėtas</td>
+                                    {% elseif invite.status == "Seen" %}
+                                        <td>Peržiūrėtas</td>
+                                    {% else%}
+                                        <td>Atmestas</td>
+                                    {% endif %}
+                                    <td>{{ invite.created.format('M d Y H:i') }}</td>
+                                    <td>
+                                        <a href="#" class="invite-accept" title="Priimti">
+                                            <i class=" fa fa-check"></i>
+                                        </a>
+                                        <a href="#" class="invite-reject" title="Atmesti">
+                                            <i class=" fa fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             {# team invites table #}
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
@@ -44,7 +104,11 @@
                 </div>
             </div>
             <div class="panel panel-default panel-warning">
-                <div class="panel-heading panel-warning">Sukurti pakvietimai</div>
+                <div class="panel-heading panel-warning">
+                    Sukurti pakvietimai
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i>
+                    </span>
+                </div>
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table id="team-created-invites" class="table table-striped table-hover datatable">
@@ -58,7 +122,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for invite in invites %}
+                            {% for invite in createdInvites %}
                                 <tr data-id="{{ invite.inviteId }}">
                                     <td>
                                         <a href="{{ path('basket_planner_user_profile', {'id': invite.userId}) }}">
@@ -89,7 +153,11 @@
 
             {# team table #}
             <div class="panel panel-default panel-warning">
-                <div class="panel-heading panel-warning">Komandos</div>
+                <div class="panel-heading panel-warning">Komandos
+                    Sukurti pakvietimai
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i>
+                    </span>
+                </div>
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table id="teams" class="table table-striped table-hover datatable">
@@ -137,7 +205,7 @@
             src="{{ asset('assets/js/dataTables.bootstrapPagination.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#teams,#team-created-invites").each(function() {
+            $("#teams, #team-received-invites, #team-created-invites").each(function() {
                 $(this).DataTable({
                     'paging': true,  // Table pagination
                     'ordering': true,  // Column ordering
@@ -293,6 +361,68 @@
                         });
                     }
                 });
+            });
+
+            $('.invite-accept, .invite-reject').on('click', function () {
+                var inviteRow = $(this).parent().parent();
+                var messageBox = $('#invite-status-messages');
+                var clickedClass = $(this).attr("class");
+                var acceptUrl = '{{path('basket_planner_team.invite.accept')}}';
+                var rejectUrl = '{{path('basket_planner_team.invite.changeStatus')}}';
+                var destination = '';
+                var data = {};
+                if (clickedClass == 'invite-accept'){
+                    destination = acceptUrl;
+                }else{
+                    destination = rejectUrl;
+                    data.status = 'Rejected';
+                }
+
+                $.confirm({
+                    title: 'Dėmesio!',
+                    content: 'Ar tikrai norite testi?',
+                    confirmButton: 'Taip',
+                    cancelButton: 'Ne',
+                    confirm: function(){
+                        var id = inviteRow.attr("data-id");
+                        data.inviteId = id;
+                        $.ajax({
+                            type: "POST",
+                            url: destination,
+                            data: data,
+                            success: function(data) {
+                                var className = '';
+                                if (data['status'] == 'ok') {
+                                    inviteRow.fadeOut('slow', function () {
+                                        $(this).remove();
+                                    });
+                                    className = 'alert alert-success';
+                                } else {
+                                    className = 'alert alert-danger';
+                                }
+
+                                var content = '<div class="' + className + '">' + data["message"]
+                                        + '<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>';
+                                $(content).hide().appendTo(messageBox).fadeIn(1000);
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.panel-heading span.clickable').on("click", function (e) {
+                if ($(this).hasClass('panel-collapsed')) {
+                    // expand the panel
+                    $(this).parents('.panel').find('.panel-body').slideDown();
+                    $(this).removeClass('panel-collapsed');
+                    $(this).find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+                }
+                else {
+                    // collapse the panel
+                    $(this).parents('.panel').find('.panel-body').slideUp();
+                    $(this).addClass('panel-collapsed');
+                    $(this).find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+                }
             });
         });
     </script>
