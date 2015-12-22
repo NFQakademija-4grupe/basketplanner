@@ -1,6 +1,6 @@
 <?php
 
-namespace BasketPlanner\TeamBundle\Manager;
+namespace BasketPlanner\TeamBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use BasketPlanner\TeamBundle\Entity\TeamUser;
@@ -34,9 +34,8 @@ class TeamManager{
             ->andWhere('t.role = ?2')
             ->setParameter(1, $user)
             ->setParameter(2, $role);
-        $count = $query->getQuery()->getSingleScalarResult();
 
-        return $count;
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -59,9 +58,8 @@ class TeamManager{
                 GROUP BY tu.team
                 ')
             ->setParameter('userId', $user);
-        $teams = $query->getArrayResult();
 
-        return $teams;
+        return $query->getArrayResult();
     }
 
     /**
@@ -86,9 +84,8 @@ class TeamManager{
                 ')
             ->setParameter('userId', $user)
             ->setParameter('role', $role);
-        $teams = $query->getArrayResult();
 
-        return $teams;
+        return $query->getArrayResult();
     }
 
     /**
@@ -106,9 +103,8 @@ class TeamManager{
             ->from('BasketPlannerTeamBundle:TeamUser','t')
             ->where('t.team = ?1')
             ->setParameter(1, $team);
-        $count = $query->getQuery()->getSingleScalarResult();
 
-        return $count;
+        return $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -157,9 +153,8 @@ class TeamManager{
                 WITH tp.user = u.id
                 WHERE tp.team = :team")
             ->setParameter('team', $team);
-        $teams = $query->getArrayResult();
 
-        return $teams;
+        return $query->getArrayResult();
     }
 
     /**
@@ -217,9 +212,8 @@ class TeamManager{
             ->andWhere('tu.role = ?2')
             ->setParameter(1, $user)
             ->setParameter(2, 'Owner');
-        $results = $query->getQuery()->getArrayResult();
 
-        return $results;
+        return $query->getQuery()->getArrayResult();
     }
 
     /**
@@ -244,9 +238,8 @@ class TeamManager{
             ->setParameter(1, $user)
             ->setParameter(2, 'Owner')
             ->setParameter(3, 'Rejected');
-        $results = $query->getQuery()->getArrayResult();
 
-        return $results;
+        return $query->getQuery()->getArrayResult();
     }
 
     /**

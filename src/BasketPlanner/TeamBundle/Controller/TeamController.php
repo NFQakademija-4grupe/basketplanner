@@ -110,6 +110,97 @@ class TeamController extends Controller
         ]);
     }
 
+    public function leaveAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $message = '';
+            $status = 'failed';
+            $userId = $this->getUser()->getId();
+            $teamId = $request->get('teamId');
+            $teamManager = $this->get('basketplanner_team.team_manager');
+            $em = $this->getDoctrine()->getEntityManager();
+            $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
+
+            if ($userRole != null){
+                if($userRole != 'Owner'){
+                    $teamUser = $em->getRepository('BasketPlannerTeamBundle:TeamUser')->findOneBy(array(
+                        'team' => $teamId,
+                        'user' => $userId
+                    ));
+
+                    $em->remove($teamUser);
+                    $em->flush();
+                    $message = 'Jūs sekmingai palikote komandą!';
+                    $status = 'ok';
+                }else{
+                    $message = 'Komandos sąvininkas negali palikti komandos!';
+                }
+            }else{
+                $message = 'Jūs neturite priegos!';
+            }
+
+            $response = json_encode(array('message' => $message, 'status' => $status ));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
+
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
+
+    public function deleteAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest())
+        {
+            $message = '';
+            $status = 'failed';
+            $userId = $this->getUser()->getId();
+            $teamId = $request->get('teamId');
+            $teamManager = $this->get('basketplanner_team.team_manager');
+            $em = $this->getDoctrine()->getEntityManager();
+            $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
+
+            if ($userRole != null)
+            {
+                if($userRole == 'Owner')
+                {
+                    $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+                    $teamPlayers = $team->getTeamUser();
+
+                    foreach ($teamPlayers as $player)
+                    {
+                        $em->remove($player);
+                    }
+
+                    $em->remove($team);
+                    $em->flush();
+                    $message = 'Komanda sekmingai pašalinta!';
+                    $status = 'ok';
+                }else{
+                    $message = 'Komandą ištrinti gali tik jos sąvininkas!';
+                }
+            }else{
+                $message = 'Jūs neturite priegos!';
+            }
+            $response = json_encode(array('message' => $message, 'status' => $status ));
+
+            return new Response($response, 200, array(
+                'Content-Type' => 'application/json'
+            ));
+        } else {
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
+
+            return new Response($response, 400, array(
+                'Content-Type' => 'application/json'
+            ));
+        }
+    }
+
     public function inviteAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {

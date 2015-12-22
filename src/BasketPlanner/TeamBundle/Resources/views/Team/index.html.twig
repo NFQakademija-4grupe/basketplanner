@@ -153,9 +153,10 @@
 
             {# team table #}
             <div class="panel panel-default panel-warning">
-                <div class="panel-heading panel-warning">Komandos
-                    Sukurti pakvietimai
-                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i>
+                <div class="panel-heading panel-warning">
+                    Komandos
+                    <span class="pull-right clickable">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
                     </span>
                 </div>
                 <div class="panel-body">
@@ -370,22 +371,25 @@
                 var acceptUrl = '{{path('basket_planner_team.invite.accept')}}';
                 var rejectUrl = '{{path('basket_planner_team.invite.changeStatus')}}';
                 var destination = '';
+                var alertMessage = '';
                 var data = {};
+
                 if (clickedClass == 'invite-accept'){
                     destination = acceptUrl;
+                    alertMessage = 'Ar tikrai norite prisijungti prie šios komandos?';
                 }else{
                     destination = rejectUrl;
                     data.status = 'Rejected';
+                    alertMessage = 'Ar tikrai norite atmesti šį pakvietimą? Jis daugiau nebus rodomas.';
                 }
 
                 $.confirm({
                     title: 'Dėmesio!',
-                    content: 'Ar tikrai norite testi?',
+                    content: alertMessage,
                     confirmButton: 'Taip',
                     cancelButton: 'Ne',
                     confirm: function(){
-                        var id = inviteRow.attr("data-id");
-                        data.inviteId = id;
+                        data.inviteId = inviteRow.attr("data-id");
                         $.ajax({
                             type: "POST",
                             url: destination,
