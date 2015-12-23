@@ -169,6 +169,7 @@ class TeamController extends Controller
             {
                 if($userRole == 'Owner')
                 {
+                    //TO DO: notifications, check for active matches
                     $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
                     $teamPlayers = $team->getTeamUser();
 
@@ -340,9 +341,9 @@ class TeamController extends Controller
                         $teamUser->setRole('Player');
 
                         //TO DO: notificate team players about new user
-                        //$em->persist($teamUser);
-                        //$em->remove($invite);
-                        //$em->flush();
+                        $em->persist($teamUser);
+                        $em->remove($invite);
+                        $em->flush();
 
                         $message = 'Jūs sėkmingai prisijungėte prie komandos!';
                         $status = 'ok';

@@ -152,6 +152,11 @@
             </div>
 
             {# team table #}
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div id="team-messages" style="margin-bottom: 0px"></div>
+                </div>
+            </div>
             <div class="panel panel-default panel-warning">
                 <div class="panel-heading panel-warning">
                     Komandos
@@ -169,11 +174,12 @@
                                 <th>Žaidėjų skaičius</th>
                                 <th>Teisės</th>
                                 <th>Sukurta</th>
+                                <th>Veiksmai</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for team in teams %}
-                            <tr>
+                            <tr data-id="{{ team[0].id }}">
                                 <td>
                                     <a href="{{ path('basket_planner_team.show', {'id': team[0].id}) }}">
                                         {{ team[0].name }}
@@ -187,6 +193,17 @@
                                     <td>Žaidėjas</td>
                                 {% endif %}
                                 <td>{{ team[0].created.format('M d Y H:i') }}</td>
+                                {% if team.role == "Owner" %}
+                                    <td>
+                                        <a href="#" class="team-remove" title="Ištrinti">
+                                            <i class=" fa fa-times"></i>
+                                        </a>
+                                    </td>
+                                {% else %}
+                                    <td><a href="#" class="team-leave" title="Palikti">
+                                            <i class=" fa fa-chain-broken"></i>
+                                        </a></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -329,47 +346,13 @@
                 return false;
             });
 
-            $('.invite-remove').on('click', function () {
-                var inviteRow = $(this).parent().parent();
-                var messageBox = $('#invite-remove-messages');
-                $.confirm({
-                    title: 'Dėmesio!',
-                    content: 'Ar tikrai norite pašalinti šį pakvietimą?',
-                    confirmButton: 'Taip',
-                    cancelButton: 'Ne',
-                    confirm: function(){
-                        var id = inviteRow.attr("data-id");
-                        var data = 'inviteId=' + id;
-                        $.ajax({
-                            type: "POST",
-                            url: '{{path('basket_planner_team.invite.delete')}}',
-                            data: data,
-                            success: function(data) {
-                                var className = '';
-                                if (data['status'] == 'ok') {
-                                    inviteRow.fadeOut('slow', function () {
-                                        $(this).remove();
-                                    });
-                                    className = 'alert alert-success';
-                                } else {
-                                    className = 'alert alert-danger';
-                                }
-
-                                var content = '<div class="' + className + '">' + data["message"]
-                                + '<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a></div>';
-                                $(content).hide().appendTo(messageBox).fadeIn(1000);
-                            }
-                        });
-                    }
-                });
-            });
-
-            $('.invite-accept, .invite-reject').on('click', function () {
+            $('.invite-accept, .invite-reject, .invite-remove').on('click', function () {
                 var inviteRow = $(this).parent().parent();
                 var messageBox = $('#invite-status-messages');
                 var clickedClass = $(this).attr("class");
                 var acceptUrl = '{{path('basket_planner_team.invite.accept')}}';
                 var rejectUrl = '{{path('basket_planner_team.invite.changeStatus')}}';
+                var removeUrl = '{{path('basket_planner_team.invite.delete')}}';
                 var destination = '';
                 var alertMessage = '';
                 var data = {};
@@ -377,10 +360,14 @@
                 if (clickedClass == 'invite-accept'){
                     destination = acceptUrl;
                     alertMessage = 'Ar tikrai norite prisijungti prie šios komandos?';
-                }else{
+                } else if (clickedClass == 'invite-reject'){
                     destination = rejectUrl;
                     data.status = 'Rejected';
                     alertMessage = 'Ar tikrai norite atmesti šį pakvietimą? Jis daugiau nebus rodomas.';
+                } else {
+                    destination = removeUrl;
+                    messageBox = $('#invite-remove-messages');
+                    alertMessage = 'Ar tikrai norite pašalinti šį pakvietimą?';
                 }
 
                 $.confirm({
