@@ -94,9 +94,8 @@ class TeamRepository extends EntityRepository
             ->andWhere('tu.user = ?2')
             ->setParameter(1, $team)
             ->setParameter(2, $user);
-        $results = $query->getQuery()->getArrayResult();
 
-        return $results;
+        return $query->getQuery()->getArrayResult();
     }
 
     /**

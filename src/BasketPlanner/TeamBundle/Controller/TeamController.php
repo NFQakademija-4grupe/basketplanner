@@ -46,7 +46,7 @@ class TeamController extends Controller
 
             return new JsonResponse($users);
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!'));
+            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
             return new Response($response, 400, array(
                 'Content-Type' => 'application/json'
@@ -111,12 +111,12 @@ class TeamController extends Controller
 
     public function leaveAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
             $teamId = strip_tags($request->request->get('teamId'));
-            $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
@@ -138,29 +138,24 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            $response = json_encode(array('message' => $message, 'status' => $status ));
+            return $teamManager->createAjaxResponse($message, $status, 200);
 
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
     public function deleteAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest())
         {
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
             $teamId = strip_tags($request->request->get('teamId'));
-            $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
@@ -187,28 +182,24 @@ class TeamController extends Controller
             }else{
                 $message = 'Jūs neturite priegos!';
             }
-            $response = json_encode(array('message' => $message, 'status' => $status ));
 
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse($message, $status, 200);
+
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
     public function inviteAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
             $userId = strip_tags($request->request->get('user'));
             $teamId = strip_tags($request->request->get('team'));
-            $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
             //check if user is not a member of team
@@ -256,29 +247,23 @@ class TeamController extends Controller
                 $message = 'Įvyko klaida! Šis žaidėjas jau yra šioje komandoje!';
             }
 
+            return $teamManager->createAjaxResponse($message, $status, 200);
 
-            $response = json_encode(array('message' => $message, 'status' => $status));
-
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
     public function inviteDeleteAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
             $inviteId = strip_tags($request->request->get('inviteId'));
-            $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
@@ -297,29 +282,24 @@ class TeamController extends Controller
                 $message = 'Pakvietimo rasti nepavyko!';
             }
 
-            $response = json_encode(array('message' => $message, 'status' => $status ));
+            return $teamManager->createAjaxResponse($message, $status, 200);
 
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
     public function inviteAcceptAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest())
         {
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
             $inviteId = strip_tags($request->request->get('inviteId'));
-            $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
@@ -355,21 +335,19 @@ class TeamController extends Controller
             }else{
                 $message = 'Jūs neturite priegos!';
             }
-            $response = json_encode(array('message' => $message, 'status' => $status ));
 
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse($message, $status, 200);
+
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
-    public function inviteChangeStatusAction(Request $request){
+    public function inviteChangeStatusAction(Request $request)
+    {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
@@ -395,17 +373,12 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            $response = json_encode(array('message' => $message, 'status' => $status ));
+            return $teamManager->createAjaxResponse($message, $status, 200);
 
-            return new Response($response, 200, array(
-                'Content-Type' => 'application/json'
-            ));
         } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 }

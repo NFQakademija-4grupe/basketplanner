@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class TeamManager{
 
@@ -185,5 +186,23 @@ class TeamManager{
             'Assistant' => 'Padėjėjas',
             'Player' => 'Žaidėjas'
         );
+    }
+    /**
+     * return possible team member roles
+     *
+     * @var string $message message to define action state
+     * @var string $status status variable to tell js functions about state
+     * @var integer $statusCode response status code
+     *
+     * @return object
+     */
+    public function createAjaxResponse($message, $status, $statusCode)
+    {
+        $responseBody = json_encode(array('message' => $message, 'status' => $status));
+        $response = new Response($responseBody, $statusCode, array(
+            'Content-Type' => 'application/json'
+        ));
+
+        return $response;
     }
 }
