@@ -8,7 +8,6 @@ use BasketPlanner\TeamBundle\Form\InviteType;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\TeamBundle\Entity\Invite;
 use BasketPlanner\UserBundle\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +39,7 @@ class TeamController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             $user = $this->getUser()->getId();
-            $string = $request->getContent(false);
+            $string = strip_tags($request->getContent(false));
             $users = $this->getDoctrine()
                 ->getRepository('BasketPlannerUserBundle:User')
                 ->findByLetters($string, $user);
@@ -116,7 +115,7 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $teamId = $request->get('teamId');
+            $teamId = strip_tags($request->request->get('teamId'));
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
@@ -160,7 +159,7 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $teamId = $request->get('teamId');
+            $teamId = strip_tags($request->request->get('teamId'));
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
@@ -207,8 +206,8 @@ class TeamController extends Controller
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
-            $userId = $request->get('user');
-            $teamId = $request->get('team');
+            $userId = strip_tags($request->request->get('user'));
+            $teamId = strip_tags($request->request->get('team'));
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
@@ -278,7 +277,7 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $inviteId = $request->get('inviteId');
+            $inviteId = strip_tags($request->request->get('inviteId'));
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
@@ -319,7 +318,7 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $inviteId = $request->get('inviteId');
+            $inviteId = strip_tags($request->request->get('inviteId'));
             $teamManager = $this->get('basketplanner_team.team_manager');
             $em = $this->getDoctrine()->getEntityManager();
 
@@ -374,8 +373,8 @@ class TeamController extends Controller
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
-            $inviteId = $request->get('inviteId');
-            $inviteStatus = $request->get('status');
+            $inviteId = strip_tags($request->request->get('inviteId'));
+            $inviteStatus = strip_tags($request->request->get('status'));
             $em = $this->getDoctrine()->getEntityManager();
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
 

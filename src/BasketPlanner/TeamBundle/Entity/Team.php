@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Team
  *
  * @ORM\Table(name="team")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BasketPlanner\TeamBundle\Repository\TeamRepository")
  */
 class Team
 {

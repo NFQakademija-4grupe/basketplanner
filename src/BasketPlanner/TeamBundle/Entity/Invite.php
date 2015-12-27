@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Invite
  *
  * @ORM\Table(name="team_invite")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BasketPlanner\TeamBundle\Repository\InviteRepository")
  */
 class Invite
 {
