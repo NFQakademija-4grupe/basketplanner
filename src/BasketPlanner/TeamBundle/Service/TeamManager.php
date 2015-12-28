@@ -35,6 +35,10 @@ class TeamManager{
 
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeamsCount($user, $role);
 
+        if ($results == null){
+            return 0;
+        }
+
         return $results;
     }
 
@@ -93,6 +97,10 @@ class TeamManager{
 
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getTeamPlayersCount($team);
 
+        if ($results == null){
+            return 0;
+        }
+
         return $results;
     }
 
@@ -117,7 +125,7 @@ class TeamManager{
             $object = $results[0];
             $role = $object['role'];
         }else{
-            return;
+            return null;
         }
 
         return $role;
@@ -158,6 +166,11 @@ class TeamManager{
         }
 
         $teamEntity = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($team);
+
+        if ($teamEntity == null){
+            return 0;
+        }
+
         $type = $teamEntity->getType();
         $limit = $type->getPlayers()/ 2;
 

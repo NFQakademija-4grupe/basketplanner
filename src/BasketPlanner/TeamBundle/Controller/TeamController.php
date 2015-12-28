@@ -72,6 +72,7 @@ class TeamController extends Controller
             $teamManager = $this->get('basketplanner_team.team_manager');
             $limit = $this->container->getParameter('basket_planner_team.created_teams_limit');
 
+            //check if user reached limit of teams allowed to have
             if ($teamManager->getUserTeamsCount($this->getUser()->getId(), 'Owner') <= $limit ){
                 $team->setCreated(new \DateTime('now'));
                 $user = $this->getUser();
@@ -116,11 +117,13 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $teamId = strip_tags($request->request->get('teamId'));
+            $teamId = intval(strip_tags($request->request->get('id')));
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
+            //check if user is part of the team
             if ($userRole != null){
+                //check if user is owner of the team
                 if($userRole != 'Owner'){
                     $teamUser = $em->getRepository('BasketPlannerTeamBundle:TeamUser')->findOneBy(array(
                         'team' => $teamId,
@@ -155,30 +158,26 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $teamId = strip_tags($request->request->get('teamId'));
+            $teamId = intval(strip_tags($request->request->get('id')));
             $em = $this->getDoctrine()->getEntityManager();
             $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
-            if ($userRole != null)
+            //check if user is part of the team and is owner of the team
+            if ($userRole != null && $userRole == 'Owner')
             {
-                if($userRole == 'Owner')
+                //TO DO: notifications, check for active matches
+                $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+                $teamPlayers = $team->getTeamUser();
+
+                foreach ($teamPlayers as $player)
                 {
-                    //TO DO: notifications, check for active matches
-                    $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
-                    $teamPlayers = $team->getTeamUser();
-
-                    foreach ($teamPlayers as $player)
-                    {
-                        $em->remove($player);
-                    }
-
-                    $em->remove($team);
-                    $em->flush();
-                    $message = 'Komanda sekmingai pašalinta!';
-                    $status = 'ok';
-                }else{
-                    $message = 'Komandą ištrinti gali tik jos sąvininkas!';
+                    $em->remove($player);
                 }
+
+                $em->remove($team);
+                $em->flush();
+                $message = 'Komanda sekmingai pašalinta!';
+                $status = 'ok';
             }else{
                 $message = 'Jūs neturite priegos!';
             }
@@ -198,8 +197,8 @@ class TeamController extends Controller
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
-            $userId = strip_tags($request->request->get('user'));
-            $teamId = strip_tags($request->request->get('team'));
+            $userId = intval(strip_tags($request->request->get('user')));
+            $teamId = intval(strip_tags($request->request->get('team')));
             $em = $this->getDoctrine()->getEntityManager();
 
             //check if user is not a member of team
@@ -259,13 +258,15 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $inviteId = strip_tags($request->request->get('inviteId'));
+            $inviteId = intval(strip_tags($request->request->get('id')));
             $em = $this->getDoctrine()->getEntityManager();
 
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
             $userRole = $teamManager->getUserRoleInTeam($userId, $invite->getTeam()->getId());
 
+            //check if such invite exist
             if ($invite !== null) {
+                //check if user have privileges to remove invite
                 if ($userRole == 'Owner') {
                     $em->remove($invite);
                     $em->flush();
@@ -295,16 +296,18 @@ class TeamController extends Controller
             $message = '';
             $status = 'failed';
             $userId = $this->getUser()->getId();
-            $inviteId = strip_tags($request->request->get('inviteId'));
+            $inviteId = intval(strip_tags($request->request->get('id')));
             $em = $this->getDoctrine()->getEntityManager();
 
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
 
             if($invite !== null)
             {
+                //check if current user is user which have been invited
                 if ($invite->getUser()->getId() === $userId)
                 {
                     $teamId = $invite->getTeam()->getId();
+                    //check if is not full
                     if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId))
                     {
                         $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
@@ -344,23 +347,25 @@ class TeamController extends Controller
         if ($request->isXmlHttpRequest()) {
             $message = '';
             $status = 'failed';
-            $inviteId = strip_tags($request->request->get('inviteId'));
+            $inviteId = intval(strip_tags($request->request->get('id')));
             $inviteStatus = strip_tags($request->request->get('status'));
             $em = $this->getDoctrine()->getEntityManager();
             $invite = $em->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
 
+            //check if current user is user which have been invited
             if($invite->getUser()->getId() == $this->getUser()->getId()){
 
                 if($inviteStatus == 'Seen'){
                     $invite->setStatus('Seen');
+                    $message = 'Pakvietimo statusas pakeistas!';
                 }else if ($inviteStatus == 'Rejected'){
                     $invite->setStatus('Rejected');
+                    $message = 'Pakvietimas atmestas!';
                 }
 
                 //TO DO: notificate user about status change
                 $em->persist($invite);
                 $em->flush();
-                $message = 'Pakvietimas atmestas!';
                 $status = 'ok';
             }else{
                 $message = 'Jūs neturite priegos!';

@@ -346,13 +346,16 @@
                 return false;
             });
 
-            $('.invite-accept, .invite-reject, .invite-remove').on('click', function () {
-                var inviteRow = $(this).parent().parent();
+            $('.invite-accept, .invite-reject, .invite-remove, .team-remove, .team-leave').on('click', function () {
+                var dataRow = $(this).parent().parent();
                 var messageBox = $('#invite-status-messages');
                 var clickedClass = $(this).attr("class");
                 var acceptUrl = '{{path('basket_planner_team.invite.accept')}}';
                 var rejectUrl = '{{path('basket_planner_team.invite.changeStatus')}}';
                 var removeUrl = '{{path('basket_planner_team.invite.delete')}}';
+                var teamRemoveUrl = '{{path('basket_planner_team.delete')}}';
+                var teamLeaveUrl = '{{path('basket_planner_team.leave')}}';
+
                 var destination = '';
                 var alertMessage = '';
                 var data = {};
@@ -364,10 +367,18 @@
                     destination = rejectUrl;
                     data.status = 'Rejected';
                     alertMessage = 'Ar tikrai norite atmesti šį pakvietimą? Jis daugiau nebus rodomas.';
-                } else {
+                } else if (clickedClass == 'invite-remove'){
                     destination = removeUrl;
                     messageBox = $('#invite-remove-messages');
                     alertMessage = 'Ar tikrai norite pašalinti šį pakvietimą?';
+                } else if (clickedClass == 'team-remove'){
+                    destination = teamRemoveUrl;
+                    messageBox = $('#team-messages');
+                    alertMessage = 'Ar tikrai norite pašalinti šią komandą?';
+                } else {
+                    destination = teamLeaveUrl;
+                    messageBox = $('#team-messages');
+                    alertMessage = 'Ar tikrai norite palikti šią komandą?';
                 }
 
                 $.confirm({
@@ -376,7 +387,7 @@
                     confirmButton: 'Taip',
                     cancelButton: 'Ne',
                     confirm: function(){
-                        data.inviteId = inviteRow.attr("data-id");
+                        data.id = dataRow.attr("data-id");
                         $.ajax({
                             type: "POST",
                             url: destination,
@@ -384,7 +395,7 @@
                             success: function(data) {
                                 var className = '';
                                 if (data['status'] == 'ok') {
-                                    inviteRow.fadeOut('slow', function () {
+                                    dataRow.fadeOut('slow', function () {
                                         $(this).remove();
                                     });
                                     className = 'alert alert-success';
