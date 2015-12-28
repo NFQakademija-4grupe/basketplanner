@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\UserBundle\Entity\User;
+use BasketPlanner\TeamBundle\Entity\Invite;
 use Symfony\Component\HttpFoundation\Response;
 
 class TeamManager{
@@ -27,6 +28,11 @@ class TeamManager{
      */
     public function getUserTeamsCount($user, $role)
     {
+        if (!is_integer($user) || !is_string($role))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeamsCount($user, $role);
 
         return $results;
@@ -41,6 +47,11 @@ class TeamManager{
      */
     public function getUserTeams($user)
     {
+        if (!is_integer($user))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeams($user);
 
         return $results;
@@ -56,6 +67,11 @@ class TeamManager{
      */
     public function getUserTeamsByRole($user, $role)
     {
+        if (!is_integer($user) || !is_string($role))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeamsByRole($user, $role);
 
         return $results;
@@ -70,6 +86,11 @@ class TeamManager{
      */
     public function getTeamPlayersCount($team)
     {
+        if (!is_integer($team))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getTeamPlayersCount($team);
 
         return $results;
@@ -85,13 +106,18 @@ class TeamManager{
      */
     public function getUserRoleInTeam($user, $team)
     {
+        if (!is_integer($user) || !is_integer($team))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserRoleInTeam($user, $team);
 
         if (count($results) > 0) {
             $object = $results[0];
             $role = $object['role'];
         }else{
-            return null;
+            return;
         }
 
         return $role;
@@ -106,6 +132,12 @@ class TeamManager{
      */
     public function getTeamPlayers($team)
     {
+
+        if (!is_integer($team))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getTeamPlayers($team);
 
         return $results;
@@ -114,14 +146,19 @@ class TeamManager{
     /**
      * get max team players
      *
-     * @var integer $teamId Team id
+     * @var integer $team Team id
      *
      * @return integer
      */
-    public function getTeamPlayersLimit($teamId)
+    public function getTeamPlayersLimit($team)
     {
-        $team = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
-        $type = $team->getType();
+        if (!is_integer($team))
+        {
+            return;
+        }
+
+        $teamEntity = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($team);
+        $type = $teamEntity->getType();
         $limit = $type->getPlayers()/ 2;
 
         return $limit;
@@ -147,6 +184,25 @@ class TeamManager{
     }
 
     /**
+     * create invite object
+     *
+     * @var User $user
+     * @var Team $team
+     *
+     * @return Invite
+     */
+    public function createTeamInvite(User $user, Team $team)
+    {
+        $invite = new Invite();
+        $invite->setStatus('New');
+        $invite->setUser($user);
+        $invite->setTeam($team);
+        $invite->setCreated(new \DateTime('now'));
+
+        return $invite;
+    }
+
+    /**
      * get created invites
      *
      * @var integer $user user id
@@ -155,6 +211,11 @@ class TeamManager{
      */
     public function getUserCreatedInvites($user)
     {
+        if (!is_integer($user))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->getUserCreatedInvites($user);
 
         return $results;
@@ -169,6 +230,11 @@ class TeamManager{
      */
     public function getUserReceivedInvites($user)
     {
+        if (!is_integer($user))
+        {
+            return;
+        }
+
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->getUserReceivedInvites($user);
 
         return $results;
@@ -188,7 +254,7 @@ class TeamManager{
         );
     }
     /**
-     * return possible team member roles
+     * create json response
      *
      * @var string $message message to define action state
      * @var string $status status variable to tell js functions about state
@@ -196,7 +262,7 @@ class TeamManager{
      *
      * @return object
      */
-    public function createAjaxResponse($message, $status, $statusCode)
+    public function createJSonResponse($message, $status, $statusCode)
     {
         $responseBody = json_encode(array('message' => $message, 'status' => $status));
         $response = new Response($responseBody, $statusCode, array(

@@ -37,6 +37,7 @@ class TeamController extends Controller
 
     public function searchAction(Request $request)
     {
+        $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
             $user = $this->getUser()->getId();
             $string = strip_tags($request->getContent(false));
@@ -45,12 +46,11 @@ class TeamController extends Controller
                 ->findByLetters($string, $user);
 
             return new JsonResponse($users);
-        } else {
-            $response = json_encode(array('message' => 'Jūs neturite priegos!', 'status' => 'failed'));
 
-            return new Response($response, 400, array(
-                'Content-Type' => 'application/json'
-            ));
+        } else {
+
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
+
         }
     }
 
@@ -138,11 +138,11 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
@@ -183,11 +183,11 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
@@ -221,11 +221,7 @@ class TeamController extends Controller
 
                         if ($user != null && $team != null)
                         {
-                            $invite = new Invite();
-                            $invite->setStatus('New');
-                            $invite->setUser($user);
-                            $invite->setTeam($team);
-                            $invite->setCreated(new \DateTime('now'));
+                            $invite = $teamManager->createTeamInvite($user, $team);
 
                             $em->persist($user);
                             $em->persist($team);
@@ -247,11 +243,11 @@ class TeamController extends Controller
                 $message = 'Įvyko klaida! Šis žaidėjas jau yra šioje komandoje!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
@@ -282,11 +278,11 @@ class TeamController extends Controller
                 $message = 'Pakvietimo rasti nepavyko!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
@@ -314,10 +310,7 @@ class TeamController extends Controller
                         $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
                         $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
 
-                        $teamUser = new TeamUser();
-                        $teamUser->setUser($user);
-                        $teamUser->setTeam($team);
-                        $teamUser->setRole('Player');
+                        $teamUser = $teamManager->createTeamPlayer($user, $team, 'Player');
 
                         //TO DO: notificate team players about new user
                         $em->persist($teamUser);
@@ -336,11 +329,11 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
@@ -373,11 +366,11 @@ class TeamController extends Controller
                 $message = 'Jūs neturite priegos!';
             }
 
-            return $teamManager->createAjaxResponse($message, $status, 200);
+            return $teamManager->createJSonResponse($message, $status, 200);
 
         } else {
 
-            return $teamManager->createAjaxResponse('Jūs neturite priegos!', 'failed', 400);
+            return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
 
         }
     }
