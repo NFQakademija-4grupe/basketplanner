@@ -34,8 +34,10 @@ class MatchController extends Controller
     {
         $loadMap = $this->get('basketplanner_match.map_loader_service');
         $map = $loadMap->loadMarkerById($match->getCourt()->getId());
-
-        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match, 'map' => $map]);
+        $player = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('BasketPlannerMatchBundle:MatchUser')
+            ->findOneBy(array('match' => $match, 'user' => $this->getUser()));
+        return $this->render('BasketPlannerMatchBundle:Match:show.html.twig', ['match' => $match, 'map' => $map, 'player' => $player]);
     }
 
     /**

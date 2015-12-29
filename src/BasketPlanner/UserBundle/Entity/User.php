@@ -120,7 +120,7 @@ class User extends BaseUser
     protected $createdMatches;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\Match", mappedBy="players")
+     * @ORM\OneToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\MatchUser", mappedBy="user")
      */
     protected $joinedMatches;
 

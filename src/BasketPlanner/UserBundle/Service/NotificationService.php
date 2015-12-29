@@ -45,7 +45,8 @@ class NotificationService {
             $query = $this->entityManager
                 ->createQuery('
                 SELECT m.id, u.id, u.email, u.firstName, u.lastName  FROM BasketPlanner\MatchBundle\Entity\Match m
-                INNER JOIN m.players u
+                INNER JOIN m.players mu
+                LEFT JOIN mu.user u
                 WHERE m.id = :matchId
                 AND u.id <> :userId')
                 ->setParameter('matchId', $matchId)

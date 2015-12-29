@@ -3,6 +3,7 @@
 namespace BasketPlanner\MatchBundle\Entity;
 
 use BasketPlanner\UserBundle\Entity\User;
+use BasketPlanner\MatchBundle\Entity\MatchUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,8 +28,7 @@ class Match
     protected $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\BasketPlanner\UserBundle\Entity\User", inversedBy="joinedMatches")
-     * @ORM\JoinTable(name="matches_users")
+     * @ORM\OneToMany(targetEntity="\BasketPlanner\MatchBundle\Entity\MatchUser", mappedBy="match")
      */
     protected $players;
 
@@ -358,11 +358,11 @@ class Match
     /**
      * Add player
      *
-     * @param User $player
+     * @param MatchUser $player
      *
      * @return Match
      */
-    public function addPlayer(User $player)
+    public function addPlayer(MatchUser $player)
     {
         $this->players[] = $player;
 
@@ -372,9 +372,9 @@ class Match
     /**
      * Remove player
      *
-     * @param User $player
+     * @param MatchUser $player
      */
-    public function removePlayer(User $player)
+    public function removePlayer(MatchUser $player)
     {
         $this->players->removeElement($player);
     }

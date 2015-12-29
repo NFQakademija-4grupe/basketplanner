@@ -42,12 +42,12 @@
                             {{ google_map(map) }}</div>
 
                         <div class="content-wrap">
-
-                            {% for player in match.players %}
+                            {% for player in match.players() %}
+                                {% set user = player.getUser() %}
                                 <img role="button" alt="Image"
                                      class='author-img thumb48'
-                                     src='{{ player.profilePicture }}'
-                                     data-content="{{ player.fullName }}"
+                                     src='{{ user.profilePicture }}'
+                                     data-content="{{ user.fullName }}"
                                      data-container="body" data-toggle="popover"
                                      data-placement="top"
                                      data-trigger="focus">
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {% if app.user in match.players %}
+                            {% if player in match.players %}
                                 <a class="btn-match"
                                    href="{{ path('basket_planner_match_leave', {'id': match.id}) }}"><i
                                             class="fa fa-sign-out"></i> Išeiti</a>

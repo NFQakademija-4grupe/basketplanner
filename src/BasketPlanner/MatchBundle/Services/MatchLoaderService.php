@@ -3,6 +3,7 @@
 namespace BasketPlanner\MatchBundle\Services;
 
 use BasketPlanner\MatchBundle\Entity\Match;
+use BasketPlanner\MatchBundle\Entity\MatchUser;
 use BasketPlanner\MatchBundle\Form\FilterType;
 use BasketPlanner\MatchBundle\Form\MatchType;
 use BasketPlanner\UserBundle\Entity\User;
@@ -125,14 +126,20 @@ class MatchLoaderService
             }
 
             $match->setOwner($user);
-            $match->addPlayer($user);
             $match->setPlayersCount(1);
             $match->setCourt($court);
             $match->setActive(true);
             $match->setCreatedAt(new \DateTime('now'));
             $match->setNotified(0);
 
+            $player = new MatchUser();
+            $player->setUser($user);
+            $player->setMatch($match);
+
+            $match->addPlayer($player);
+
             $this->em->persist($match);
+            $this->em->persist($player);
             $this->em->flush();
 
             $this->session->getFlashBag()->add('success', 'Sėkmingai sukurtas mačas!');
@@ -161,10 +168,14 @@ class MatchLoaderService
         {
             try
             {
-                $match->addPlayer($user);
+                $player = new MatchUser();
+                $player->setUser($user);
+                $player->setMatch($match);
+                $match->addPlayer($player);
                 $match->increasePlayersCount();
 
                 $this->em->persist($match);
+                $this->em->persist($player);
                 $this->em->flush();
 
                 $this->session->getFlashBag()->add('success', 'Sėkmingai prisijungėte prie mačo!');
@@ -192,12 +203,14 @@ class MatchLoaderService
 
     public function leaveMatch(Match $match, User $user)
     {
-        if (!$match->getPlayers()->contains($user)) {
+        $player = $this->em->getRepository('BasketPlannerMatchBundle:MatchUser')->findOneBy(array('match' => $match, 'user' =>$user));
+
+        if (!$match->getPlayers()->contains($player)) {
             $this->session->getFlashBag()->add('error', 'Neįmanoma išeiti iš mačo prie kurio nesate prisijunge!');
             return false;
         }
 
-        $match->removePlayer($user);
+        $match->removePlayer($player);
         $match->decreasePlayersCount();
 
         if ($match->getPlayersCount() == 0) {
@@ -205,6 +218,7 @@ class MatchLoaderService
         }
 
         $this->em->persist($match);
+        $this->em->remove($player);
         $this->em->flush();
 
         $this->session->getFlashBag()->add('success', 'Sėkmingai išėjote iš mačo');
