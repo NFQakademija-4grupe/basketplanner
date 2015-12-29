@@ -61,11 +61,13 @@ class NotificationService {
                      <a href="'.$url.'">Mačo peržiūra</a>';
                 $this->sendNotificationMQ($result['email'], $subject, $message);
             }
+
         }else{
             $query = $this->entityManager
                 ->createQuery('
                     SELECT u.id FROM BasketPlanner\MatchBundle\Entity\Match m
-                    INNER JOIN m.players u
+                    INNER JOIN m.players mu
+                    LEFT JOIN mu.user u
                     WHERE m.id = :matchId
                     AND u.id <> :userId
                 ')
@@ -78,6 +80,7 @@ class NotificationService {
             $title = $user->getFirstName().' prisijungė prie mačo!';
             $this->createNotificationMQ($title, $text, $url, $users);
         }
+
     }
 
     /**
