@@ -64,6 +64,13 @@ class Team
     protected $teamUser;
 
     /**
+     * match users association
+     *
+     * @ORM\OneToMany(targetEntity="BasketPlanner\MatchBundle\Entity\MatchUser", mappedBy="team")
+     */
+    protected $matchUser;
+
+    /**
      * team invite association
      *
      * @ORM\OneToMany(targetEntity="BasketPlanner\TeamBundle\Entity\Invite", mappedBy="team")
@@ -73,6 +80,7 @@ class Team
     public function __construct()
     {
         $this->teamUser = new ArrayCollection();
+        $this->matchUser = new ArrayCollection();
         $this->teamInvite = new ArrayCollection();
     }
 
@@ -213,6 +221,39 @@ class Team
     public function getTeamUser()
     {
         return $this->teamUser;
+    }
+
+    /**
+     * Add match
+     *
+     * @param \BasketPlanner\MatchBundle\Entity\MatchUser $matchUser
+     * @return Team
+     */
+    public function addMatchUser($matchUser)
+    {
+        $this->matchUser[] = $matchUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove match
+     *
+     * @param \BasketPlanner\MatchBundle\Entity\MatchUser $matchUser
+     */
+    public function removeMatchUser($matchUser)
+    {
+        $this->matchUser->removeElement($matchUser);
+    }
+
+    /**
+     * Get matches
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMatchUser()
+    {
+        return $this->matchUser;
     }
 
     /**

@@ -40,7 +40,7 @@ class MatchUser
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="BasketPlanner\TeamBundle\Entity\Team", inversedBy="teamUser")
+     * @ORM\ManyToOne(targetEntity="BasketPlanner\TeamBundle\Entity\Team", inversedBy="matchUser")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      *
      */
