@@ -28,6 +28,7 @@ services:
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
             logger: "@logger"
+            notificationService: "@basketplanner_user.notifications_service"
 
     basketplanner_user.notifications_service:
         class: BasketPlanner\UserBundle\Service\NotificationService

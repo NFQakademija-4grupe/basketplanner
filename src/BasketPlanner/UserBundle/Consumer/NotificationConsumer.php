@@ -4,6 +4,7 @@ namespace BasketPlanner\UserBundle\Consumer;
 
 use BasketPlanner\UserBundle\Entity\Notification;
 use BasketPlanner\UserBundle\Entity\NotificationUser;
+use BasketPlanner\UserBundle\Service\NotificationService;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -15,10 +16,12 @@ class NotificationConsumer implements ConsumerInterface
 {
     private $entityManager;
     private $logger;
+    private $notificationService;
 
-    public function __construct(EntityManager $entityManager, LoggerInterface $logger){
+    public function __construct(EntityManager $entityManager, LoggerInterface $logger,NotificationService $notificationService){
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->notificationService = $notificationService;
     }
     public function execute(AMQPMessage $msg)
     {
@@ -29,23 +32,7 @@ class NotificationConsumer implements ConsumerInterface
             $link = $data['link'];
             $users = $data['users'];
 
-            $notification = new Notification();
-            $notification->setTitle($title);
-            $notification->setText($text);
-            $notification->setLink($link);
-            $notification->setDate(new \DateTime('now'));
-            $this->entityManager->persist($notification);
-
-            foreach($users as $user) {
-                $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($user['id']);
-                $notificationUser = new NotificationUser();
-                $notificationUser->setUser($user);
-                $notificationUser->setNotification($notification);
-                $notificationUser->setSeen(false);
-                $this->entityManager->persist($user);
-                $this->entityManager->persist($notificationUser);
-            }
-            $this->entityManager->flush();
+            $this->notificationService->createNotification($title, $text, $link, $users);
 
             return ConsumerInterface::MSG_ACK;
 
