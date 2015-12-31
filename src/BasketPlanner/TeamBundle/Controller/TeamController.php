@@ -8,6 +8,7 @@ use BasketPlanner\TeamBundle\Form\InviteType;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\TeamBundle\Entity\Invite;
 use BasketPlanner\UserBundle\Entity\User;
+use BasketPlanner\TeamBundle\Exception\TeamException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,35 +115,19 @@ class TeamController extends Controller
     {
         $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
-            $message = '';
-            $status = 'failed';
             $userId = $this->getUser()->getId();
             $teamId = intval(strip_tags($request->request->get('id')));
-            $em = $this->getDoctrine()->getEntityManager();
-            $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
-            //check if user is part of the team
-            if ($userRole != null){
-                //check if user is owner of the team
-                if($userRole != 'Owner'){
-                    $teamUser = $em->getRepository('BasketPlannerTeamBundle:TeamUser')->findOneBy(array(
-                        'team' => $teamId,
-                        'user' => $userId
-                    ));
+            try {
+                $teamManager->leaveTeam($userId, $teamId);
 
-                    $em->remove($teamUser);
-                    $em->flush();
-                    $message = 'Jūs sekmingai palikote komandą!';
-                    $status = 'ok';
-                }else{
-                    $message = 'Komandos sąvininkas negali palikti komandos!';
-                }
-            }else{
-                $message = 'Jūs neturite priegos!';
+                return $teamManager->createJSonResponse('Jūs sekmingai palikote komandą!', 'ok', 200);
+
+            } catch (TeamException $e){
+
+                return $teamManager->createJSonResponse($e->getMessage(), 'failed', 200);
+
             }
-
-            return $teamManager->createJSonResponse($message, $status, 200);
-
         } else {
 
             return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
@@ -155,35 +140,19 @@ class TeamController extends Controller
         $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest())
         {
-            $message = '';
-            $status = 'failed';
             $userId = $this->getUser()->getId();
             $teamId = intval(strip_tags($request->request->get('id')));
-            $em = $this->getDoctrine()->getEntityManager();
-            $userRole = $teamManager->getUserRoleInTeam($userId, $teamId);
 
-            //check if user is part of the team and is owner of the team
-            if ($userRole != null && $userRole == 'Owner')
-            {
-                //TO DO: notifications, check for active matches
-                $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
-                $teamPlayers = $team->getTeamUser();
+            try {
+                $teamManager->deleteTeam($userId, $teamId);
 
-                foreach ($teamPlayers as $player)
-                {
-                    $em->remove($player);
-                }
+                return $teamManager->createJSonResponse('Jūs sekmingai pašalinote komandą!', 'ok', 200);
 
-                $em->remove($team);
-                $em->flush();
-                $message = 'Komanda sekmingai pašalinta!';
-                $status = 'ok';
-            }else{
-                $message = 'Jūs neturite priegos!';
+            } catch (TeamException $e) {
+
+                return $teamManager->createJSonResponse($e->getMessage(), 'failed', 200);
+
             }
-
-            return $teamManager->createJSonResponse($message, $status, 200);
-
         } else {
 
             return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);
@@ -195,55 +164,20 @@ class TeamController extends Controller
     {
         $teamManager = $this->get('basketplanner_team.team_manager');
         if ($request->isXmlHttpRequest()) {
-            $message = '';
-            $status = 'failed';
             $userId = intval(strip_tags($request->request->get('user')));
+            $invitedId = $this->getUser()->getId();
             $teamId = intval(strip_tags($request->request->get('team')));
-            $em = $this->getDoctrine()->getEntityManager();
 
-            //check if user is not a member of team
-            if ($teamManager->getUserRoleInTeam($userId, $teamId) === null)
-            {
-                //check if team is not full
-                if ($teamManager->getTeamPlayersCount($teamId) < $teamManager->getTeamPlayersLimit($teamId))
-                {
-                    $inviteExists = $em->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
-                        'team' => $teamId,
-                        'user' => $userId
-                    ));
+            try {
+                $teamManager->inviteToTeam($userId, $invitedId, $teamId);
 
-                    //check if invite to same user and team already exists
-                    if ($inviteExists === null)
-                    {
-                        $user = $em->getRepository('BasketPlannerUserBundle:User')->find($userId);
-                        $team = $em->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+                return $teamManager->createJSonResponse('Vartotojas sekmingai pakviestas į pasirinktą komandą!', 'ok', 200);
 
-                        if ($user != null && $team != null)
-                        {
-                            $invite = $teamManager->createTeamInvite($user, $team);
+            } catch (TeamException $e) {
 
-                            $em->persist($user);
-                            $em->persist($team);
-                            $em->persist($invite);
-                            $em->flush();
+                return $teamManager->createJSonResponse($e->getMessage(), 'failed', 200);
 
-                            $message = 'Vartotojas sekmingai pakviestas į pasirinktą komandą!';
-                            $status = 'ok';
-                        } else {
-                            $message = 'Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!';
-                        }
-                    } else {
-                        $message = 'Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!';
-                    }
-                } else {
-                    $message = 'Įvyko klaida! Komanda jau pilna!';
-                }
-            } else {
-                $message = 'Įvyko klaida! Šis žaidėjas jau yra šioje komandoje!';
             }
-
-            return $teamManager->createJSonResponse($message, $status, 200);
-
         } else {
 
             return $teamManager->createJSonResponse('Jūs neturite priegos!', 'failed', 400);

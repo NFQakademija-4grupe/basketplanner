@@ -259,7 +259,7 @@ class Team
     /**
      * Add team invite
      *
-     * @param \BasketPlanner\TeamBundle\Entity\Invite $invite
+     * @param \BasketPlanner\TeamBundle\Entity\Invite $teamInvite
      * @return Team
      */
     public function addTeamInvite($teamInvite)

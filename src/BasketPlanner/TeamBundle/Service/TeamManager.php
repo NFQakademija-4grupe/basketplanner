@@ -7,6 +7,7 @@ use BasketPlanner\TeamBundle\Entity\TeamUser;
 use BasketPlanner\TeamBundle\Entity\Team;
 use BasketPlanner\UserBundle\Entity\User;
 use BasketPlanner\TeamBundle\Entity\Invite;
+use BasketPlanner\TeamBundle\Exception\TeamException;
 use Symfony\Component\HttpFoundation\Response;
 
 class TeamManager{
@@ -17,6 +18,118 @@ class TeamManager{
     {
         $this->entityManager = $entityManager;
     }
+
+    /**
+     * leave team
+     *
+     * @var integer $userId id of the user
+     * @var integer $teamId id of the team to leave
+     * @throws TeamException
+     */
+    public function leaveTeam($userId, $teamId)
+    {
+        $userRole = $this->getUserRoleInTeam($userId, $teamId);
+        //check if user is part of the team
+        if ($userRole != null){
+            //check if user is owner of the team
+            if($userRole != 'Owner'){
+                $teamUser = $this->entityManager->getRepository('BasketPlannerTeamBundle:TeamUser')->findOneBy(array(
+                    'team' => $teamId,
+                    'user' => $userId
+                ));
+
+                $this->entityManager->remove($teamUser);
+                $this->entityManager->flush();
+            }else{
+                throw new TeamException("Komandos sąvininkas negali palikti komandos!");
+            }
+        }else{
+            throw new TeamException("Jūs neturite priegos!");
+        }
+    }
+
+    /**
+     * delete team
+     *
+     * @var integer $userId id of the user
+     * @var integer $teamId id of the team to remove
+     * @throws TeamException
+     */
+    public function deleteTeam($userId, $teamId)
+    {
+        $userRole = $this->getUserRoleInTeam($userId, $teamId);
+        //check if user is part of the team and is owner of the team
+        if ($userRole == 'Owner')
+        {
+            //TO DO: notifications, check for active matches
+            $team = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+            $teamPlayers = $team->getTeamUser();
+
+            foreach ($teamPlayers as $player)
+            {
+                $this->entityManager->remove($player);
+            }
+
+            $this->entityManager->remove($team);
+            $this->entityManager->flush();
+        }else{
+            throw new TeamException("Jūs neturite priegos!");
+        }
+    }
+
+    /**
+     * invite user to team
+     *
+     * @var integer $userId id of the user which will be invited
+     * @var integer $inviterId id of the user who invites
+     * @var integer $teamId id of the team to remove
+     * @throws TeamException
+     */
+    public function inviteToTeam($userId, $inviterId, $teamId)
+    {
+
+        //check if user who invites have privileges to invite
+        if ($this->getUserRoleInTeam($inviterId, $teamId) !== 'Owner') {
+            throw new TeamException("Įvyko klaida! Jūs neturite teisių kviesti žaidėjų į šią komandą!");
+        }
+
+        //check if user is not a member of team
+        if ($this->getUserRoleInTeam($userId, $teamId) !== null) {
+            throw new TeamException("Įvyko klaida! Šis žaidėjas jau yra šioje komandoje!");
+        }
+
+        //check if team is not full
+        if ($this->getTeamPlayersCount($teamId) >= $this->getTeamPlayersLimit($teamId)) {
+            throw new TeamException("Įvyko klaida! Komanda jau pilna!");
+        }
+
+        $inviteExists = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->findOneBy(array(
+            'team' => $teamId,
+            'user' => $userId
+        ));
+
+        //check if invite to same user and team already exists
+        if ($inviteExists === null)
+        {
+            $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($userId);
+            $team = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+
+            if ($user != null && $team != null)
+            {
+                $invite = $this->createTeamInvite($user, $team);
+
+                $this->entityManager->persist($user);
+                $this->entityManager->persist($team);
+                $this->entityManager->persist($invite);
+                $this->entityManager->flush();
+            } else {
+                throw new TeamException("Įvyko klaida!! Nepavyko rasti nurodytos komandos arba vartotojo!");
+            }
+        } else {
+            throw new TeamException("Įvyko klaida! Šis vartotojas jau pakviestas į pasirinktą komandą!");
+        }
+    }
+
 
     /**
      * get count of teams created or joined by user
@@ -114,11 +227,6 @@ class TeamManager{
      */
     public function getUserRoleInTeam($user, $team)
     {
-        if (!is_integer($user) || !is_integer($team))
-        {
-            return;
-        }
-
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserRoleInTeam($user, $team);
 
         if (count($results) > 0) {
