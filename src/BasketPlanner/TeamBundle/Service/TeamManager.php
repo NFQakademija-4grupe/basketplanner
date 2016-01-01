@@ -130,6 +130,106 @@ class TeamManager{
         }
     }
 
+    /**
+     * remove invite
+     *
+     * @var integer $userId id of the user which was invited
+     * @var integer $inviteId id of the invite
+     * @throws TeamException
+     */
+    public function inviteDelete($userId, $inviteId)
+    {
+        $invite = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+
+        //check if such invite exist
+        if ($invite == null)
+        {
+            throw new TeamException("Įvyko klaida! Pakvietimo rasti nepavyko!");
+        }
+
+        $userRole = $this->getUserRoleInTeam($userId, $invite->getTeam()->getId());
+        //check if user have privileges to remove invite
+        if ($userRole == 'Owner') {
+            $this->entityManager->remove($invite);
+            $this->entityManager->flush();
+        } else {
+            throw new TeamException("Įvyko klaida! Jūs neturite prieigos pašalinti šį pakvietimą!");
+        }
+    }
+
+    /**
+     * accept invite
+     *
+     * @var integer $userId id of currently logged in user
+     * @var integer $inviteId id of the invite
+     * @throws TeamException
+     */
+    public function inviteAccept($userId, $inviteId)
+    {
+        $invite = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+
+        if($invite == null)
+        {
+            throw new TeamException("Įvyko klaida! Pakvietimo rasti nepavyko!");
+        }
+
+        //check if current user is user which have been invited
+        if ($invite->getUser()->getId() === $userId) {
+            throw new TeamException("Įvyko klaida! Jūs neturite prieigos priimti šį pakvietimą!");
+        }
+
+        $teamId = $invite->getTeam()->getId();
+        $teamPlayers = $this->getTeamPlayersCount($teamId);
+        //check if is not full
+        if ($teamPlayers != null && $teamPlayers < $this->getTeamPlayersLimit($teamId))
+        {
+            $user = $this->entityManager->getRepository('BasketPlannerUserBundle:User')->find($userId);
+            $team = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($teamId);
+
+            $teamUser = $this->createTeamPlayer($user, $team, 'Player');
+
+            //TO DO: notificate team players about new user
+            $this->entityManager->persist($teamUser);
+            $this->entityManager->remove($invite);
+            $this->entityManager->flush();
+        } else {
+            throw new TeamException("Įvyko klaida! Pasiektas komandos žaidėjų limitas!");
+        }
+    }
+
+    /**
+     * change status of the invite
+     *
+     * @var integer $userId id of currently logged in user
+     * @var integer $inviteId id of the invite
+     * @var string $inviteStatus new status of the invite
+     * @throws TeamException
+     */
+    public function inviteChangeStatus($userId, $inviteId, $inviteStatus)
+    {
+        $invite = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
+
+        if($invite == null)
+        {
+            throw new TeamException("Įvyko klaida! Pakvietimo rasti nepavyko!");
+        }
+
+        if($invite->getUser()->getId() != $userId)
+        {
+            throw new TeamException("Įvyko klaida! Jūs neturite priegos prie šio pakvietimo!");
+        }
+
+        if($inviteStatus == 'Seen'){
+            $invite->setStatus('Seen');
+        }else if ($inviteStatus == 'Rejected'){
+            $invite->setStatus('Rejected');
+        }
+
+        //TO DO: notificate user about status change
+        $this->entityManager->persist($invite);
+        $this->entityManager->flush();
+
+    }
 
     /**
      * get count of teams created or joined by user
@@ -141,55 +241,12 @@ class TeamManager{
      */
     public function getUserTeamsCount($user, $role)
     {
-        if (!is_integer($user) || !is_string($role))
-        {
-            return;
-        }
 
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeamsCount($user, $role);
 
         if ($results == null){
             return 0;
         }
-
-        return $results;
-    }
-
-    /**
-     * get teams created and joined by user
-     *
-     * @var integer $user
-     *
-     * @return array
-     */
-    public function getUserTeams($user)
-    {
-        if (!is_integer($user))
-        {
-            return;
-        }
-
-        $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeams($user);
-
-        return $results;
-    }
-
-    /**
-     * get teams created and joined by user
-     *
-     * @var integer $user
-     * @var string $role
-     *
-     * @return array
-     */
-    public function getUserTeamsByRole($user, $role)
-    {
-        if (!is_integer($user) || !is_string($role))
-        {
-            return;
-        }
-
-        $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getUserTeamsByRole($user, $role);
 
         return $results;
     }
@@ -203,11 +260,6 @@ class TeamManager{
      */
     public function getTeamPlayersCount($team)
     {
-        if (!is_integer($team))
-        {
-            return;
-        }
-
         $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getTeamPlayersCount($team);
 
         if ($results == null){
@@ -240,26 +292,6 @@ class TeamManager{
     }
 
     /**
-     * get list of teams players
-     *
-     * @var integer $team Team id
-     *
-     * @return array
-     */
-    public function getTeamPlayers($team)
-    {
-
-        if (!is_integer($team))
-        {
-            return;
-        }
-
-        $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->getTeamPlayers($team);
-
-        return $results;
-    }
-
-    /**
      * get max team players
      *
      * @var integer $team Team id
@@ -268,11 +300,6 @@ class TeamManager{
      */
     public function getTeamPlayersLimit($team)
     {
-        if (!is_integer($team))
-        {
-            return;
-        }
-
         $teamEntity = $this->entityManager->getRepository('BasketPlannerTeamBundle:Team')->find($team);
 
         if ($teamEntity == null){
@@ -321,44 +348,6 @@ class TeamManager{
         $invite->setCreated(new \DateTime('now'));
 
         return $invite;
-    }
-
-    /**
-     * get created invites
-     *
-     * @var integer $user user id
-     *
-     * @return array
-     */
-    public function getUserCreatedInvites($user)
-    {
-        if (!is_integer($user))
-        {
-            return;
-        }
-
-        $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->getUserCreatedInvites($user);
-
-        return $results;
-    }
-
-    /**
-     * get received invites
-     *
-     * @var integer $user user id
-     *
-     * @return array
-     */
-    public function getUserReceivedInvites($user)
-    {
-        if (!is_integer($user))
-        {
-            return;
-        }
-
-        $results = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->getUserReceivedInvites($user);
-
-        return $results;
     }
 
     /**
