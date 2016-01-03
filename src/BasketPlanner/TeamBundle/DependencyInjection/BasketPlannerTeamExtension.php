@@ -23,6 +23,7 @@ class BasketPlannerTeamExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('basket_planner_team.created_teams_limit', $config['created_teams_limit']);
+        $container->setParameter('basket_planner_team.joined_teams_limit', $config['joined_teams_limit']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

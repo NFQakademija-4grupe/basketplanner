@@ -218,9 +218,10 @@ class TeamController extends Controller
         {
             $userId = $this->getUser()->getId();
             $inviteId = intval(strip_tags($request->request->get('id')));
+            $limit = $this->container->getParameter('basket_planner_team.joined_teams_limit');
 
             try {
-                $teamManager->inviteAccept($userId, $inviteId);
+                $teamManager->inviteAccept($userId, $inviteId, $limit);
 
                 return $teamManager->createJSonResponse('Jūs sėkmingai prisijungėte prie komandos!', 'ok', 200);
 

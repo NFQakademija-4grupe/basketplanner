@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->integerNode('created_teams_limit')->end()
+                ->integerNode('joined_teams_limit')->end()
             ->end();
 
         return $treeBuilder;

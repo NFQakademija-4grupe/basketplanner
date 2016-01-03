@@ -162,9 +162,10 @@ class TeamManager{
      *
      * @var integer $userId id of currently logged in user
      * @var integer $inviteId id of the invite
+     * @var integer $inviteId id of the invite
      * @throws TeamException
      */
-    public function inviteAccept($userId, $inviteId)
+    public function inviteAccept($userId, $inviteId, $limit)
     {
         $invite = $this->entityManager->getRepository('BasketPlannerTeamBundle:Invite')->find($inviteId);
 
@@ -176,6 +177,11 @@ class TeamManager{
         //check if current user is user which have been invited
         if ($invite->getUser()->getId() === $userId) {
             throw new TeamException("Įvyko klaida! Jūs neturite prieigos priimti šį pakvietimą!");
+        }
+
+        //check if user havent reached joined teams limit
+        if ($limit >= $this->getUserTeamsCount($userId, 'Player')) {
+            throw new TeamException("Įvyko klaida! Jūs pasiekėte komandų, kuriose esate narys, limitą!");
         }
 
         $teamId = $invite->getTeam()->getId();
