@@ -1,4 +1,5 @@
 services:
-#    basket_planner_main.example:
-#        class: BasketPlanner\Bundle\MainBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    basketplanner_main.twig.javascript_container_extension:
+        class: BasketPlanner\MainBundle\Twig\JavascriptContainerExtension
+        tags:
+            - { name: twig.extension }

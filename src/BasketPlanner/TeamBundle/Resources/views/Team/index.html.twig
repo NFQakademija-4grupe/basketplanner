@@ -4,7 +4,15 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/dataTables.colVis.css') }}">
 {% endblock %}
+
 {% block content %}
+
+{{ jsContainerAdd([
+    'assets/js/jquery.dataTables.min.js',
+    'assets/js/dataTables.bootstrap.js',
+    'assets/js/dataTables.bootstrapPagination.js'
+]) }}
+
 <!-- START DATATABLE 1 -->
 <div class="container-fluid ">
     <div class="row">
@@ -14,7 +22,9 @@
                     <div class="form-group" style="margin-bottom: 0px">
                         <div class="row">
                             <div class="col-lg-5 col-sm-6" id="userSearch">
-                                <input type="text" id="user" name="user" class="typeahead input-lg form-control" placeholder="Vartotojų paieška" autocomplete="off">
+                                <input type="text" id="user" name="user"
+                                       class="typeahead input-lg form-control"
+                                       placeholder="Vartotojų paieška" autocomplete="off">
                             </div>
                             {{ form_start(invite, {'attr':{'id': 'team-invite-form'}}) }}
                             <div class="col-lg-5 col-sm-6" id="teamSelect">
@@ -216,11 +226,8 @@
     </div>
 </div>
 {% endblock %}
+
 {% block scripts %}
-    <script type="text/javascript" charset="utf8" src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" charset="utf8" src="{{ asset('assets/js/dataTables.bootstrap.js') }}"></script>
-    <script type="text/javascript" charset="utf8"
-            src="{{ asset('assets/js/dataTables.bootstrapPagination.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#teams, #team-received-invites, #team-created-invites").each(function() {

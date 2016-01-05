@@ -25,8 +25,9 @@ class CourtController extends Controller
     }
 
     public function updateApprovedAction(Request $request){
-        if($request->isXmlHttpRequest()) {
-            $id = $request->get('id');
+        if($request->isXmlHttpRequest() && $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+
+            $id = intval(strip_tags($request->get('id')));
 
             $em = $this->getDoctrine()->getManager();
 

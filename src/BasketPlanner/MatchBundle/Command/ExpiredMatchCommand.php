@@ -47,7 +47,8 @@ class ExpiredMatchCommand extends ContainerAwareCommand
                     ->select("m")
                     ->from("BasketPlannerMatchBundle:Match", "m")
                     ->where("m.active = true")
-                    ->andWhere("m.createdAt<CURRENT_TIMESTAMP()")
+                    ->andWhere("m.createdAt < :time")
+                    ->setParameter('time', time())
                     ->getQuery();
         $expiredMatches = $query->execute();
 

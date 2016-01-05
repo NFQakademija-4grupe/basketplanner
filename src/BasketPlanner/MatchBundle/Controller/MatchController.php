@@ -108,7 +108,7 @@ class MatchController extends Controller
             $upcoming = new CronTask();
             $upcoming
                 ->setName('Upcoming matches check')
-                ->setInterval(300)// Run once every hour
+                ->setInterval(300)
                 ->setCommands(array(
                     'match:check-upcoming'
                 ));
@@ -118,7 +118,7 @@ class MatchController extends Controller
             $expired = new CronTask();
             $expired
                 ->setName('Expired matches check')
-                ->setInterval(600)// Run once every hour
+                ->setInterval(600)
                 ->setCommands(array(
                     'match:check-expired'
                 ));
