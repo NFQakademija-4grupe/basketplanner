@@ -1,6 +1,11 @@
 {% extends '::base.html.twig' %}
 {% form_theme form '::Form/fields.html.twig' %}
 {% block content %}
+
+    {{ jsContainerAdd([
+        'assets/js/bootstrap-datetimepicker.min.js',
+    ]) }}
+
     <div autoscroll="false" class="content-wrapper">
         <div class="row">
             <div class="col-sm-12">

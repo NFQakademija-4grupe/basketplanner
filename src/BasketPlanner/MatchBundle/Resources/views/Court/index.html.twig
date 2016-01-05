@@ -1,6 +1,11 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
+
+    {{ jsContainerAdd([
+        'assets/js/jquery-confirm.min.js'
+    ]) }}
+
     {% embed  'partials/panel.html.twig' %}
         {% block panel_content %}
             <div class="panel-heading"><h1>Aikštelių patvirtinimas</h1></div>

@@ -3,6 +3,11 @@
     {% block stylesheets %}
     {% endblock %}
 {% block content %}
+
+    {{ jsContainerAdd([
+        'assets/js/bootstrap-datetimepicker.min.js',
+    ]) }}
+
     <div ui-view="" autoscroll="false" class="content-wrapper">
         <!-- START row-->
         <div class="row">
@@ -175,8 +180,6 @@
 {% endblock %}
 
 {% block scripts %}
-    {#<script src="{{ asset('assets/js/toastr.js') }}"></script>#}
-
     <script>
         $(document).ready(function () {
 

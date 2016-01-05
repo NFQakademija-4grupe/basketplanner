@@ -130,7 +130,7 @@
                                             <!-- END list group item-->
                                         </div>
                                         <!-- END list group-->
-                                        {% if app.user in match.players %}
+                                        {% if player in match.players %}
                                             <!-- START panel footer-->
                                             <div class="panel-footer clearfix">
                                                 {{ render(controller('BasketPlannerMatchBundle:Comment:create', { 'id': match.id } )) }}
